@@ -41,14 +41,6 @@ jobs:
               -dname "CN=Android Debug,O=Android,C=US"
           fi
 
-      - name: Configure .env from GitHub Secrets (optional)
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          if [ -n "$GEMINI_API_KEY" ]; then
-            echo "GEMINI_API_KEY=$GEMINI_API_KEY" > .env
-          fi
-
       - name: Build Debug APK
         run: gradle :app:assembleDebug
 

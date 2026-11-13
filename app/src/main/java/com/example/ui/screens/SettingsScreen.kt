@@ -151,7 +151,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Masukkan Gemini API Key Anda untuk mengaktifkan Scan OCR foto struk secara langsung dari perangkat ini (tersimpan lokal di perangkat). Kosongkan jika sudah dikonfigurasi melalui Secrets Panel AI Studio.",
+                text = "Masukkan Gemini API Key Anda untuk mengaktifkan Scan OCR foto struk. Key tersimpan lokal di perangkat dan dapat diubah atau dikosongkan kapan saja.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -166,7 +166,7 @@ fun SettingsScreen(
                     .testTag("settings_api_key_input"),
                 singleLine = true,
                 label = { Text("Gemini API Key") },
-                placeholder = { Text("AIzaSy... / AQ....") },
+                placeholder = { Text("Masukkan API Key...") },
                 textStyle = TextStyle(fontFamily = JetBrainsMonoFamily),
                 visualTransformation = if (showApiKey) {
                     VisualTransformation.None
@@ -174,11 +174,24 @@ fun SettingsScreen(
                     PasswordVisualTransformation()
                 },
                 trailingIcon = {
-                    IconButton(onClick = { showApiKey = !showApiKey }) {
-                        Icon(
-                            imageVector = if (showApiKey) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                            contentDescription = if (showApiKey) "Sembunyikan API Key" else "Lihat API Key"
-                        )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (apiKey.isNotEmpty()) {
+                            IconButton(
+                                onClick = { apiKey = "" },
+                                modifier = Modifier.testTag("clear_api_key_button")
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.DeleteOutline,
+                                    contentDescription = "Hapus API Key"
+                                )
+                            }
+                        }
+                        IconButton(onClick = { showApiKey = !showApiKey }) {
+                            Icon(
+                                imageVector = if (showApiKey) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                                contentDescription = if (showApiKey) "Sembunyikan API Key" else "Lihat API Key"
+                            )
+                        }
                     }
                 },
                 shape = RoundedCornerShape(12.dp),

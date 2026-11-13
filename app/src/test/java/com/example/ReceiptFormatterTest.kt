@@ -21,6 +21,7 @@ class ReceiptFormatterTest {
     @Test
     fun `calculateAutoAdminFee respects configured tiers and aboveMaxFee`() {
         val settings = StoreSettings()
+        assertEquals(0L, ReceiptFormatter.calculateAutoAdminFee(0L, settings))
         assertEquals(3000L, ReceiptFormatter.calculateAutoAdminFee(50_000L, settings))
         assertEquals(3000L, ReceiptFormatter.calculateAutoAdminFee(100_000L, settings))
         assertEquals(5000L, ReceiptFormatter.calculateAutoAdminFee(500_000L, settings))

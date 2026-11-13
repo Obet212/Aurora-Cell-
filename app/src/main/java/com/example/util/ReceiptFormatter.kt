@@ -161,10 +161,8 @@ object ReceiptFormatter {
     }
 
     fun calculateAutoAdminFee(nominal: Long, settings: StoreSettings): Long {
+        if (nominal <= 0L) return 0L
         val sortedTiers = settings.tiers.filter { it.maxNominal > 0 }.sortedBy { it.maxNominal }
-        if (nominal <= 0L) {
-            return sortedTiers.firstOrNull()?.fee ?: 0L
-        }
         for (tier in sortedTiers) {
             if (nominal <= tier.maxNominal) {
                 return tier.fee

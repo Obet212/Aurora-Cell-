@@ -7,7 +7,6 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.util.Base64
-import com.example.BuildConfig
 import com.example.model.OcrParsedResult
 import com.example.model.ServiceMode
 import com.example.util.ReceiptFormatter
@@ -35,14 +34,7 @@ class GeminiOcrService(private val context: Context) {
         .build()
 
     fun resolveEffectiveApiKey(settingsOverride: String): String {
-        val override = settingsOverride.trim()
-        if (override.isNotEmpty()) return override
-        val buildConfigKey = BuildConfig.GEMINI_API_KEY.trim()
-        return if (buildConfigKey.isNotEmpty() && buildConfigKey != "MY_GEMINI_API_KEY") {
-            buildConfigKey
-        } else {
-            ""
-        }
+        return settingsOverride.trim()
     }
 
     suspend fun scanReceiptImage(imageUri: Uri, apiKeyOverride: String): Result<OcrParsedResult> =
@@ -51,7 +43,7 @@ class GeminiOcrService(private val context: Context) {
             if (apiKey.isBlank()) {
                 return@withContext Result.failure(
                     IllegalStateException(
-                        "Gemini API Key belum diatur. Masukkan API Key Anda di tab Pengaturan atau panel Secrets AI Studio."
+                        "Gemini API Key belum diisi. Silakan masukkan API Key Anda di tab 3. Pengaturan."
                     )
                 )
             }
@@ -234,22 +226,28 @@ class GeminiOcrService(private val context: Context) {
         )
     }
 
-    private fun compressUriToJpegBase64(uri: Uri, maxWidth: Int): String {
+    internal fun compressUriToJpegBase64(uri: Uri, maxWidth: Int = 1024): String {
         val resolver = context.contentResolver
         val boundsOpts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        resolver.openInputStream(uri)?.use { stream ->
+        val boundsStream = resolver.openInputStream(uri)
+            ?: throw IllegalStateException("Tidak dapat membuka file gambar.")
+        boundsStream.use { stream ->
             BitmapFactory.decodeStream(stream, null, boundsOpts)
-        } ?: throw IllegalStateException("Tidak dapat membuka file gambar.")
+        }
 
         var sampleSize = 1
-        while (boundsOpts.outWidth / sampleSize > maxWidth * 2 ||
-            boundsOpts.outHeight / sampleSize > maxWidth * 2
-        ) {
-            sampleSize *= 2
+        if (boundsOpts.outWidth > 0 && boundsOpts.outHeight > 0) {
+            while (boundsOpts.outWidth / sampleSize > maxWidth * 2 ||
+                boundsOpts.outHeight / sampleSize > maxWidth * 2
+            ) {
+                sampleSize *= 2
+            }
         }
 
         val decodeOpts = BitmapFactory.Options().apply { inSampleSize = sampleSize }
-        val decoded = resolver.openInputStream(uri)?.use { stream ->
+        val decodeStream = resolver.openInputStream(uri)
+            ?: throw IllegalStateException("Tidak dapat membuka file gambar.")
+        val decoded = decodeStream.use { stream ->
             BitmapFactory.decodeStream(stream, null, decodeOpts)
         } ?: throw IllegalStateException("Format gambar tidak didukung.")
 

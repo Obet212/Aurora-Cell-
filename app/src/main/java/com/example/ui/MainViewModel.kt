@@ -57,13 +57,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val savedSettings = repository.settingsFlow.first()
             val savedDraft = repository.draftTransactionFlow.first()
-            val initialTx = if (savedDraft != null && (savedDraft.nominal > 0L || savedDraft.penerima.isNotBlank())) {
+            val initialTx = if (savedDraft != null && (savedDraft.nominal > 0L || savedDraft.penerima.isNotBlank() || savedDraft.referensi.isNotBlank())) {
                 savedDraft
             } else {
-                TransactionForm().let { defaultTx ->
-                    val fee = ReceiptFormatter.calculateAutoAdminFee(defaultTx.nominal, savedSettings)
-                    defaultTx.copy(admin = fee)
-                }
+                TransactionForm()
             }
             _uiState.update {
                 it.copy(
@@ -165,7 +162,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun resetForm() {
-        val settings = _uiState.value.settings
         _uiState.update {
             it.copy(
                 selectedImageUri = null,
@@ -173,18 +169,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             )
         }
         updateTx {
-            TransactionForm(
-                mode = ServiceMode.BANK,
-                tanggal = ReceiptFormatter.currentDateFormatted(),
-                waktu = ReceiptFormatter.currentTimeFormatted(),
-                referensi = "",
-                tujuan = "",
-                nomor = "",
-                penerima = "",
-                nominal = 0L,
-                admin = ReceiptFormatter.calculateAutoAdminFee(0L, settings),
-                adminAutoMode = true
-            )
+            TransactionForm()
         }
         emitMessage("Formulir dikosongkan")
     }

@@ -32,14 +32,14 @@ data class StoreSettings(
 
 data class TransactionForm(
     val mode: ServiceMode = ServiceMode.BANK,
-    val tanggal: String = "12 Nov 2026",
-    val waktu: String = "15:17:50 WIB",
-    val referensi: String = "9527120261112151750379TRF1737080495",
-    val tujuan: String = "BCA",
-    val nomor: String = "758-096-8702",
-    val penerima: String = "SINERGI KOMUNIKASI SEJAH",
-    val nominal: Long = 999_236L,
-    val admin: Long = 6_000L,
+    val tanggal: String = "",
+    val waktu: String = "",
+    val referensi: String = "",
+    val tujuan: String = "",
+    val nomor: String = "",
+    val penerima: String = "",
+    val nominal: Long = 0L,
+    val admin: Long = 0L,
     val adminAutoMode: Boolean = true
 ) {
     val total: Long get() = nominal + admin

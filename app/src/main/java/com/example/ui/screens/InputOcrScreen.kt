@@ -394,7 +394,7 @@ fun InputOcrScreen(
                     label = "Tanggal",
                     value = tx.tanggal,
                     onValueChange = onTanggalChange,
-                    placeholder = "12 Nov 2026",
+                    placeholder = "",
                     modifier = Modifier.weight(1f),
                     trailingHeader = {
                         TextButton(
@@ -420,7 +420,7 @@ fun InputOcrScreen(
                     label = "Waktu",
                     value = tx.waktu,
                     onValueChange = onWaktuChange,
-                    placeholder = "15:17:50 WIB",
+                    placeholder = "",
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -432,7 +432,7 @@ fun InputOcrScreen(
                 label = "No. Referensi",
                 value = tx.referensi,
                 onValueChange = onReferensiChange,
-                placeholder = "9527120261112151750379TRF1737080495",
+                placeholder = "",
                 isMonospace = true
             )
 
@@ -440,7 +440,6 @@ fun InputOcrScreen(
 
             // Bank Tujuan / E-Wallet + Chips
             val tujuanLabel = ReceiptFormatter.tujuanLabel(tx.mode)
-            val tujuanPlaceholder = if (tx.mode == ServiceMode.EWALLET) "DANA" else "BCA"
             val chipItems = if (tx.mode == ServiceMode.EWALLET) {
                 ReceiptFormatter.EWALLET_CHIPS
             } else {
@@ -451,7 +450,7 @@ fun InputOcrScreen(
                 label = tujuanLabel,
                 value = tx.tujuan,
                 onValueChange = onTujuanChange,
-                placeholder = tujuanPlaceholder
+                placeholder = ""
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -480,14 +479,14 @@ fun InputOcrScreen(
                     label = ReceiptFormatter.nomorLabel(tx.mode),
                     value = tx.nomor,
                     onValueChange = onNomorChange,
-                    placeholder = if (tx.mode == ServiceMode.EWALLET) "081234567890" else "758-096-8702",
+                    placeholder = "",
                     modifier = Modifier.weight(1f)
                 )
                 LabeledInputField(
                     label = "Nama Penerima",
                     value = tx.penerima,
                     onValueChange = onPenerimaChange,
-                    placeholder = "SINERGI KOMUNIKASI SEJAH",
+                    placeholder = "",
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -503,7 +502,7 @@ fun InputOcrScreen(
                     label = "Nominal (Rp)",
                     value = if (tx.nominal > 0L) tx.nominal.toString() else "",
                     onValueChange = onNominalChange,
-                    placeholder = "999.236",
+                    placeholder = "0",
                     isBoldLarge = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = thousandTransform,
@@ -514,9 +513,9 @@ fun InputOcrScreen(
 
                 LabeledInputField(
                     label = "Biaya Admin",
-                    value = tx.admin.toString(),
+                    value = if (tx.admin > 0L || !tx.adminAutoMode) tx.admin.toString() else "",
                     onValueChange = onAdminChange,
-                    placeholder = "6.000",
+                    placeholder = "0",
                     isBoldLarge = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = thousandTransform,
