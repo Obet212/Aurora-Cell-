@@ -276,7 +276,6 @@ fun AuroraCellApp(
                                 onToggleAdminMode = viewModel::toggleAdminMode,
                                 onQuickAdminSelect = viewModel::selectQuickAdmin,
                                 onGoToPreview = { viewModel.selectTab(AppTab.PREVIEW_PRINT) },
-                                onGoToSettings = { viewModel.selectTab(AppTab.SETTINGS) },
                                 modifier = contentModifier
                             )
                         }
@@ -306,7 +305,6 @@ fun AuroraCellApp(
                         AppTab.SETTINGS -> {
                             SettingsScreen(
                                 settings = state.settings,
-                                hasConfiguredApiKey = state.hasConfiguredApiKey,
                                 onSaveSettings = viewModel::saveSettings,
                                 modifier = contentModifier
                             )

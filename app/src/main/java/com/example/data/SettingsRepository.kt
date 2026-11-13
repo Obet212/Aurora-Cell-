@@ -46,7 +46,6 @@ class SettingsRepository(private val context: Context) {
             .ifEmpty { StoreSettings.defaultTiers() }
 
         val normalized = settings.copy(
-            apiKeyOverride = settings.apiKeyOverride.trim(),
             storeName = ReceiptFormatter.sanitizeSingleLine(settings.storeName)
                 .uppercase()
                 .ifEmpty { "AURORA CELL" },
@@ -81,7 +80,6 @@ class SettingsRepository(private val context: Context) {
             )
         }
         return JSONObject().apply {
-            put("apiKeyOverride", s.apiKeyOverride)
             put("storeName", s.storeName)
             put("storeAddress", s.storeAddress)
             put("footerLine1", s.footerLine1)
@@ -108,7 +106,6 @@ class SettingsRepository(private val context: Context) {
                 }
             }
             StoreSettings(
-                apiKeyOverride = obj.optString("apiKeyOverride", ""),
                 storeName = obj.optString("storeName", "AURORA CELL").ifBlank { "AURORA CELL" },
                 storeAddress = obj.optString("storeAddress", "Kota Semarang, Jawa Tengah")
                     .ifBlank { "Kota Semarang, Jawa Tengah" },

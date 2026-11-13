@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
-import com.example.data.GeminiOcrService
+import com.example.data.OfflineOcrService
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -26,7 +26,7 @@ class ExampleRobolectricTest {
   }
 
   @Test
-  fun `compressUriToJpegBase64 succeeds on valid image uri`() {
+  fun `decodePreparedBitmap succeeds on valid image uri`() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     val file = File(context.cacheDir, "test_receipt.png")
     val bmp = Bitmap.createBitmap(120, 200, Bitmap.Config.ARGB_8888)
@@ -35,8 +35,10 @@ class ExampleRobolectricTest {
     }
     bmp.recycle()
 
-    val service = GeminiOcrService(context)
-    val base64 = service.compressUriToJpegBase64(Uri.fromFile(file), maxWidth = 1024)
-    assertTrue(base64.isNotBlank())
+    val service = OfflineOcrService(context)
+    val prepared = service.decodePreparedBitmap(Uri.fromFile(file))
+    assertTrue(prepared.width >= 120)
+    assertTrue(prepared.height >= 200)
+    prepared.recycle()
   }
 }

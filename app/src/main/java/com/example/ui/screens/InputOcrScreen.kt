@@ -29,9 +29,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AccountBalanceWallet
-import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DocumentScanner
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Schedule
@@ -105,7 +105,6 @@ fun InputOcrScreen(
     onToggleAdminMode: () -> Unit,
     onQuickAdminSelect: (Long) -> Unit,
     onGoToPreview: () -> Unit,
-    onGoToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val thousandTransform = remember { ThousandSeparatorTransformation() }
@@ -134,13 +133,13 @@ fun InputOcrScreen(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.AutoAwesome,
+                                imageVector = Icons.Filled.DocumentScanner,
                                 contentDescription = null,
                                 tint = IndigoPrimary,
                                 modifier = Modifier.size(13.dp)
                             )
                             Text(
-                                text = "Gemini Vision AI",
+                                text = "OCR Offline",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = IndigoPrimary,
                                 fontWeight = FontWeight.Bold
@@ -153,31 +152,10 @@ fun InputOcrScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Pilih screenshot bukti transfer M-Banking (BCA, BRI, Mandiri, BNI, SeaBank) atau E-Wallet (DANA, OVO, GoPay, ShopeePay) untuk mengisi rincian struk otomatis.",
+                text = "Pilih screenshot bukti transfer M-Banking (BCA, BRI, Mandiri, BNI, SeaBank) atau E-Wallet (DANA, OVO, GoPay, ShopeePay) untuk mengisi rincian struk otomatis tanpa internet.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-
-            if (!state.hasConfiguredApiKey) {
-                Spacer(modifier = Modifier.height(10.dp))
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(10.dp))
-                        .clickable(onClick = onGoToSettings)
-                        .testTag("api_key_notice_banner"),
-                    color = AmberSoft,
-                    border = BorderStroke(1.dp, Color(0xFFFDE68A))
-                ) {
-                    Text(
-                        text = "API Key Gemini belum diatur. Ketuk di sini untuk memasukkan API Key di Pengaturan.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF92400E),
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
-            }
 
             Spacer(modifier = Modifier.height(12.dp))
 

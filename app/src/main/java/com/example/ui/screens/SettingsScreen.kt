@@ -20,12 +20,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -46,8 +43,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.model.AdminTier
@@ -59,11 +54,9 @@ import com.example.ui.components.ThousandSeparatorTransformation
 import com.example.ui.theme.DangerRed
 import com.example.ui.theme.DangerSoft
 import com.example.ui.theme.EmeraldAccent
-import com.example.ui.theme.EmeraldSoft
 import com.example.ui.theme.IndigoBorder
 import com.example.ui.theme.IndigoPrimary
 import com.example.ui.theme.IndigoSoft
-import com.example.ui.theme.JetBrainsMonoFamily
 import com.example.util.ReceiptFormatter
 
 private data class EditableTierRow(
@@ -75,9 +68,7 @@ private data class EditableTierRow(
 @Composable
 fun SettingsScreen(
     settings: StoreSettings,
-    hasConfiguredApiKey: Boolean,
     onSaveSettings: (
-        apiKeyOverride: String,
         storeName: String,
         storeAddress: String,
         footerLine1: String,
@@ -87,8 +78,6 @@ fun SettingsScreen(
     ) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var apiKey by remember { mutableStateOf(settings.apiKeyOverride) }
-    var showApiKey by remember { mutableStateOf(false) }
     var storeName by remember { mutableStateOf(settings.storeName) }
     var storeAddress by remember { mutableStateOf(settings.storeAddress) }
     var footer1 by remember { mutableStateOf(settings.footerLine1) }
@@ -97,7 +86,6 @@ fun SettingsScreen(
     val tierRows = remember { mutableStateListOf<EditableTierRow>() }
 
     LaunchedEffect(settings) {
-        apiKey = settings.apiKeyOverride
         storeName = settings.storeName
         storeAddress = settings.storeAddress
         footer1 = settings.footerLine1
@@ -123,86 +111,7 @@ fun SettingsScreen(
             .padding(14.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Card A: Gemini API Key
-        AuroraSectionCard {
-            SectionHeaderRow(
-                badgeText = "AI",
-                title = "Gemini API Key (OCR)",
-                trailing = {
-                    Surface(
-                        shape = RoundedCornerShape(999.dp),
-                        color = if (hasConfiguredApiKey) EmeraldSoft else IndigoSoft,
-                        border = BorderStroke(
-                            1.dp,
-                            if (hasConfiguredApiKey) Color(0xFFA7F3D0) else IndigoBorder
-                        )
-                    ) {
-                        Text(
-                            text = if (hasConfiguredApiKey) "Aktif" else "Belum Diisi",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = if (hasConfiguredApiKey) Color(0xFF065F46) else IndigoPrimary,
-                            modifier = Modifier.padding(horizontal = 9.dp, vertical = 4.dp)
-                        )
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Masukkan Gemini API Key Anda untuk mengaktifkan Scan OCR foto struk. Key tersimpan lokal di perangkat dan dapat diubah atau dikosongkan kapan saja.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            OutlinedTextField(
-                value = apiKey,
-                onValueChange = { apiKey = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("settings_api_key_input"),
-                singleLine = true,
-                label = { Text("Gemini API Key") },
-                placeholder = { Text("Masukkan API Key...") },
-                textStyle = TextStyle(fontFamily = JetBrainsMonoFamily),
-                visualTransformation = if (showApiKey) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
-                },
-                trailingIcon = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (apiKey.isNotEmpty()) {
-                            IconButton(
-                                onClick = { apiKey = "" },
-                                modifier = Modifier.testTag("clear_api_key_button")
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.DeleteOutline,
-                                    contentDescription = "Hapus API Key"
-                                )
-                            }
-                        }
-                        IconButton(onClick = { showApiKey = !showApiKey }) {
-                            Icon(
-                                imageVector = if (showApiKey) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                                contentDescription = if (showApiKey) "Sembunyikan API Key" else "Lihat API Key"
-                            )
-                        }
-                    }
-                },
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.surface,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
-                )
-            )
-        }
-
-        // Card B: Identitas Toko & Footer Struk
+        // Card A: Identitas Toko & Footer Struk
         AuroraSectionCard {
             SectionHeaderRow(
                 badgeText = "A",
@@ -431,7 +340,6 @@ fun SettingsScreen(
                         if (max > 0L) AdminTier(id = r.id, maxNominal = max, fee = fee) else null
                     }
                     onSaveSettings(
-                        apiKey,
                         storeName,
                         storeAddress,
                         footer1,

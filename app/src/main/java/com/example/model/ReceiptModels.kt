@@ -12,7 +12,6 @@ data class AdminTier(
 )
 
 data class StoreSettings(
-    val apiKeyOverride: String = "",
     val storeName: String = "AURORA CELL",
     val storeAddress: String = "Kota Semarang, Jawa Tengah",
     val footerLine1: String = "Terima kasih telah bertransaksi",

@@ -1,6 +1,6 @@
 {
   "name": "Aurora Cell",
-  "description": "Aplikasi kasir cetak struk thermal 58mm dengan pemindai OCR bukti transfer dan e-wallet.",
+  "description": "Aplikasi kasir cetak struk thermal 58mm dengan pemindai OCR offline bukti transfer dan e-wallet.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

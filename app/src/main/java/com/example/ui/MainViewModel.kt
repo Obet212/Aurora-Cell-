@@ -4,7 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.GeminiOcrService
+import com.example.data.OfflineOcrService
 import com.example.data.SettingsRepository
 import com.example.model.AdminTier
 import com.example.model.BluetoothPrinterDevice
@@ -38,14 +38,13 @@ data class MainUiState(
     val selectedImageUri: Uri? = null,
     val pairedPrinters: List<BluetoothPrinterDevice> = emptyList(),
     val showPrinterDialog: Boolean = false,
-    val isPrintingBluetooth: Boolean = false,
-    val hasConfiguredApiKey: Boolean = false
+    val isPrintingBluetooth: Boolean = false
 )
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = SettingsRepository(application.applicationContext)
-    private val ocrService = GeminiOcrService(application.applicationContext)
+    private val ocrService = OfflineOcrService(application.applicationContext)
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -65,8 +64,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _uiState.update {
                 it.copy(
                     settings = savedSettings,
-                    tx = initialTx,
-                    hasConfiguredApiKey = ocrService.resolveEffectiveApiKey(savedSettings.apiKeyOverride).isNotEmpty()
+                    tx = initialTx
                 )
             }
         }
@@ -191,7 +189,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     ocrState = OcrUiState.Loading
                 )
             }
-            val result = ocrService.scanReceiptImage(uri, _uiState.value.settings.apiKeyOverride)
+            val result = ocrService.scanReceiptImage(uri)
             result.onSuccess { parsed ->
                 val settings = _uiState.value.settings
                 updateTx { current ->
@@ -215,7 +213,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.update {
                     it.copy(
                         ocrState = OcrUiState.Success(
-                            "Scan OCR berhasil! Data transaksi (${parsed.tujuan.ifBlank { "-" }}) telah diisikan otomatis."
+                            "Scan OCR offline berhasil! Data transaksi (${parsed.tujuan.ifBlank { "-" }}) telah diisikan otomatis."
                         )
                     )
                 }
@@ -234,7 +232,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveSettings(
-        apiKeyOverride: String,
         storeName: String,
         storeAddress: String,
         footerLine1: String,
@@ -249,7 +246,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         val updated = StoreSettings(
-            apiKeyOverride = apiKeyOverride.trim(),
             storeName = ReceiptFormatter.sanitizeSingleLine(storeName).uppercase().ifEmpty { "AURORA CELL" },
             storeAddress = ReceiptFormatter.sanitizeSingleLine(storeAddress).ifEmpty { "Kota Semarang, Jawa Tengah" },
             footerLine1 = ReceiptFormatter.sanitizeSingleLine(footerLine1).ifEmpty { "Terima kasih telah bertransaksi" },
@@ -268,8 +264,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
                 state.copy(
                     settings = updated,
-                    tx = adjustedTx,
-                    hasConfiguredApiKey = ocrService.resolveEffectiveApiKey(updated.apiKeyOverride).isNotEmpty()
+                    tx = adjustedTx
                 )
             }
             emitMessage("Pengaturan disimpan (${updated.tiers.size} aturan admin aktif)")
