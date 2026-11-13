@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.OcrUnrecognizedException
 import com.example.data.OfflineOcrService
 import com.example.data.SettingsRepository
 import com.example.model.AdminTier
@@ -38,7 +39,8 @@ data class MainUiState(
     val selectedImageUri: Uri? = null,
     val pairedPrinters: List<BluetoothPrinterDevice> = emptyList(),
     val showPrinterDialog: Boolean = false,
-    val isPrintingBluetooth: Boolean = false
+    val isPrintingBluetooth: Boolean = false,
+    val lastOcrRawText: String = ""
 )
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -163,7 +165,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update {
             it.copy(
                 selectedImageUri = null,
-                ocrState = OcrUiState.Idle
+                ocrState = OcrUiState.Idle,
+                lastOcrRawText = ""
             )
         }
         updateTx {
@@ -176,7 +179,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update {
             it.copy(
                 selectedImageUri = null,
-                ocrState = OcrUiState.Idle
+                ocrState = OcrUiState.Idle,
+                lastOcrRawText = ""
             )
         }
     }
@@ -186,7 +190,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _uiState.update {
                 it.copy(
                     selectedImageUri = uri,
-                    ocrState = OcrUiState.Loading
+                    ocrState = OcrUiState.Loading,
+                    lastOcrRawText = ""
                 )
             }
             val result = ocrService.scanReceiptImage(uri)
@@ -214,17 +219,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     it.copy(
                         ocrState = OcrUiState.Success(
                             "Scan OCR offline berhasil! Data transaksi (${parsed.tujuan.ifBlank { "-" }}) telah diisikan otomatis."
-                        )
+                        ),
+                        lastOcrRawText = parsed.rawText
                     )
                 }
                 emitMessage("Bukti transaksi berhasil dipindai!")
             }.onFailure { err ->
+                val partialRaw = (err as? OcrUnrecognizedException)?.rawText.orEmpty()
                 _uiState.update {
                     it.copy(
                         ocrState = OcrUiState.Error(
                             (err.message ?: "Gagal memindai bukti transaksi.") +
                                 " Anda tetap dapat mengisi data secara manual."
-                        )
+                        ),
+                        lastOcrRawText = partialRaw
                     )
                 }
             }
@@ -309,6 +317,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val text = ReceiptFormatter.buildThermal32String(state.tx, state.settings)
         ReceiptOutputManager.copyToClipboard(getApplication(), text)
         emitMessage("Teks struk 58mm (32 karakter) berhasil disalin!")
+    }
+
+    fun copyOcrRawText() {
+        val raw = _uiState.value.lastOcrRawText.trim()
+        if (raw.isBlank()) return
+        ReceiptOutputManager.copyToClipboard(
+            context = getApplication(),
+            text = raw,
+            label = "Hasil OCR Aurora Cell"
+        )
+        emitMessage("Teks hasil OCR berhasil disalin!")
     }
 
     fun printViaRawBt() {

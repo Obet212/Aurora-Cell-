@@ -19,6 +19,11 @@ import kotlin.coroutines.resumeWithException
 import kotlin.math.max
 import kotlin.math.roundToInt
 
+class OcrUnrecognizedException(
+    message: String,
+    val rawText: String
+) : IllegalStateException(message)
+
 class OfflineOcrService(private val context: Context) {
 
     private val recognizer by lazy {
@@ -56,8 +61,9 @@ class OfflineOcrService(private val context: Context) {
 
                 if (!hasUsefulField) {
                     return@withContext Result.failure(
-                        IllegalStateException(
-                            "Data bukti transfer belum terbaca lengkap. Silakan periksa foto atau lengkapi secara manual."
+                        OcrUnrecognizedException(
+                            message = "Data bukti transfer belum terbaca lengkap. Anda dapat menyalin teks hasil OCR di bawah atau melengkapi secara manual.",
+                            rawText = parsed.rawText.ifBlank { visionText.text.trim() }
                         )
                     )
                 }

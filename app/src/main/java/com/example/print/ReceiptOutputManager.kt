@@ -52,9 +52,13 @@ object ReceiptOutputManager {
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
 
-    fun copyToClipboard(context: Context, text: String) {
+    fun copyToClipboard(
+        context: Context,
+        text: String,
+        label: String = "Struk Aurora Cell 58mm"
+    ) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.setPrimaryClip(ClipData.newPlainText("Struk Aurora Cell 58mm", text))
+        clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
     }
 
     fun shareToWhatsApp(context: Context, message: String): Boolean {

@@ -64,5 +64,6 @@ data class OcrParsedResult(
     val tujuan: String,
     val nomor: String,
     val penerima: String,
-    val nominal: Long
+    val nominal: Long,
+    val rawText: String = ""
 )

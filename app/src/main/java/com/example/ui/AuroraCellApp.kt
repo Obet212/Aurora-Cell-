@@ -261,6 +261,7 @@ fun AuroraCellApp(
                                     cameraLauncher.launch(uri)
                                 },
                                 onClearImage = viewModel::clearSelectedImage,
+                                onCopyOcrRawText = viewModel::copyOcrRawText,
                                 onFillSample = viewModel::fillSampleTransaction,
                                 onResetForm = viewModel::resetForm,
                                 onSelectMode = { mode -> viewModel.setServiceMode(mode) },

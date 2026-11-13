@@ -143,6 +143,18 @@ object ReceiptTextParser {
         val nomor = extractNomor(rows, allTextLines, recipientParty, referensi, nominal)
         val penerima = extractPenerima(rows, allTextLines, recipientParty)
 
+        val formattedRawText = if (rows.isNotEmpty()) {
+            rows.joinToString("\n") { row ->
+                if (row.leftLabel != null && row.rightValue != null) {
+                    "${row.leftLabel}: ${row.rightValue}"
+                } else {
+                    row.fullText
+                }
+            }
+        } else {
+            rawFallbackText.trim()
+        }
+
         return OcrParsedResult(
             tipe = mode,
             tanggal = tanggal,
@@ -151,7 +163,8 @@ object ReceiptTextParser {
             tujuan = tujuan,
             nomor = nomor,
             penerima = penerima,
-            nominal = nominal
+            nominal = nominal,
+            rawText = formattedRawText
         )
     }
 

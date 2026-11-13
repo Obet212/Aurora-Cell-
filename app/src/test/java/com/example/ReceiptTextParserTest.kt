@@ -4,6 +4,7 @@ import com.example.data.OcrLineBox
 import com.example.data.ReceiptTextParser
 import com.example.model.ServiceMode
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ReceiptTextParserTest {
@@ -43,6 +44,8 @@ class ReceiptTextParserTest {
         assertEquals("758-096-8702", result.nomor)
         assertEquals("SINERGI KOMUNIKASI SEJAH", result.penerima)
         assertEquals("9527120261112151750379TRF1737080495", result.referensi)
+        assertTrue(result.rawText.contains("Nama Penerima: SINERGI KOMUNIKASI SEJAH"))
+        assertTrue(result.rawText.contains("Rekening Tujuan: 758 - 096 - 8702"))
     }
 
     @Test

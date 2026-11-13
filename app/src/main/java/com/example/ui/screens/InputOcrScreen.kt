@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -31,7 +32,10 @@ import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DocumentScanner
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Schedule
@@ -48,7 +52,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -80,6 +87,7 @@ import com.example.ui.theme.EwalletSky
 import com.example.ui.theme.IndigoBorder
 import com.example.ui.theme.IndigoPrimary
 import com.example.ui.theme.IndigoSoft
+import com.example.ui.theme.JetBrainsMonoFamily
 import com.example.ui.theme.SlateDark900
 import com.example.util.ReceiptFormatter
 
@@ -90,6 +98,7 @@ fun InputOcrScreen(
     onPickGallery: () -> Unit,
     onTakeCamera: () -> Unit,
     onClearImage: () -> Unit,
+    onCopyOcrRawText: () -> Unit,
     onFillSample: () -> Unit,
     onResetForm: () -> Unit,
     onSelectMode: (ServiceMode) -> Unit,
@@ -282,6 +291,16 @@ fun InputOcrScreen(
                             )
                         }
                     }
+                }
+            }
+
+            AnimatedVisibility(visible = state.lastOcrRawText.isNotBlank()) {
+                Column {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    OcrRawResultBox(
+                        rawText = state.lastOcrRawText,
+                        onCopyAll = onCopyOcrRawText
+                    )
                 }
             }
         }
@@ -669,6 +688,109 @@ private fun SelectedImagePreview(
                 tint = Color.White,
                 modifier = Modifier.size(16.dp)
             )
+        }
+    }
+}
+
+@Composable
+private fun OcrRawResultBox(
+    rawText: String,
+    onCopyAll: () -> Unit
+) {
+    var expanded by remember(rawText) { mutableStateOf(true) }
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag("ocr_raw_result_card"),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Hasil Teks OCR",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Tahan teks untuk salin sebagian, atau Salin Semua",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = onCopyAll,
+                        modifier = Modifier
+                            .minimumInteractiveComponentSize()
+                            .heightIn(min = 38.dp)
+                            .testTag("copy_ocr_raw_button"),
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ContentCopy,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(text = "Salin", style = MaterialTheme.typography.labelMedium)
+                    }
+
+                    IconButton(
+                        onClick = { expanded = !expanded },
+                        modifier = Modifier
+                            .minimumInteractiveComponentSize()
+                            .testTag("toggle_ocr_raw_button")
+                    ) {
+                        Icon(
+                            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                            contentDescription = if (expanded) "Sembunyikan Hasil OCR" else "Tampilkan Hasil OCR"
+                        )
+                    }
+                }
+            }
+
+            AnimatedVisibility(visible = expanded) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 175.dp)
+                            .verticalScroll(rememberScrollState())
+                            .padding(10.dp)
+                    ) {
+                        SelectionContainer {
+                            Text(
+                                text = rawText,
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontFamily = JetBrainsMonoFamily
+                                ),
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.testTag("ocr_raw_selectable_text")
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
