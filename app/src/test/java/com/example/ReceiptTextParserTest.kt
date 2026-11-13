@@ -10,7 +10,7 @@ import org.junit.Test
 class ReceiptTextParserTest {
 
     @Test
-    fun `parses myBCA screenshot with right-aligned wrapped name, spaced rekening, and 3-line ref`() {
+    fun `parses myBCA screenshot with Header Zone, 0_45W X-threshold, Dynamic Y-banding, and pure-digit rekening`() {
         val boxes = listOf(
             OcrLineBox("Transfer Berhasil", 320f, 240f, 680f, 280f),
             OcrLineBox("12 Nov 2026 15:17:50", 330f, 290f, 670f, 320f),
@@ -30,18 +30,18 @@ class ReceiptTextParserTest {
             OcrLineBox("Berita", 50f, 1020f, 160f, 1055f),
             OcrLineBox("No. Referensi", 50f, 1100f, 310f, 1135f),
             OcrLineBox("952712026111215175", 500f, 1100f, 950f, 1135f),
-            OcrLineBox("0379TRF173708049", 505f, 1140f, 950f, 1175f),
+            OcrLineBox("0379trf173708049", 505f, 1140f, 950f, 1175f),
             OcrLineBox("5", 920f, 1180f, 950f, 1215f)
         )
 
-        val result = ReceiptTextParser.parseSpatialLines(boxes)
+        val result = ReceiptTextParser.parseCoordinateLayout(boxes, imageWidth = 1000f, imageHeight = 1300f)
 
         assertEquals(ServiceMode.BANK, result.tipe)
         assertEquals("BCA", result.tujuan)
         assertEquals("12 Nov 2026", result.tanggal)
         assertEquals("15:17:50 WIB", result.waktu)
         assertEquals(999_236L, result.nominal)
-        assertEquals("758-096-8702", result.nomor)
+        assertEquals("7580968702", result.nomor)
         assertEquals("SINERGI KOMUNIKASI SEJAH", result.penerima)
         assertEquals("9527120261112151750379TRF1737080495", result.referensi)
         assertTrue(result.rawText.contains("Nama Penerima: SINERGI KOMUNIKASI SEJAH"))
@@ -75,7 +75,7 @@ class ReceiptTextParserTest {
             OcrLineBox("799-1b4b5b185fc3", 610f, 1015f, 920f, 1050f)
         )
 
-        val result = ReceiptTextParser.parseSpatialLines(boxes)
+        val result = ReceiptTextParser.parseCoordinateLayout(boxes, imageWidth = 1000f, imageHeight = 1100f)
 
         assertEquals(ServiceMode.EWALLET, result.tipe)
         assertEquals("DANA", result.tujuan)
@@ -113,42 +113,44 @@ class ReceiptTextParserTest {
             OcrLineBox("Rp0", 830f, 1030f, 910f, 1065f)
         )
 
-        val result = ReceiptTextParser.parseSpatialLines(boxes)
+        val result = ReceiptTextParser.parseCoordinateLayout(boxes, imageWidth = 1000f, imageHeight = 1150f)
 
         assertEquals(ServiceMode.BANK, result.tipe)
         assertEquals("BRI", result.tujuan)
         assertEquals("11 Nov 2026", result.tanggal)
         assertEquals("15:28:17 WIB", result.waktu)
         assertEquals(202_006L, result.nominal)
-        assertEquals("0055 0100 2452 301", result.nomor)
+        assertEquals("005501002452301", result.nomor)
         assertEquals("ORDER KUOTA EVOLUSI", result.penerima)
         assertEquals("250029825490", result.referensi)
     }
 
     @Test
-    fun `parses unsplit prefix label rows when ML Kit omits column gap`() {
+    fun `parses unsplit prefix label rows and sanitizes lookalike characters to digits`() {
         val raw = """
             Transfer Berhasil
             12 Nov 2026 15:17:50
             Nama Penerima SINERGI KOMUNIKASI SEJAH
-            Rekening Tujuan 758 - 096 - 8702
+            Rekening Tujuan 7S8 - O96 - B7l2
             Nominal Tujuan IDR 999,236.00
-            No. Referensi 9527120261112151750379TRF1737080495
+            No. Referensi 9527120261112151750379trf1737080495
         """.trimIndent()
 
         val result = ReceiptTextParser.parseRawText(raw)
 
         assertEquals(ServiceMode.BANK, result.tipe)
         assertEquals(999_236L, result.nominal)
-        assertEquals("758-096-8702", result.nomor)
+        assertEquals("7580968712", result.nomor)
         assertEquals("SINERGI KOMUNIKASI SEJAH", result.penerima)
         assertEquals("9527120261112151750379TRF1737080495", result.referensi)
     }
 
     @Test
-    fun `normalizes OCR letter O confusion in rupiah amounts`() {
+    fun `normalizes OCR letter lookalike typos and strips decimal cents before thousands`() {
         assertEquals(140_000L, ReceiptTextParser.parseRupiahAmount("Rp14O.OOO"))
+        assertEquals(518_000L, ReceiptTextParser.parseRupiahAmount("Rp 5lB.000,00"))
         assertEquals(999_236L, ReceiptTextParser.parseRupiahAmount("Rp 999.236,00"))
         assertEquals(50_000L, ReceiptTextParser.parseRupiahAmount("IDR 50,000.00"))
+        assertEquals("085518001234", ReceiptTextParser.sanitizeDigitsOnlyAccount("O8SS lB00 1234"))
     }
 }

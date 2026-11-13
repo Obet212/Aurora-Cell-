@@ -19,11 +19,15 @@ data class OcrLineBox(
     val height: Float get() = (bottom - top).coerceAtLeast(1f)
 }
 
-internal data class LogicalRow(
-    val fullText: String,
-    val leftLabel: String?,
-    val rightValue: String?
-)
+internal data class BandedField(
+    val label: String,
+    val valueLines: List<String>
+) {
+    val joinedWithSpace: String
+        get() = ReceiptFormatter.sanitizeSingleLine(valueLines.joinToString(" "))
+    val joinedNoSpace: String
+        get() = valueLines.joinToString("") { it.replace(Regex("\\s+"), "") }
+}
 
 internal data class TransferParty(
     val name: String,
@@ -85,7 +89,7 @@ object ReceiptTextParser {
         "ALLO BANK" to listOf("allo bank")
     )
 
-    private val KNOWN_LABEL_PREFIXES = listOf(
+    private val ANCHOR_LABEL_KEYWORDS = listOf(
         "nomor rekening tujuan", "no. rekening tujuan", "rekening tujuan",
         "nomor referensi", "no. referensi", "no referensi", "kode referensi",
         "id order merchant", "id transaksi", "no. transaksi", "nomor transaksi",
@@ -98,7 +102,8 @@ object ReceiptTextParser {
         "nomor rekening", "no. rekening", "no rekening",
         "akun shopeepay", "akun gopay", "akun dana", "akun ovo", "akun linkaja",
         "biaya admin", "biaya transaksi", "total bayar", "total transfer",
-        "nominal", "jumlah", "catatan", "berita", "penerima", "nama"
+        "detail penerima", "detail transaksi",
+        "tujuan", "nominal", "jumlah", "catatan", "berita", "penerima", "nama"
     )
 
     fun parseRawText(rawText: String): OcrParsedResult {
@@ -116,44 +121,146 @@ object ReceiptTextParser {
                     bottom = top + 30f
                 )
             }
-        return parseSpatialLines(lines, rawText)
+        return parseCoordinateLayout(lines, imageWidth = 1000f, imageHeight = (lines.size * 40f).coerceAtLeast(100f))
     }
 
     fun parseSpatialLines(
         lineBoxes: List<OcrLineBox>,
-        rawFallbackText: String = lineBoxes.joinToString("\n") { it.text }
+        rawFallbackText: String = ""
     ): OcrParsedResult {
-        val cleanedBoxes = lineBoxes
+        val maxRight = lineBoxes.maxOfOrNull { it.right } ?: 1000f
+        val maxBottom = lineBoxes.maxOfOrNull { it.bottom } ?: 1000f
+        return parseCoordinateLayout(lineBoxes, imageWidth = maxRight, imageHeight = maxBottom)
+    }
+
+    /**
+     * Coordinate-based OCR layout engine:
+     * 1. Sorts Text.Line bounding boxes vertically by `top`.
+     * 2. Detects topmost left-column anchor label (`firstAnchorTop`) to separate Header Zone
+     *    from Two-Column Detail Zone.
+     * 3. Applies X-Threshold = 0.45 * imageWidth to separate Anchor Labels (< 0.45*W) from
+     *    Value Lines (>= 0.45*W).
+     * 4. Applies Dynamic Y-Row Banding: [label[i].top - 10px, label[i+1].top - 10px) using
+     *    each value box's `centerY` so multi-line names and multi-line references merge cleanly.
+     */
+    fun parseCoordinateLayout(
+        lineBoxes: List<OcrLineBox>,
+        imageWidth: Float,
+        imageHeight: Float = 0f
+    ): OcrParsedResult {
+        val cleaned = lineBoxes
             .map { it.copy(text = ReceiptFormatter.sanitizeSingleLine(it.text)) }
             .filter { it.text.isNotBlank() }
+            .sortedWith(compareBy<OcrLineBox> { it.top }.thenBy { it.left })
 
-        val rows = buildLogicalRows(cleanedBoxes)
-        val allTextLines = (rows.map { it.fullText } + rawFallbackText.lines().map { it.trim() })
-            .filter { it.isNotBlank() }
-            .distinct()
+        if (cleaned.isEmpty()) {
+            return OcrParsedResult(
+                tipe = ServiceMode.BANK,
+                tanggal = "",
+                waktu = "",
+                referensi = "",
+                tujuan = "",
+                nomor = "",
+                penerima = "",
+                nominal = 0L,
+                rawText = ""
+            )
+        }
 
-        val parties = extractTransferParties(rows)
-        val recipientParty = selectRecipientParty(parties)
+        val effectiveWidth = if (imageWidth > 0f) imageWidth else cleaned.maxOf { it.right }.coerceAtLeast(1f)
+        val xThreshold = 0.45f * effectiveWidth
 
-        val tanggal = extractDate(allTextLines, rows)
-        val waktu = extractTime(allTextLines, rows)
-        val nominal = extractNominal(rows, allTextLines)
-        val referensi = extractReferensi(rows, allTextLines)
-        val (tujuan, mode) = extractTujuanAndMode(rows, allTextLines, recipientParty)
-        val nomor = extractNomor(rows, allTextLines, recipientParty, referensi, nominal)
-        val penerima = extractPenerima(rows, allTextLines, recipientParty)
+        // Find topmost anchor label coordinate in left column (left < 0.45 * imageWidth)
+        val firstAnchorTop = cleaned
+            .firstOrNull { box ->
+                box.left < xThreshold && isKnownAnchorLabel(cleanLabelNoise(box.text))
+            }?.top ?: Float.MAX_VALUE
 
-        val formattedRawText = if (rows.isNotEmpty()) {
-            rows.joinToString("\n") { row ->
-                if (row.leftLabel != null && row.rightValue != null) {
-                    "${row.leftLabel}: ${row.rightValue}"
-                } else {
-                    row.fullText
+        val headerBoxes = cleaned.filter { it.top < firstAnchorTop }
+        val bodyBoxes = cleaned.filter { it.top >= firstAnchorTop }
+
+        // Build Header Zone text lines
+        val headerLines = groupHorizontalRows(headerBoxes).map { row ->
+            row.joinToString(" ") { it.text }
+        }
+
+        // Separate 2 columns in body zone: left < xThreshold -> Anchor Labels, left >= xThreshold -> Values
+        val leftBoxesRaw = bodyBoxes.filter { it.left < xThreshold }
+        val rightBoxes = bodyBoxes.filter { it.left >= xThreshold }
+            .sortedWith(compareBy<OcrLineBox> { it.top }.thenBy { it.left })
+
+        // Group same-row tokens on left column (e.g. "ID Transaksi" + "©")
+        val mergedAnchorBoxes = groupHorizontalRows(leftBoxesRaw).map { row ->
+            OcrLineBox(
+                text = row.joinToString(" ") { it.text },
+                left = row.minOf { it.left },
+                top = row.minOf { it.top },
+                right = row.maxOf { it.right },
+                bottom = row.maxOf { it.bottom }
+            )
+        }.sortedBy { it.top }
+
+        // Keep left-column anchor labels intact; only split colon/prefix when a box combines label + value
+        val extraBandedFields = mutableListOf<BandedField>()
+        val activeAnchors = mergedAnchorBoxes.filter { box ->
+            val labelText = cleanLabelNoise(box.text)
+            when {
+                isKnownAnchorLabelExact(labelText) -> true
+                else -> {
+                    val split = parseColonSplit(box.text) ?: parseKnownPrefixSplit(labelText)
+                    if (split != null) {
+                        extraBandedFields.add(BandedField(cleanLabelNoise(split.first), listOf(split.second)))
+                        false
+                    } else {
+                        isKnownAnchorLabel(labelText)
+                    }
                 }
             }
-        } else {
-            rawFallbackText.trim()
         }
+
+        // Dynamic Y-Row Banding: [label[i].top - 10px, label[i+1].top - 10px) matching value.centerY
+        val bandedFields = mutableListOf<BandedField>()
+        for (i in activeAnchors.indices) {
+            val anchor = activeAnchors[i]
+            val bandStartY = anchor.top - 10f
+            val bandEndY = if (i + 1 < activeAnchors.size) {
+                activeAnchors[i + 1].top - 10f
+            } else {
+                Float.MAX_VALUE
+            }
+
+            val bandValues = rightBoxes
+                .filter { it.centerY >= bandStartY && it.centerY < bandEndY }
+                .sortedWith(compareBy<OcrLineBox> { it.top }.thenBy { it.left })
+                .map { it.text }
+
+            bandedFields.add(
+                BandedField(
+                    label = cleanLabelNoise(anchor.text),
+                    valueLines = bandValues
+                )
+            )
+        }
+
+        val allBandedFields = (bandedFields + extraBandedFields)
+        val bodyAllLines = groupHorizontalRows(bodyBoxes).map { row ->
+            row.joinToString(" ") { it.text }
+        }
+        val allLines = (headerLines + bodyAllLines).distinct()
+
+        // Also detect Sender -> Recipient card blocks (Qita by BRI, BRImo, Livin')
+        val parties = extractTransferParties(bodyAllLines)
+        val recipientParty = selectRecipientParty(parties)
+
+        val tanggal = extractDate(headerLines, allBandedFields, allLines)
+        val waktu = extractTime(headerLines, allBandedFields, allLines)
+        val nominal = extractNominal(headerLines, allBandedFields, allLines)
+        val referensi = extractReferensi(allBandedFields, allLines)
+        val (tujuan, mode) = extractTujuanAndMode(allBandedFields, recipientParty, headerLines, allLines)
+        val nomor = extractNomor(allBandedFields, recipientParty, allLines, referensi, nominal)
+        val penerima = extractPenerima(allBandedFields, recipientParty, allLines)
+
+        val formattedRawText = buildFormattedRawText(headerLines, allBandedFields, bodyAllLines)
 
         return OcrParsedResult(
             tipe = mode,
@@ -168,164 +275,39 @@ object ReceiptTextParser {
         )
     }
 
-    internal fun buildLogicalRows(boxes: List<OcrLineBox>): List<LogicalRow> {
+    private fun groupHorizontalRows(boxes: List<OcrLineBox>): List<List<OcrLineBox>> {
         if (boxes.isEmpty()) return emptyList()
-
-        val minLeft = boxes.minOf { it.left }
-        val maxRight = boxes.maxOf { it.right }
-        val totalWidth = (maxRight - minLeft).coerceAtLeast(1f)
-
         val sorted = boxes.sortedWith(compareBy<OcrLineBox> { it.centerY }.thenBy { it.left })
-        val visualRows = mutableListOf<MutableList<OcrLineBox>>()
-
+        val rows = mutableListOf<MutableList<OcrLineBox>>()
         for (box in sorted) {
-            val lastRow = visualRows.lastOrNull()
-            if (lastRow == null) {
-                visualRows.add(mutableListOf(box))
+            val last = rows.lastOrNull()
+            if (last == null) {
+                rows.add(mutableListOf(box))
             } else {
-                val avgCenterY = lastRow.map { it.centerY }.average().toFloat()
-                val avgHeight = lastRow.map { it.height }.average().toFloat()
-                val tolerance = max(avgHeight, box.height) * 0.55f
-                if (abs(box.centerY - avgCenterY) <= tolerance) {
-                    lastRow.add(box)
+                val avgY = last.map { it.centerY }.average().toFloat()
+                val avgH = last.map { it.height }.average().toFloat()
+                if (abs(box.centerY - avgY) <= max(avgH, box.height) * 0.55f) {
+                    last.add(box)
                 } else {
-                    visualRows.add(mutableListOf(box))
+                    rows.add(mutableListOf(box))
                 }
             }
         }
-
-        val result = mutableListOf<LogicalRow>()
-        var lastRowHadSplit = false
-        var lastLeftLabelRight = minLeft
-        var lastRightAnchorLeft = Float.MAX_VALUE
-        var lastRightAnchorRight = maxRight
-        var lastRowBottom = 0f
-        var lastRowAvgHeight = 20f
-
-        for (rowItems in visualRows) {
-            val ordered = rowItems.sortedBy { it.left }
-            val fullText = ordered.joinToString(" ") { it.text }
-            val rowTop = ordered.minOf { it.top }
-            val rowBottom = ordered.maxOf { it.bottom }
-            val firstLeft = ordered.first().left
-            val rowRight = ordered.last().right
-            val rowHeight = ordered.map { it.height }.average().toFloat()
-
-            var splitIdx = -1
-            var maxGap = 0f
-            for (i in 0 until ordered.size - 1) {
-                val gap = ordered[i + 1].left - ordered[i].right
-                if (gap > maxGap) {
-                    maxGap = gap
-                    splitIdx = i
-                }
-            }
-
-            val splitThreshold = max(rowHeight * 1.3f, totalWidth * 0.055f)
-            val colonSplit = parseColonSplit(fullText)
-            val prefixSplit = parseKnownPrefixSplit(fullText)
-
-            if (splitIdx >= 0 && maxGap >= splitThreshold) {
-                val leftItems = ordered.subList(0, splitIdx + 1)
-                val rightItems = ordered.subList(splitIdx + 1, ordered.size)
-                val leftPart = leftItems.joinToString(" ") { it.text }
-                val rightPart = rightItems.joinToString(" ") { it.text }
-                result.add(
-                    LogicalRow(
-                        fullText = fullText,
-                        leftLabel = cleanLabelNoise(leftPart),
-                        rightValue = rightPart.trim()
-                    )
-                )
-                val isAvatarInitialRow = leftPart.length <= 3 &&
-                    leftPart.all { it.isLetter() } &&
-                    rightItems.first().left < minLeft + totalWidth * 0.45f
-                lastRowHadSplit = !isAvatarInitialRow
-                lastLeftLabelRight = leftItems.last().right
-                lastRightAnchorLeft = rightItems.first().left
-                lastRightAnchorRight = rightItems.last().right
-                lastRowBottom = rowBottom
-                lastRowAvgHeight = rowHeight
-            } else if (colonSplit != null) {
-                result.add(
-                    LogicalRow(
-                        fullText = fullText,
-                        leftLabel = cleanLabelNoise(colonSplit.first),
-                        rightValue = colonSplit.second.trim()
-                    )
-                )
-                lastRowHadSplit = false
-                lastRowBottom = rowBottom
-                lastRowAvgHeight = rowHeight
-            } else if (prefixSplit != null) {
-                result.add(
-                    LogicalRow(
-                        fullText = fullText,
-                        leftLabel = cleanLabelNoise(prefixSplit.first),
-                        rightValue = prefixSplit.second.trim()
-                    )
-                )
-                lastRowHadSplit = false
-                lastRowBottom = rowBottom
-                lastRowAvgHeight = rowHeight
-            } else {
-                val verticalClose = (rowTop - lastRowBottom) <= max(lastRowAvgHeight, rowHeight) * 2.35f
-                val clearedLeftColumn = firstLeft >= lastLeftLabelRight + rowHeight * 0.4f ||
-                    firstLeft >= minLeft + totalWidth * 0.30f
-                val alignedLeftOfRightCol = firstLeft >= max(
-                    lastRightAnchorLeft - totalWidth * 0.12f,
-                    minLeft + totalWidth * 0.35f
-                )
-                val alignedRightEdge = abs(rowRight - lastRightAnchorRight) <= totalWidth * 0.12f
-
-                val isRightContinuation = lastRowHadSplit &&
-                    verticalClose &&
-                    clearedLeftColumn &&
-                    (alignedLeftOfRightCol || alignedRightEdge) &&
-                    !looksLikeStandaloneLabel(fullText)
-
-                if (isRightContinuation && result.isNotEmpty()) {
-                    val prev = result.removeAt(result.lastIndex)
-                    val joinedRight = joinContinuation(prev.rightValue.orEmpty(), fullText)
-                    result.add(
-                        prev.copy(
-                            fullText = "${prev.fullText} $fullText",
-                            rightValue = joinedRight
-                        )
-                    )
-                    lastRowBottom = rowBottom
-                    lastRightAnchorLeft = minOf(lastRightAnchorLeft, firstLeft)
-                    lastRightAnchorRight = maxOf(lastRightAnchorRight, rowRight)
-                } else {
-                    result.add(
-                        LogicalRow(
-                            fullText = fullText,
-                            leftLabel = null,
-                            rightValue = null
-                        )
-                    )
-                    lastRowHadSplit = false
-                    lastRowBottom = rowBottom
-                    lastRowAvgHeight = rowHeight
-                }
-            }
-        }
-
-        return result
+        return rows.map { row -> row.sortedBy { it.left } }
     }
 
-    private fun joinContinuation(existing: String, continuation: String): String {
-        val a = existing.trim()
-        val b = continuation.trim()
-        if (a.isEmpty()) return b
-        if (b.isEmpty()) return a
-        val aNoSpace = !a.contains(' ')
-        val bNoSpace = !b.contains(' ')
-        val bothIdLike = aNoSpace && bNoSpace &&
-            a.all { it.isLetterOrDigit() || it == '-' } &&
-            b.all { it.isLetterOrDigit() || it == '-' } &&
-            (a.any { it.isDigit() } && (b.any { it.isDigit() } || b.length <= 4))
-        return if (bothIdLike) "$a$b" else "$a $b"
+    private fun isKnownAnchorLabelExact(text: String): Boolean {
+        val norm = text.lowercase().trim().trimEnd(':')
+        if (norm.isEmpty()) return false
+        return ANCHOR_LABEL_KEYWORDS.any { it == norm }
+    }
+
+    private fun isKnownAnchorLabel(text: String): Boolean {
+        val norm = text.lowercase().trim().trimEnd(':')
+        if (norm.isEmpty()) return false
+        return ANCHOR_LABEL_KEYWORDS.any { kw ->
+            norm == kw || norm.startsWith(kw)
+        }
     }
 
     private fun parseColonSplit(text: String): Pair<String, String>? {
@@ -341,14 +323,15 @@ object ReceiptTextParser {
     }
 
     private fun parseKnownPrefixSplit(text: String): Pair<String, String>? {
-        val trimmed = text.trim()
+        val trimmed = cleanLabelNoise(text)
+        if (isKnownAnchorLabelExact(trimmed)) return null
         val lower = trimmed.lowercase()
-        for (prefix in KNOWN_LABEL_PREFIXES) {
+        for (prefix in ANCHOR_LABEL_KEYWORDS) {
             if (lower.startsWith(prefix) && trimmed.length > prefix.length) {
                 val nextChar = trimmed[prefix.length]
                 if (nextChar == ' ' || nextChar == ':' || nextChar == '\t') {
                     val rest = trimmed.substring(prefix.length).trimStart(' ', ':', '\t').trim()
-                    if (rest.isNotEmpty() && !rest.equals("oleh", ignoreCase = true)) {
+                    if (rest.any { it.isLetterOrDigit() } && !rest.equals("oleh", ignoreCase = true)) {
                         return trimmed.substring(0, prefix.length) to rest
                     }
                 }
@@ -357,58 +340,49 @@ object ReceiptTextParser {
         return null
     }
 
-    private fun looksLikeStandaloneLabel(text: String): Boolean {
-        val norm = text.lowercase().trim()
-        if (KNOWN_LABEL_PREFIXES.any { norm.startsWith(it) }) return true
-        if (looksLikeCardAccountLine(text)) return true
-        return norm.startsWith("id ") || norm.startsWith("no.") || norm.startsWith("nomor ") ||
-            norm.startsWith("detail ") || norm.startsWith("metode ") || norm.startsWith("total ") ||
-            norm.startsWith("rekening ") || norm.startsWith("dari ") || norm.startsWith("berita") ||
-            norm.startsWith("catatan") || norm.startsWith("informasi ") || norm.startsWith("diamankan ")
-    }
-
-    private fun looksLikeCardAccountLine(text: String): Boolean {
-        val cardLineRegex = Regex("""^(.{2,28}?)\s*[-•|:]\s*([0-9*xX•.\s\-]{6,28})$""")
-        val match = cardLineRegex.find(text.trim()) ?: return false
-        val instRaw = match.groupValues[1].trim()
-        val accountRaw = match.groupValues[2].trim()
-        return detectInstitution(instRaw) != null &&
-            accountRaw.count { it.isDigit() } >= 3 &&
-            !accountRaw.contains(':')
-    }
-
     private fun cleanLabelNoise(label: String): String {
         return label.replace(Regex("[©®™📋❐]+"), "")
             .replace(Regex("\\s+[oOcC]$"), "")
             .trim()
+            .trimEnd(':')
     }
 
-    /**
-     * Detects card-style Sender/Recipient blocks common in Qita by BRI, BRImo, Livin', SeaBank, etc.:
-     *   ADHI NUGROHO
-     *   BANK BRI - 6051 **** **** 500
-     *   ORDER KUOTA EVOLUSI
-     *   BANK BRI - 0055 0100 2452 301
-     */
-    internal fun extractTransferParties(rows: List<LogicalRow>): List<TransferParty> {
-        val parties = mutableListOf<TransferParty>()
-        val cardLineRegex = Regex(
-            """^(.{2,28}?)\s*[-•|:]\s*([0-9*xX•.\s\-]{6,28})$"""
-        )
+    private fun buildFormattedRawText(
+        headerLines: List<String>,
+        bandedFields: List<BandedField>,
+        bodyAllLines: List<String>
+    ): String {
+        val out = mutableListOf<String>()
+        out.addAll(headerLines)
+        if (bandedFields.isNotEmpty()) {
+            bandedFields.forEach { field ->
+                if (field.valueLines.isNotEmpty()) {
+                    out.add("${field.label}: ${field.joinedWithSpace}")
+                } else {
+                    out.add(field.label)
+                }
+            }
+        } else {
+            out.addAll(bodyAllLines)
+        }
+        return out.filter { it.isNotBlank() }.distinct().joinToString("\n")
+    }
 
-        for (idx in rows.indices) {
-            val rowText = rows[idx].fullText.trim()
+    internal fun extractTransferParties(lines: List<String>): List<TransferParty> {
+        val parties = mutableListOf<TransferParty>()
+        val cardLineRegex = Regex("""^(.{2,28}?)\s*[-•|:]\s*([0-9*xX•.\s\-]{6,28})$""")
+
+        for (idx in lines.indices) {
+            val rowText = lines[idx].trim()
             val match = cardLineRegex.find(rowText) ?: continue
             val instRaw = match.groupValues[1].trim()
             val accountRaw = match.groupValues[2].trim()
 
-            // Verify left side is a known bank/e-wallet and right side has at least 3 digits
             val detected = detectInstitution(instRaw) ?: continue
             if (accountRaw.count { it.isDigit() } < 3) continue
-            // Avoid matching date/time lines like "13 Nov 2026 - 17:55"
             if (accountRaw.contains(':')) continue
 
-            val candidateName = findPrecedingPartyName(rows, idx)
+            val candidateName = findPrecedingPartyName(lines, idx)
             val isMasked = accountRaw.contains('*') || accountRaw.contains('•') || accountRaw.contains('x', ignoreCase = true)
 
             parties.add(
@@ -416,7 +390,7 @@ object ReceiptTextParser {
                     name = normalizeDisplayName(candidateName),
                     institution = detected.first,
                     mode = detected.second,
-                    account = normalizeAccountNumber(accountRaw),
+                    account = sanitizeDigitsOnlyAccount(accountRaw),
                     isMasked = isMasked
                 )
             )
@@ -424,14 +398,13 @@ object ReceiptTextParser {
         return parties
     }
 
-    private fun findPrecedingPartyName(rows: List<LogicalRow>, accountRowIdx: Int): String {
-        for (i in accountRowIdx - 1 downTo maxOf(0, accountRowIdx - 2)) {
-            val r = rows[i]
-            // If avatar initials ("OE", "AN") got split as a short leftLabel, take rightValue!
-            val candidate = if (r.leftLabel != null && r.rightValue != null && r.leftLabel.length <= 4) {
-                r.rightValue.trim()
-            } else {
-                r.fullText.trim()
+    private fun findPrecedingPartyName(lines: List<String>, accountIdx: Int): String {
+        for (i in accountIdx - 1 downTo maxOf(0, accountIdx - 2)) {
+            var candidate = lines[i].trim()
+            // Strip leading 2-letter avatar initial or 3-4 letter bank badge if merged onto same line
+            val avatarPrefix = Regex("""^(?:[A-Z]{2}|BRI|BCA|BNI|MANDIRI)\s+([A-Z][A-Z\s]{3,})$""")
+            avatarPrefix.find(candidate)?.let { m ->
+                candidate = m.groupValues[1].trim()
             }
             val lower = candidate.lowercase()
             if (candidate.length <= 2) continue
@@ -453,19 +426,24 @@ object ReceiptTextParser {
     private fun selectRecipientParty(parties: List<TransferParty>): TransferParty? {
         if (parties.isEmpty()) return null
         if (parties.size == 1) return parties.first()
-        // When both Sender and Recipient cards appear, Sender is first (usually masked) and Recipient is last
         return parties.lastOrNull { !it.isMasked } ?: parties.last()
     }
 
-    private fun extractDate(lines: List<String>, rows: List<LogicalRow>): String {
-        for (row in rows) {
-            val label = row.leftLabel?.lowercase().orEmpty()
-            val value = row.rightValue.orEmpty()
-            if (value.isNotBlank() && (label.contains("tanggal") || label.contains("waktu") || label.contains("tgl"))) {
-                parseDateCandidate(value)?.let { return it }
+    private fun extractDate(
+        headerLines: List<String>,
+        bandedFields: List<BandedField>,
+        allLines: List<String>
+    ): String {
+        for (line in headerLines) {
+            parseDateCandidate(line)?.let { return it }
+        }
+        for (field in bandedFields) {
+            val l = field.label.lowercase()
+            if (l.contains("tanggal") || l.contains("waktu") || l.contains("tgl")) {
+                parseDateCandidate(field.joinedWithSpace)?.let { return it }
             }
         }
-        for (line in lines) {
+        for (line in allLines) {
             parseDateCandidate(line)?.let { return it }
         }
         return ""
@@ -519,15 +497,21 @@ object ReceiptTextParser {
         return null
     }
 
-    private fun extractTime(lines: List<String>, rows: List<LogicalRow>): String {
-        for (row in rows) {
-            val label = row.leftLabel?.lowercase().orEmpty()
-            val value = row.rightValue.orEmpty()
-            if (value.isNotBlank() && (label.contains("waktu") || label.contains("jam") || label.contains("tanggal"))) {
-                parseTimeCandidate(value)?.let { return it }
+    private fun extractTime(
+        headerLines: List<String>,
+        bandedFields: List<BandedField>,
+        allLines: List<String>
+    ): String {
+        for (line in headerLines) {
+            parseTimeCandidate(line)?.let { return it }
+        }
+        for (field in bandedFields) {
+            val l = field.label.lowercase()
+            if (l.contains("waktu") || l.contains("jam") || l.contains("tanggal")) {
+                parseTimeCandidate(field.joinedWithSpace)?.let { return it }
             }
         }
-        for (line in lines) {
+        for (line in allLines) {
             parseTimeCandidate(line)?.let { return it }
         }
         return ""
@@ -563,49 +547,50 @@ object ReceiptTextParser {
         return null
     }
 
-    private fun extractNominal(rows: List<LogicalRow>, lines: List<String>): Long {
+    private fun extractNominal(
+        headerLines: List<String>,
+        bandedFields: List<BandedField>,
+        allLines: List<String>
+    ): Long {
         val primaryLabels = listOf(
             "nominal tujuan", "nominal transfer", "nominal transaksi", "jumlah transfer",
-            "jumlah transaksi", "nilai transfer", "besar transfer",
-            "nominal", "jumlah"
+            "jumlah transaksi", "nilai transfer", "besar transfer", "nominal", "jumlah"
         )
-        val totalLabels = listOf(
-            "total bayar", "total pembayaran", "total transfer",
-            "total transaksi", "total"
-        )
-
+        // Priority 1: Explicit nominal field in two-column bands
         for (target in primaryLabels) {
-            for (row in rows) {
-                val label = row.leftLabel?.lowercase().orEmpty()
-                val value = row.rightValue.orEmpty()
-                if (value.isNotBlank() && label.contains(target) && !label.contains("admin") && !label.contains("biaya")) {
-                    parseRupiahAmount(value)?.let { if (it > 0L) return it }
+            for (field in bandedFields) {
+                val label = field.label.lowercase()
+                if (field.valueLines.isNotEmpty() && label.contains(target) &&
+                    !label.contains("admin") && !label.contains("biaya")
+                ) {
+                    parseRupiahAmount(field.joinedWithSpace)?.let { if (it > 0L) return it }
                 }
             }
         }
 
-        for (target in totalLabels) {
-            for (row in rows) {
-                val label = row.leftLabel?.lowercase().orEmpty()
-                val value = row.rightValue.orEmpty()
-                if (value.isNotBlank() && label.contains(target) && !label.contains("admin") && !label.contains("biaya")) {
-                    parseRupiahAmount(value)?.let { if (it > 0L) return it }
-                }
-            }
-        }
-
-        for (line in lines) {
+        // Priority 2: Header Zone main amount (digits after IDR/Rp)
+        for (line in headerLines) {
             val lower = line.lowercase()
-            if (lower.contains("admin") || lower.contains("biaya") || lower.contains("saldo") || lower.contains("poin") || lower.contains("npwp")) {
-                continue
-            }
-            if (lower.contains("kirim uang") || lower.contains("transfer") || lower.contains("nominal") || lower.contains("total bayar")) {
-                parseRupiahAmount(line, requirePrefix = true)?.let { if (it > 0L) return it }
+            if (lower.contains("admin") || lower.contains("biaya") || lower.contains("saldo")) continue
+            parseRupiahAmount(line, requirePrefix = true)?.let { if (it > 0L) return it }
+        }
+
+        // Priority 3: Total labels in bands (e.g. DANA "Total Bayar Rp50.000")
+        val totalLabels = listOf("total bayar", "total pembayaran", "total transfer", "total transaksi", "total")
+        for (target in totalLabels) {
+            for (field in bandedFields) {
+                val label = field.label.lowercase()
+                if (field.valueLines.isNotEmpty() && label.contains(target) &&
+                    !label.contains("admin") && !label.contains("biaya")
+                ) {
+                    parseRupiahAmount(field.joinedWithSpace)?.let { if (it > 0L) return it }
+                }
             }
         }
 
+        // Priority 4: Any currency-prefixed amount in lines
         val candidates = mutableListOf<Long>()
-        for (line in lines) {
+        for (line in allLines) {
             val lower = line.lowercase()
             if (lower.contains("admin") || lower.contains("biaya") || lower.contains("saldo") || lower.contains("npwp")) {
                 continue
@@ -615,43 +600,46 @@ object ReceiptTextParser {
         return candidates.maxOrNull() ?: 0L
     }
 
+    /**
+     * Post-processing for Nominal:
+     * 1. Strips ".00" or ",00" decimal suffix BEFORE removing thousand separators.
+     * 2. Converts digit-lookalike OCR mistakes (O->0, I/l->1, S->5, B->8) inside numeric tokens.
+     */
     internal fun parseRupiahAmount(raw: String, requirePrefix: Boolean = false): Long? {
-        val normalized = raw
-            .replace(Regex("(?i)(rp|idr)\\s*\\.?"), "Rp ")
-            .replace(Regex("(?<=\\d)[oO](?=[\\d.,]|$)"), "0")
-            .replace(Regex("(?<=[.,])[oO]{2,3}"), { m -> "0".repeat(m.value.length) })
-
+        val prefixed = raw.replace(Regex("(?i)\\b(rp|idr)\\s*\\.?"), "Rp ")
         val pattern = if (requirePrefix) {
-            Regex("""Rp\s*([0-9][0-9.,]*)""")
+            Regex("""Rp\s*([0-9OolISsB][0-9OolISsB.,]*)""")
         } else {
-            Regex("""(?:Rp\s*)?([0-9][0-9.,]*)""")
+            Regex("""(?:Rp\s*)?([0-9OolISsB][0-9OolISsB.,]*)""")
         }
 
-        val matches = pattern.findAll(normalized).toList()
-        for (match in matches) {
-            var numToken = match.groupValues[1].trim('.', ',')
-            if (numToken.isEmpty()) continue
+        for (match in pattern.findAll(prefixed)) {
+            val rawToken = match.groupValues[1].trim('.', ',')
+            if (rawToken.isEmpty()) continue
+            val corrected = convertLookalikeCharsToDigits(rawToken, keepSeparators = true)
+            if (corrected.count { it.isDigit() } == 0) continue
 
-            numToken = when {
-                Regex("""^[\d.]+,\d{2}$""").matches(numToken) ->
-                    numToken.substringBeforeLast(',')
-                Regex("""^[\d,]+,\d{2}$""").matches(numToken) && numToken.count { it == ',' } >= 2 ->
-                    numToken.substringBeforeLast(',')
-                Regex("""^[\d,]+\.\d{2}$""").matches(numToken) ->
-                    numToken.substringBeforeLast('.')
-                Regex("""^[\d.]+\.\d{2}$""").matches(numToken) && numToken.count { it == '.' } >= 2 ->
-                    numToken.substringBeforeLast('.')
-                else -> numToken
+            // Strip trailing ".00" or ",00" cents BEFORE stripping thousand separators
+            val withoutCents = when {
+                Regex("""^[\d.]+,\d{2}$""").matches(corrected) ->
+                    corrected.substringBeforeLast(',')
+                Regex("""^[\d,]+,\d{2}$""").matches(corrected) && corrected.count { it == ',' } >= 2 ->
+                    corrected.substringBeforeLast(',')
+                Regex("""^[\d,]+\.\d{2}$""").matches(corrected) ->
+                    corrected.substringBeforeLast('.')
+                Regex("""^[\d.]+\.\d{2}$""").matches(corrected) && corrected.count { it == '.' } >= 2 ->
+                    corrected.substringBeforeLast('.')
+                else -> corrected
             }
 
             if (!requirePrefix && !match.value.contains("Rp") &&
-                !numToken.contains('.') && !numToken.contains(',') &&
-                numToken.length > 9
+                !withoutCents.contains('.') && !withoutCents.contains(',') &&
+                withoutCents.length > 9
             ) {
                 continue
             }
 
-            val digits = numToken.filter { it.isDigit() }
+            val digits = withoutCents.filter { it.isDigit() }
             val parsed = digits.toLongOrNull() ?: continue
             if (parsed in 1L..1_000_000_000L) {
                 return parsed
@@ -660,18 +648,18 @@ object ReceiptTextParser {
         return null
     }
 
-    private fun extractReferensi(rows: List<LogicalRow>, lines: List<String>): String {
+    private fun extractReferensi(bandedFields: List<BandedField>, allLines: List<String>): String {
         val refLabels = listOf(
             "no. referensi", "nomor referensi", "no referensi", "kode referensi",
             "id transaksi", "no. transaksi", "nomor transaksi",
             "no. ref", "nomor ref", "referensi", "rrn", "ref id", "id ref"
         )
         for (target in refLabels) {
-            for (row in rows) {
-                val label = row.leftLabel?.lowercase().orEmpty()
-                val value = row.rightValue.orEmpty()
-                if (value.isNotBlank() && label.contains(target) && !label.contains("merchant")) {
-                    val cleaned = value.replace(Regex("\\s+"), "")
+            for (field in bandedFields) {
+                val label = field.label.lowercase()
+                if (field.valueLines.isNotEmpty() && label.contains(target) && !label.contains("merchant")) {
+                    // Join all lines in reference band without spaces and uppercase
+                    val cleaned = field.joinedNoSpace.uppercase()
                     if (cleaned.length >= 6 && cleaned.any { it.isDigit() }) {
                         return cleaned
                     }
@@ -679,11 +667,10 @@ object ReceiptTextParser {
             }
         }
 
-        for (row in rows) {
-            val label = row.leftLabel?.lowercase().orEmpty()
-            val value = row.rightValue.orEmpty()
-            if (value.isNotBlank() && (label == "ref" || label.contains("id order"))) {
-                val cleaned = value.replace(Regex("\\s+"), "")
+        for (field in bandedFields) {
+            val label = field.label.lowercase()
+            if (field.valueLines.isNotEmpty() && (label == "ref" || label.contains("id order"))) {
+                val cleaned = field.joinedNoSpace.uppercase()
                 if (cleaned.length >= 8 && cleaned.any { it.isDigit() }) {
                     return cleaned
                 }
@@ -691,18 +678,19 @@ object ReceiptTextParser {
         }
 
         val refTokenRegex = Regex("""\b(?=[A-Z0-9]*\d)[A-Z0-9]{12,45}\b""")
-        for (line in lines) {
+        for (line in allLines) {
             val lower = line.lowercase()
             if (lower.contains("npwp") || lower.contains("call center")) continue
-            refTokenRegex.find(line)?.let { return it.value }
+            refTokenRegex.find(line.uppercase())?.let { return it.value }
         }
         return ""
     }
 
     private fun extractTujuanAndMode(
-        rows: List<LogicalRow>,
-        lines: List<String>,
-        recipientParty: TransferParty?
+        bandedFields: List<BandedField>,
+        recipientParty: TransferParty?,
+        headerLines: List<String>,
+        allLines: List<String>
     ): Pair<String, ServiceMode> {
         val destLabels = listOf(
             "bank tujuan", "bank penerima", "tujuan transfer", "e-wallet", "ewallet",
@@ -710,18 +698,19 @@ object ReceiptTextParser {
             "nomor dana", "tujuan", "layanan", "produk"
         )
 
-        // Priority 1: Explicit destination labels
+        // Priority 1: Explicit destination anchor band
         for (target in destLabels) {
-            for (row in rows) {
-                val label = row.leftLabel?.lowercase().orEmpty()
-                val value = row.rightValue.orEmpty()
-                if (label.contains(target) && !label.contains("rekening") && !label.contains("nomor") && !label.contains("mata uang") && !label.contains("nominal") ||
+            for (field in bandedFields) {
+                val label = field.label.lowercase()
+                val valStr = field.joinedWithSpace
+                if (label.contains(target) && !label.contains("rekening") && !label.contains("nomor") &&
+                    !label.contains("mata uang") && !label.contains("nominal") ||
                     (label.contains("akun ") && destLabels.any { label.contains(it) })
                 ) {
                     detectInstitution(label)?.let { return it }
-                    if (value.isNotBlank()) {
-                        detectInstitution(value)?.let { return it }
-                        val cleaned = ReceiptFormatter.sanitizeSingleLine(value).uppercase()
+                    if (valStr.isNotBlank()) {
+                        detectInstitution(valStr)?.let { return it }
+                        val cleaned = valStr.uppercase()
                         if (cleaned.isNotBlank() && !cleaned.all { it.isDigit() || it == '-' || it == '*' }) {
                             val mode = if (ReceiptFormatter.EWALLET_KEYWORDS.any { cleaned.contains(it) }) {
                                 ServiceMode.EWALLET
@@ -735,22 +724,23 @@ object ReceiptTextParser {
             }
         }
 
-        // Priority 2: Recipient card institution (e.g. "BANK BRI - 0055 0100 2452 301")
+        // Priority 2: Recipient party card
         if (recipientParty != null) {
             return recipientParty.institution to recipientParty.mode
         }
 
-        // Priority 3: "Jenis Transaksi" row (e.g. "Transfer ke Rekening BCA" / "Transfer Bank BRI")
-        for (row in rows) {
-            val label = row.leftLabel?.lowercase().orEmpty()
-            val value = row.rightValue.orEmpty()
-            if (label.contains("jenis transaksi") && value.isNotBlank()) {
-                detectInstitution(value)?.let { return it }
+        // Priority 3: "Jenis Transaksi" band
+        for (field in bandedFields) {
+            if (field.label.lowercase().contains("jenis transaksi") && field.valueLines.isNotEmpty()) {
+                detectInstitution(field.joinedWithSpace)?.let { return it }
             }
         }
 
-        // Priority 4: Non-source lines
-        val nonSourceLines = lines.filter { line ->
+        // Priority 4: Header or non-source lines
+        for (line in headerLines) {
+            detectInstitution(line)?.let { return it }
+        }
+        val nonSourceLines = allLines.filter { line ->
             val l = line.lowercase()
             !l.contains("sumber dana") && !l.contains("metode pembayaran") &&
                 !l.contains("rekening sumber") && !l.contains("dari rekening")
@@ -758,8 +748,7 @@ object ReceiptTextParser {
         for (line in nonSourceLines) {
             detectInstitution(line)?.let { return it }
         }
-
-        for (line in lines) {
+        for (line in allLines) {
             detectInstitution(line)?.let { return it }
         }
 
@@ -782,9 +771,9 @@ object ReceiptTextParser {
     }
 
     private fun extractNomor(
-        rows: List<LogicalRow>,
-        lines: List<String>,
+        bandedFields: List<BandedField>,
         recipientParty: TransferParty?,
+        allLines: List<String>,
         referensi: String,
         nominal: Long
     ): String {
@@ -795,40 +784,39 @@ object ReceiptTextParser {
             "nomor hp", "no. hp", "no hp", "nomor telepon", "nomor"
         )
 
-        // Priority 1: Explicit labeled row
+        // Priority 1: Explicit rekening/nomor band -> join without spaces + convert lookalikes to pure digits
         for (target in nomorLabels) {
-            for (row in rows) {
-                val label = row.leftLabel?.lowercase().orEmpty()
-                val value = row.rightValue.orEmpty()
-                if (value.isNotBlank() &&
+            for (field in bandedFields) {
+                val label = field.label.lowercase()
+                if (field.valueLines.isNotEmpty() &&
                     label.contains(target) &&
                     !label.contains("dari") &&
                     !label.contains("sumber") &&
                     !label.contains("pengirim") &&
                     !label.contains("referensi")
                 ) {
-                    val cleaned = normalizeAccountNumber(value)
-                    if (cleaned.any { it.isDigit() } && cleaned != referensi) {
-                        return cleaned
+                    val pureDigits = sanitizeDigitsOnlyAccount(field.joinedNoSpace)
+                    if (pureDigits.isNotEmpty() && pureDigits != referensi) {
+                        return pureDigits
                     }
                 }
             }
         }
 
-        // Priority 2: Recipient party from Sender -> Recipient card (e.g. Qita by BRI / BRImo / Livin')
-        if (recipientParty != null && recipientParty.account.any { it.isDigit() }) {
+        // Priority 2: Recipient party card
+        if (recipientParty != null && recipientParty.account.isNotEmpty()) {
             return recipientParty.account
         }
 
-        // Priority 3: Inline DANA style "ke <Name> - 085559659554"
-        val fullJoined = lines.joinToString(" ")
+        // Priority 3: Inline "- 085559659554"
+        val fullJoined = allLines.joinToString(" ")
         Regex("""-\s*(08\d{7,12}|\+62\d{8,13}|\d{3,4}\s*-\s*\d{3,4}\s*-\s*\d{3,6})\b""")
             .find(fullJoined)
-            ?.let { return normalizeAccountNumber(it.groupValues[1]) }
+            ?.let { return sanitizeDigitsOnlyAccount(it.groupValues[1]) }
 
-        // Priority 4: Standalone phone / dashed / space-grouped account number
+        // Priority 4: Standalone account or phone number
         val nominalDigits = nominal.toString()
-        for (line in lines) {
+        for (line in allLines) {
             val lower = line.lowercase()
             if (lower.contains("referensi") || lower.contains("id transaksi") ||
                 lower.contains("id order") || lower.contains("id dana") ||
@@ -841,25 +829,15 @@ object ReceiptTextParser {
                 if (it.value != referensi) return it.value
             }
             Regex("""\b(\d{3,4}\s*-\s*\d{3,4}\s*-\s*\d{3,6})\b""").find(line)?.let {
-                val normalized = normalizeAccountNumber(it.value)
-                if (normalized != referensi) return normalized
+                val digits = sanitizeDigitsOnlyAccount(it.value)
+                if (digits != referensi) return digits
             }
             Regex("""\b((?:\d{4}\s+){2,4}\d{2,4})\b""").find(line)?.let {
-                if (it.value.replace(" ", "") != referensi) return it.value.trim()
-            }
-        }
-
-        for (line in lines) {
-            val lower = line.lowercase()
-            if (lower.contains("referensi") || lower.contains("transaksi") ||
-                lower.contains("order") || lower.contains("rp") ||
-                lower.contains("npwp") || lower.contains("call center") ||
-                lower.contains("dari ")
-            ) {
-                continue
+                val digits = sanitizeDigitsOnlyAccount(it.value)
+                if (digits != referensi) return digits
             }
             Regex("""\b(\d{8,16})\b""").find(line)?.let { m ->
-                if (m.value != referensi && m.value != nominalDigits) {
+                if (!lower.contains("rp") && m.value != referensi && m.value != nominalDigits) {
                     return m.value
                 }
             }
@@ -869,26 +847,25 @@ object ReceiptTextParser {
     }
 
     private fun extractPenerima(
-        rows: List<LogicalRow>,
-        lines: List<String>,
-        recipientParty: TransferParty?
+        bandedFields: List<BandedField>,
+        recipientParty: TransferParty?,
+        allLines: List<String>
     ): String {
-        val nameLabels = listOf(
-            "nama penerima", "nama tujuan", "penerima", "nama"
-        )
-        // Priority 1: Explicit labeled row
+        val nameLabels = listOf("nama penerima", "nama tujuan", "penerima", "nama")
+
+        // Priority 1: Explicit recipient name band -> join with single space
         for (target in nameLabels) {
-            for (row in rows) {
-                val label = row.leftLabel?.lowercase().orEmpty()
-                val value = row.rightValue.orEmpty()
-                if (value.isNotBlank() &&
+            for (field in bandedFields) {
+                val label = field.label.lowercase()
+                if (field.valueLines.isNotEmpty() &&
                     (label == target || label.contains(target)) &&
                     !label.contains("pengirim") &&
+                    !label.contains("sumber") &&
                     !label.contains("bank") &&
                     !label.contains("toko") &&
                     !label.contains("produk")
                 ) {
-                    val cleaned = normalizeDisplayName(value)
+                    val cleaned = normalizeDisplayName(field.joinedWithSpace)
                     if (cleaned.any { it.isLetter() }) {
                         return cleaned
                     }
@@ -896,13 +873,13 @@ object ReceiptTextParser {
             }
         }
 
-        // Priority 2: Recipient party from Sender -> Recipient card (e.g. "ORDER KUOTA EVOLUSI")
+        // Priority 2: Recipient party card
         if (recipientParty != null && recipientParty.name.any { it.isLetter() }) {
             return recipientParty.name
         }
 
         // Priority 3: Inline "ke <Name> - <Number>"
-        val joined = lines.joinToString(" ")
+        val joined = allLines.joinToString(" ")
         Regex("""\bke\s+([A-Za-z][A-Za-z0-9*.•·\s']{2,40}?)(?:\s*-\s*\d|\s+08\d|\s*$)""")
             .find(joined)
             ?.let { m ->
@@ -915,12 +892,26 @@ object ReceiptTextParser {
         return ""
     }
 
-    private fun normalizeAccountNumber(raw: String): String {
-        return ReceiptFormatter.sanitizeSingleLine(raw)
-            .replace(Regex("\\s*-\\s*"), "-")
-            .replace('•', '*')
-            .replace('·', '*')
-            .trim()
+    internal fun convertLookalikeCharsToDigits(raw: String, keepSeparators: Boolean = false): String {
+        val sb = StringBuilder(raw.length)
+        for (ch in raw) {
+            val mapped = when (ch) {
+                'O', 'o' -> '0'
+                'I', 'l', 'i' -> '1'
+                'S', 's' -> '5'
+                'B' -> '8'
+                else -> ch
+            }
+            if (mapped.isDigit() || (keepSeparators && (mapped == '.' || mapped == ','))) {
+                sb.append(mapped)
+            }
+        }
+        return sb.toString()
+    }
+
+    internal fun sanitizeDigitsOnlyAccount(raw: String): String {
+        val noSpaces = raw.replace(Regex("\\s+"), "")
+        return convertLookalikeCharsToDigits(noSpaces, keepSeparators = false)
     }
 
     private fun normalizeDisplayName(raw: String): String {

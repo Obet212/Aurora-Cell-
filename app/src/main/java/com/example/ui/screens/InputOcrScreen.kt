@@ -161,7 +161,7 @@ fun InputOcrScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Pilih screenshot bukti transfer M-Banking (BCA, BRI, Mandiri, BNI, SeaBank) atau E-Wallet (DANA, OVO, GoPay, ShopeePay) untuk mengisi rincian struk otomatis tanpa internet.",
+                text = "Bagikan (Share) bukti transfer langsung dari aplikasi M-Banking/E-Wallet, atau pilih dari Galeri/Kamera untuk scan OCR 100% offline.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

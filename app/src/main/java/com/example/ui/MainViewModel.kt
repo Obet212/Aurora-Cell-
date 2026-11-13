@@ -15,6 +15,7 @@ import com.example.model.StoreSettings
 import com.example.model.TransactionForm
 import com.example.print.ReceiptOutputManager
 import com.example.util.ReceiptFormatter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,6 +25,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 enum class AppTab {
     INPUT_OCR,
@@ -182,6 +186,39 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 ocrState = OcrUiState.Idle,
                 lastOcrRawText = ""
             )
+        }
+    }
+
+    fun handleSharedImage(sharedUri: Uri) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    activeTab = AppTab.INPUT_OCR,
+                    selectedImageUri = sharedUri,
+                    ocrState = OcrUiState.Loading,
+                    lastOcrRawText = ""
+                )
+            }
+            val stableUri = withContext(Dispatchers.IO) {
+                copySharedImageToCache(sharedUri)
+            }
+            processOcrImage(stableUri)
+        }
+    }
+
+    private fun copySharedImageToCache(uri: Uri): Uri {
+        return try {
+            val app = getApplication<Application>()
+            val dir = File(app.cacheDir, "shared").apply { mkdirs() }
+            val outFile = File(dir, "shared_${System.currentTimeMillis()}.img")
+            app.contentResolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(outFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+            if (outFile.exists() && outFile.length() > 0L) Uri.fromFile(outFile) else uri
+        } catch (_: Exception) {
+            uri
         }
     }
 
