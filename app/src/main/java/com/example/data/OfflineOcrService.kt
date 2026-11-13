@@ -85,20 +85,65 @@ class OfflineOcrService(private val context: Context) {
                 }
         }
 
+    /**
+     * Splits ML Kit Text.Line into horizontally separated element chunks when a single
+     * Text.Line spans both a left-column label and a right-column value (e.g. "Nama   Cahyo").
+     */
     private fun extractLineBoxes(visionText: Text): List<OcrLineBox> {
         val boxes = mutableListOf<OcrLineBox>()
         for (block in visionText.textBlocks) {
             for (line in block.lines) {
-                val rect = line.boundingBox ?: continue
-                boxes.add(
-                    OcrLineBox(
-                        text = line.text,
-                        left = rect.left.toFloat(),
-                        top = rect.top.toFloat(),
-                        right = rect.right.toFloat(),
-                        bottom = rect.bottom.toFloat()
-                    )
-                )
+                val lineRect = line.boundingBox
+                val elementsWithBox = line.elements.mapNotNull { elem ->
+                    val r = elem.boundingBox
+                    if (r != null && elem.text.isNotBlank()) elem to r else null
+                }.sortedBy { it.second.left }
+
+                if (elementsWithBox.size <= 1) {
+                    if (lineRect != null && line.text.isNotBlank()) {
+                        boxes.add(
+                            OcrLineBox(
+                                text = line.text,
+                                left = lineRect.left.toFloat(),
+                                top = lineRect.top.toFloat(),
+                                right = lineRect.right.toFloat(),
+                                bottom = lineRect.bottom.toFloat()
+                            )
+                        )
+                    }
+                    continue
+                }
+
+                val lineHeight = (lineRect?.height()?.toFloat()
+                    ?: elementsWithBox.map { it.second.height().toFloat() }.average().toFloat())
+                    .coerceAtLeast(12f)
+                val gapThreshold = max(lineHeight * 1.35f, 24f)
+
+                var chunkStart = 0
+                for (i in 0 until elementsWithBox.size) {
+                    val isLast = i == elementsWithBox.lastIndex
+                    val hasColumnGap = !isLast &&
+                        (elementsWithBox[i + 1].second.left - elementsWithBox[i].second.right) > gapThreshold
+
+                    if (isLast || hasColumnGap) {
+                        val slice = elementsWithBox.subList(chunkStart, i + 1)
+                        val chunkText = slice.joinToString(" ") { it.first.text }
+                        val left = slice.minOf { it.second.left }.toFloat()
+                        val top = slice.minOf { it.second.top }.toFloat()
+                        val right = slice.maxOf { it.second.right }.toFloat()
+                        val bottom = slice.maxOf { it.second.bottom }.toFloat()
+                        boxes.add(
+                            OcrLineBox(
+                                text = chunkText,
+                                left = left,
+                                top = top,
+                                right = right,
+                                bottom = bottom
+                            )
+                        )
+                        chunkStart = i + 1
+                    }
+                }
             }
         }
         return boxes
@@ -106,8 +151,9 @@ class OfflineOcrService(private val context: Context) {
 
     internal fun decodePreparedBitmap(
         uri: Uri,
-        minWidth: Int = 900,
-        maxDimension: Int = 1800
+        targetMinWidth: Int = 1080,
+        targetMaxWidth: Int = 1600,
+        maxHeight: Int = 4096
     ): Bitmap {
         val resolver = context.contentResolver
         val boundsOpts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
@@ -119,8 +165,8 @@ class OfflineOcrService(private val context: Context) {
 
         var sampleSize = 1
         if (boundsOpts.outWidth > 0 && boundsOpts.outHeight > 0) {
-            while (boundsOpts.outWidth / sampleSize > maxDimension * 2 ||
-                boundsOpts.outHeight / sampleSize > maxDimension * 2
+            while (boundsOpts.outWidth / sampleSize > targetMaxWidth * 2 &&
+                boundsOpts.outHeight / sampleSize > maxHeight * 2
             ) {
                 sampleSize *= 2
             }
@@ -138,22 +184,31 @@ class OfflineOcrService(private val context: Context) {
             decoded.recycle()
         }
 
-        val currentMax = max(rotated.width, rotated.height)
         val scaled = when {
-            currentMax > maxDimension -> {
-                val ratio = maxDimension.toFloat() / currentMax.toFloat()
+            rotated.width > targetMaxWidth || rotated.height > maxHeight -> {
+                val ratioW = targetMaxWidth.toFloat() / rotated.width.toFloat()
+                val ratioH = maxHeight.toFloat() / rotated.height.toFloat()
+                val ratio = minOf(ratioW, ratioH)
                 val targetW = max(1, (rotated.width * ratio).roundToInt())
                 val targetH = max(1, (rotated.height * ratio).roundToInt())
                 Bitmap.createScaledBitmap(rotated, targetW, targetH, true).also {
                     rotated.recycle()
                 }
             }
-            rotated.width in 1 until minWidth -> {
-                val ratio = (minWidth.toFloat() / rotated.width.toFloat()).coerceAtMost(2.5f)
-                val targetW = max(1, (rotated.width * ratio).roundToInt())
-                val targetH = max(1, (rotated.height * ratio).roundToInt())
-                Bitmap.createScaledBitmap(rotated, targetW, targetH, true).also {
-                    rotated.recycle()
+            rotated.width in 1 until targetMinWidth -> {
+                val maxRatioByHeight = maxHeight.toFloat() / max(1, rotated.height).toFloat()
+                val ratio = minOf(
+                    (targetMinWidth.toFloat() / rotated.width.toFloat()).coerceAtMost(2.5f),
+                    maxRatioByHeight.coerceAtLeast(1f)
+                )
+                if (ratio > 1.05f) {
+                    val targetW = max(1, (rotated.width * ratio).roundToInt())
+                    val targetH = max(1, (rotated.height * ratio).roundToInt())
+                    Bitmap.createScaledBitmap(rotated, targetW, targetH, true).also {
+                        rotated.recycle()
+                    }
+                } else {
+                    rotated
                 }
             }
             else -> rotated
