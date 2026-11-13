@@ -1,0 +1,3783 @@
+<!DOCTYPE html>
+<html lang="id"><head><script data-bard-client-injected="true">(function(firebaseConfig, initialAuthToken, appId) {
+        window.__firebase_config = firebaseConfig;
+        window.__initial_auth_token = initialAuthToken;
+        window.__app_id = appId;
+            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNjRiNzdiNDMzZDdhMDAyMWI4NjE4YjhjYTU3ZTMyZGI5MWUxMTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIwNDg0NzgzMDM1ODMzMzI1NzUxOCIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiI1YWIwMDQzOWRmODUtaW5kZXguaHRtbC0xMTYifSwiZXhwIjoxNzk0NTQ2MTM1LCJpYXQiOjE3OTQ1NDI1MzUsImFsZyI6IlJTMjU2In0.He2cR_INpu99avlW25v0NfBwmmxO_Zt7a58iqV47CFK7SQ_b69M_53N-zJVvYtNbMfrOACVpTjwtwvjxWMO7eXZjXjmVijeuFPDss8MfsGTAfrScrgB1Eqyd-CZagI3euaRdO86owrLoTkirpSmquJuEmly5ZvHcgI9mPbOpFrcowRCMMH3IwzCC5dnkSbj3gVa0WJPtlkPQ2pbJoZqYzV9gn68RyPdQrxYPVG3OFp312O4xDRYZboH5Mjo39Gluq1GCUoijw1LAEo7VfIrtLI8K13jOxvY4jKcSODzBFKsZrEp-E1-aMDRfEE_dU8YUjCMTAAgDQZC-Z-DYTFBWUA","5ab00439df85-index.html-116")</script><script data-bard-client-injected="true">
+  document.addEventListener('input', (event) => {
+    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
+      const clonedDoc = document.cloneNode(true);
+      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
+      injectedScripts.forEach(el => el.remove());
+      window.parent.postMessage({
+        type: 'inlineEdit',
+        html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
+      }, '*');
+    }
+  });
+</script><script data-bard-client-injected="true">(function(){'use strict';window.addEventListener("message",a=>{a.data&&a.data.type==="SUPPLEMENTAL_DATA_UPDATE"&&window.dispatchEvent(new CustomEvent("supplementaldataupdate",{detail:a.data.data}))});}).call(this);
+</script><script data-bard-client-injected="true">(function(){'use strict';var k=typeof Object.defineProperties=="function"?Object.defineProperty:function(a,b,d){if(a==Array.prototype||a==Object.prototype)return a;a[b]=d.value;return a};function m(a){a=["object"==typeof globalThis&&globalThis,a,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var b=0;b<a.length;++b){var d=a[b];if(d&&d.Math==Math)return d}throw Error("Cannot find global object");}var q=m(this);
+function r(a,b){if(b)a:{var d=q;a=a.split(".");for(var c=0;c<a.length-1;c++){var e=a[c];if(!(e in d))break a;d=d[e]}a=a[a.length-1];c=d[a];b=b(c);b!=c&&b!=null&&k(d,a,{configurable:!0,writable:!0,value:b})}}function t(a){function b(c){return a.next(c)}function d(c){return a.throw(c)}return new Promise(function(c,e){function f(g){g.done?c(g.value):Promise.resolve(g.value).then(b,d).then(f,e)}f(a.next())})}function u(a){return t(a())}
+r("Object.values",function(a){return a?a:function(b){var d=[],c;for(c in b)Object.prototype.hasOwnProperty.call(b,c)&&d.push(b[c]);return d}});r("Array.prototype.includes",function(a){return a?a:function(b,d){var c=this;c instanceof String&&(c=String(c));var e=c.length;d=d||0;for(d<0&&(d=Math.max(d+e,0));d<e;d++){var f=c[d];if(f===b||Object.is(f,b))return!0}return!1}});/*
+
+ MIT License
+
+ Copyright (c) 2017-2023 W.Y.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+*/
+function v(a,b){var d=a.style;b.backgroundColor&&(d.backgroundColor=b.backgroundColor);b.width&&(d.width=`${b.width}px`);b.height&&(d.height=`${b.height}px`);var c=b.style;c!=null&&Object.keys(c).forEach(e=>{d[e]=c[e]})};var aa=(()=>{var a=0;return()=>{a+=1;return`u${`0000${(Math.random()*1679616<<0).toString(36)}`.slice(-4)}${a}`}})();function w(a){var b=[];for(let d=0,c=a.length;d<c;d++)b.push(a[d]);return b}let y=null;function z(a={}){return y?y:a.u?y=a.u:y=w(window.getComputedStyle(document.documentElement))}function A(a,b){return(a=(a.ownerDocument.defaultView||window).getComputedStyle(a).getPropertyValue(b))?parseFloat(a.replace("px","")):0}
+function B(a,b={}){var d;if(!(d=b.width)){d=A(a,"border-left-width");var c=A(a,"border-right-width");d=a.clientWidth+d+c}(b=b.height)||(b=A(a,"border-top-width"),c=A(a,"border-bottom-width"),b=a.clientHeight+b+c);return{width:d,height:b}}function C(a){return new Promise((b,d)=>{var c=new Image;c.onload=()=>{c.decode().then(()=>{requestAnimationFrame(()=>b(c))})};c.onerror=d;c.crossOrigin="anonymous";c.decoding="async";c.src=a})}
+function ba(a){return u(function*(){return Promise.resolve().then(()=>(new XMLSerializer).serializeToString(a)).then(encodeURIComponent).then(b=>`data:image/svg+xml;charset=utf-8,${b}`)})}
+function ca(a,b,d){return u(function*(){var c=document.createElementNS("http://www.w3.org/2000/svg","svg"),e=document.createElementNS("http://www.w3.org/2000/svg","foreignObject");c.setAttribute("width",`${b}`);c.setAttribute("height",`${d}`);c.setAttribute("viewBox",`0 0 ${b} ${d}`);e.setAttribute("width","100%");e.setAttribute("height","100%");e.setAttribute("x","0");e.setAttribute("y","0");e.setAttribute("externalResourcesRequired","true");c.appendChild(e);e.appendChild(a);return ba(c)})}
+var D=(a,b)=>{if(a instanceof b)return!0;a=Object.getPrototypeOf(a);return a===null?!1:a.constructor.name===b.name||D(a,b)};function da(a,b){return z(b).map(d=>{var c=a.getPropertyValue(d),e=a.getPropertyPriority(d);return`${d}: ${c}${e?" !important":""};`}).join(" ")}
+function E(a,b,d,c){a=window.getComputedStyle(a,d);var e=a.getPropertyValue("content");if(e!==""&&e!=="none"){var f=aa();try{b.className=`${b.className} ${f}`}catch(h){return}e=document.createElement("style");var g=e.appendChild;d=`.${f}:${d}`;a.cssText?(c=a.getPropertyValue("content"),c=`${a.cssText} content: '${c.replace(/'|"/g,"")}';`):c=da(a,c);g.call(e,document.createTextNode(`${d}{${c}}`));b.appendChild(e)}};function F(a){return a.search(/^(data:)/)!==-1}function G(a,b,d){return u(function*(){var c=yield fetch(a,b);if(c.status===404)throw Error(`Resource "${c.url}" not found`);var e=yield c.blob();return new Promise((f,g)=>{var h=new FileReader;h.onerror=g;h.onloadend=()=>{try{f(d({v:c,result:h.result}))}catch(l){g(l)}};h.readAsDataURL(e)})})}const H={};function ea(a,b,d){var c=a.replace(/\?.*/,"");d&&(c=a);/ttf|otf|eot|woff2?/i.test(c)&&(c=c.replace(/.*\//,""));return b?`[${b}]${c}`:c}
+function I(a,b,d){return u(function*(){var c=ea(a,b,d.F);if(H[c]!=null)return H[c];d.B&&(a+=(/\?/.test(a)?"&":"?")+(new Date).getTime());try{let f=yield G(a,d.l,({v:g,result:h})=>{b||(b=g.headers.get("Content-Type")||"");return h.split(/,/)[1]});var e=`data:${b};base64,${f}`}catch(f){e=d.o||""}return H[c]=e})};const J={R:"application/font-woff",S:"application/font-woff",O:"application/font-truetype",C:"application/vnd.ms-fontobject",J:"image/png",H:"image/jpeg",G:"image/jpeg",D:"image/gif",N:"image/tiff",M:"image/svg+xml",P:"image/webp"};function K(a){return(a=/\.([^./]*?)$/g.exec(a))?a[1]:""};function fa(a){return u(function*(){var b=a.toDataURL();return b==="data:,"?a.cloneNode(!1):C(b)})}function ha(a,b){return u(function*(){if(a.currentSrc){var d=document.createElement("canvas");let c=d.getContext("2d");d.width=a.clientWidth;d.height=a.clientHeight;c==null||c.drawImage(a,0,0,d.width,d.height);d=d.toDataURL();return C(d)}d=a.poster;d=yield I(d,J[K(d).toLowerCase()]||"",b);return C(d)})}
+function ia(a,b){return u(function*(){try{let d;if(a==null?0:(d=a.contentDocument)==null?0:d.body)return yield L(a.contentDocument.body,b,!0)}catch(d){}return a.cloneNode(!1)})}function ja(a,b){return u(function*(){return D(a,HTMLCanvasElement)?fa(a):D(a,HTMLVideoElement)?ha(a,b):D(a,HTMLIFrameElement)?ia(a,b):a.cloneNode(a.tagName!=null&&a.tagName.toUpperCase()==="SVG")})}
+function ka(a,b,d){return u(function*(){if(b.tagName!=null&&b.tagName.toUpperCase()==="SVG")return b;var c=[];if(a.tagName!=null&&a.tagName.toUpperCase()==="SLOT"&&a.assignedNodes)c=w(a.assignedNodes());else{let e;if(D(a,HTMLIFrameElement)&&((e=a.contentDocument)==null?0:e.body))c=w(a.contentDocument.body.childNodes);else{let f;c=w(((f=a.shadowRoot)!=null?f:a).childNodes)}}if(c.length===0||D(a,HTMLVideoElement))return b;yield c.reduce((e,f)=>e.then(()=>L(f,d)).then(g=>{g&&b.appendChild(g)}),Promise.resolve());
+return b})}function la(a,b,d){var c=b.style;if(c){var e=window.getComputedStyle(a);e.cssText?(c.cssText=e.cssText,c.transformOrigin=e.transformOrigin):z(d).forEach(f=>{var g=e.getPropertyValue(f);f==="font-size"&&g.endsWith("px")&&(g=`${Math.floor(parseFloat(g.substring(0,g.length-2)))-.1}px`);D(a,HTMLIFrameElement)&&f==="display"&&g==="inline"&&(g="block");f==="d"&&b.getAttribute("d")&&(g=`path(${b.getAttribute("d")})`);c.setProperty(f,g,e.getPropertyPriority(f))})}}
+function ma(a,b){D(a,HTMLSelectElement)&&(b=Array.from(b.children).find(d=>a.value===d.getAttribute("value")))&&b.setAttribute("selected","")}
+function na(a,b){return u(function*(){var d=a.querySelectorAll?a.querySelectorAll("use"):[];if(d.length===0)return a;var c={};for(var e=0;e<d.length;e++){var f=d[e].getAttribute("xlink:href");if(f){let g=document.querySelector(f);a.querySelector(f)||!g||c[f]||(c[f]=yield L(g,b,!0))}}d=Object.values(c);if(d.length){c=document.createElementNS("http://www.w3.org/1999/xhtml","svg");c.setAttribute("xmlns","http://www.w3.org/1999/xhtml");c.style.position="absolute";c.style.width="0";c.style.height="0";
+c.style.overflow="hidden";c.style.display="none";e=document.createElementNS("http://www.w3.org/1999/xhtml","defs");c.appendChild(e);for(f=0;f<d.length;f++)e.appendChild(d[f]);a.appendChild(c)}return a})}
+function L(a,b,d){return u(function*(){return d||!b.filter||b.filter(a)?Promise.resolve(a).then(c=>ja(c,b)).then(c=>ka(a,c,b)).then(c=>{D(c,Element)&&(la(a,c,b),E(a,c,":before",b),E(a,c,":after",b),D(a,HTMLTextAreaElement)&&(c.textContent=a.value),D(a,HTMLInputElement)&&c.setAttribute("value",a.value),ma(a,c));return c}).then(c=>na(c,b)):null})};const M=/url\((['"]?)([^'"]+?)\1\)/g,oa=/url\([^)]+\)\s*format\((["']?)([^"']+)\1\)/g,pa=/src:\s*(?:url\([^)]+\)\s*format\([^)]+\)[,;]\s*)+/g;function qa(a){var b=[];a.replace(M,(d,c,e)=>{b.push(e);return d});return b.filter(d=>!F(d))}
+function ra(a,b,d,c){return u(function*(){try{let e=d?(new URL(b,d||void 0)).toString():b,f;f=yield I(e,J[K(b).toLowerCase()]||"",c);return a.replace(new RegExp(`(url\\(['"]?)(${b.replace(/([.*+?^${}()|\[\]\/\\])/g,"\\$1")})(['"]?\\))`,"g"),`$1${f}$3`)}catch(e){}return a})}function sa(a,{K:b}){return b?a.replace(pa,d=>{for(;;){let [c,,e]=oa.exec(d)||[];if(!e)return"";if(e===b)return`src: ${c};`}}):a}
+function N(a,b,d){return u(function*(){if(a.search(M)===-1)return a;var c=sa(a,d);return qa(c).reduce((e,f)=>e.then(g=>ra(g,f,b,d)),Promise.resolve(c))})};function O(a,b,d){return u(function*(){var c,e=(c=b.style)==null?void 0:c.getPropertyValue(a);return e?(c=yield N(e,null,d),b.style.setProperty(a,c,b.style.getPropertyPriority(a)),!0):!1})}function ta(a,b){return u(function*(){(yield O("background",a,b))||(yield O("background-image",a,b));(yield O("mask",a,b))||(yield O("-webkit-mask",a,b))||(yield O("mask-image",a,b))||(yield O("-webkit-mask-image",a,b))})}
+function ua(a,b){return u(function*(){var d=D(a,HTMLImageElement);if(d&&!F(a.src)||D(a,SVGImageElement)&&!F(a.href.baseVal)){var c=d?a.src:a.href.baseVal,e=yield I(c,J[K(c).toLowerCase()]||"",b);yield new Promise((f,g)=>{a.onload=f;a.onerror=b.h?(...h)=>{try{f(b.h(...h))}catch(l){g(l)}}:g;a.decode&&(a.decode=f);a.loading==="lazy"&&(a.loading="eager");d?(a.srcset="",a.src=e):a.href.baseVal=e})}})}
+function va(a,b){return u(function*(){var d=w(a.childNodes).map(c=>P(c,b));yield Promise.all(d).then(()=>a)})}function P(a,b){return u(function*(){D(a,Element)&&(yield ta(a,b),yield ua(a,b),yield va(a,b))})};const Q={};function R(a){return u(function*(){var b=Q[a];if(b!=null)return b;b=yield(yield fetch(a)).text();b={url:a,cssText:b};return Q[a]=b})}function S(a,b){return u(function*(){var d=a.cssText,c=/url\(["']?([^"')]+)["']?\)/g,e=(d.match(/url\([^)]+\)/g)||[]).map(f=>u(function*(){var g=f.replace(c,"$1");g.startsWith("https://")||(g=(new URL(g,a.url)).href);return G(g,b.l,({result:h})=>{d=d.replace(f,`url(${h})`);return[f,h]})}));return Promise.all(e).then(()=>d)})}
+function T(a){if(a==null)return[];var b=[];a=a.replace(/(\/\*[\s\S]*?\*\/)/gi,"");for(var d=RegExp("((@.*?keyframes [\\s\\S]*?){([\\s\\S]*?}\\s*?)})","gi");;){var c=d.exec(a);if(c===null)break;b.push(c[0])}a=a.replace(d,"");d=/@import[\s\S]*?url\([^)]*\)[\s\S]*?;/gi;for(c=RegExp("((\\s*?(?:\\/\\*[\\s\\S]*?\\*\\/)?\\s*?@media[\\s\\S]*?){([\\s\\S]*?)}\\s*?})|(([\\s\\S]*?){([\\s\\S]*?)})","gi");;){let e=d.exec(a);if(e===null)if(e=c.exec(a),e===null)break;else d.lastIndex=c.lastIndex;else c.lastIndex=
+d.lastIndex;b.push(e[0])}return b}
+function wa(a,b){return u(function*(){var d=[],c=[];a.forEach(e=>{if("cssRules"in e)try{w(e.cssRules||[]).forEach((f,g)=>{if(f.type===CSSRule.IMPORT_RULE){let h=g+1;f=R(f.href).then(l=>S(l,b)).then(l=>T(l).forEach(p=>{try{e.insertRule(p,p.startsWith("@import")?h+=1:e.cssRules.length)}catch(x){}})).catch(()=>{});c.push(f)}})}catch(f){let g=a.find(h=>h.href==null)||document.styleSheets[0];e.href!=null&&c.push(R(e.href).then(h=>S(h,b)).then(h=>T(h).forEach(l=>{g.insertRule(l,g.cssRules.length)})).catch(()=>
+{}))}});return Promise.all(c).then(()=>{a.forEach(e=>{if("cssRules"in e)try{w(e.cssRules||[]).forEach(f=>{d.push(f)})}catch(f){}});return d})})}function xa(a){return a.filter(b=>b.type===CSSRule.FONT_FACE_RULE).filter(b=>b.style.getPropertyValue("src").search(M)!==-1)}function ya(a,b){return u(function*(){if(a.ownerDocument==null)throw Error("Provided element is not within a Document");var d=yield wa(w(a.ownerDocument.styleSheets),b);return xa(d)})}
+function za(a){function b(c){(c.style.fontFamily||getComputedStyle(c).fontFamily).split(",").forEach(e=>{d.add(e.trim().replace(/["']/g,""))});Array.from(c.children).forEach(e=>{e instanceof HTMLElement&&b(e)})}var d=new Set;b(a);return d}function Aa(a,b){return u(function*(){var d=yield ya(a,b),c=za(a);return(yield Promise.all(d.filter(e=>c.has(e.style.fontFamily.trim().replace(/["']/g,""))).map(e=>N(e.cssText,e.parentStyleSheet?e.parentStyleSheet.href:null,b)))).join("\n")})}
+function Ba(a,b){return u(function*(){var d=b.m!=null?b.m:b.A?null:yield Aa(a,b);if(d){let c=document.createElement("style");c.appendChild(document.createTextNode(d));a.firstChild?a.insertBefore(c,a.firstChild):a.appendChild(c)}})};function Ca(a,b={}){return u(function*(){var {width:d,height:c}=B(a,b),e=yield L(a,b,!0);yield Ba(e,b);yield P(e,b);v(e,b);return yield ca(e,d,c)})}
+function Da(a,b={}){return u(function*(){var {width:d,height:c}=B(a,b),e=yield Ca(a,b);e=yield C(e);var f=document.createElement("canvas"),g=f.getContext("2d"),h=b.I||window.devicePixelRatio||1,l=b.j||d,p=b.i||c;f.width=l*h;f.height=p*h;!b.L&&(f.width>16384||f.height>16384)&&(f.width>16384&&f.height>16384?f.width>f.height?(f.height*=16384/f.width,f.width=16384):(f.width*=16384/f.height,f.height=16384):f.width>16384?(f.height*=16384/f.width,f.width=16384):(f.width*=16384/f.height,f.height=16384));
+f.style.width=`${l}`;f.style.height=`${p}`;b.backgroundColor&&(g.fillStyle=b.backgroundColor,g.fillRect(0,0,f.width,f.height));g.drawImage(e,0,0,f.width,f.height);return f})}function Ea(a,b={}){return u(function*(){return(yield Da(a,b)).toDataURL()})};const Fa=["gemini.google.com","corp.google.com","proxy.googlers.com"];function V(a){a=Number(a.replace(/px$/,""));return Number.isFinite(a)?a:0}function W(){return document.body.querySelectorAll('[class*="animate"]').length>0}function X(a,b){var d=document.createElement("canvas");d.width=a;d.height=b;return d.toDataURL("image/png")}const Y=X(1,1);
+function Z(a,b){return u(function*(){var d=Math.max(b?b.width:a.offsetWidth,1),c=Math.max(b?b.height:a.offsetHeight,1),e=HTMLCanvasElement.prototype.toDataURL;b&&(HTMLCanvasElement.prototype.toDataURL=function(f,g){var h;if(h=this.isConnected&&a.contains(this)){{let n=this.getBoundingClientRect();if(n.width===0||n.height===0)h=!1;else if(window.getComputedStyle(this).position==="fixed")h=n.bottom>0&&n.top<b.height&&n.right>0&&n.left<b.width;else{h=a.getBoundingClientRect();var l=n.top-h.top,p=n.left-
+h.left,x=n.right-h.left;h=n.bottom-h.top>b.scrollTop&&l<b.scrollTop+b.height&&x>b.scrollLeft&&p<b.scrollLeft+b.width}}h=!h}return h?"data:,":e.call(this,f,g)});try{let f=window.getComputedStyle(a),g=b?`${V(f.marginTop)-b.scrollTop}px`:void 0,h=b?`${V(f.marginLeft)-b.scrollLeft}px`:void 0,l=`${Math.max(a.offsetWidth,d)}px`,p,x=`${Math.max(a.offsetHeight,c+((p=b==null?void 0:b.scrollTop)!=null?p:0))}px`;return yield Ea(a,Object.assign({},{width:d,height:c,j:d,i:c},b?{style:{width:l,height:x,marginTop:g,
+marginLeft:h,marginBlockStart:g,marginInlineStart:h}}:{},{A:!0,filter:n=>{if(n.tagName==="IMG"){let U=n.getAttribute("src");if(!U||U.trim()===""||n.style.display==="none")return!1}return!0},o:Y,h:()=>Y}))}catch(f){return X(d,c)}finally{HTMLCanvasElement.prototype.toDataURL=e}})}
+function Ga(){return u(function*(){var a=document.body.offsetWidth,b=document.body.offsetHeight,d=document.body.cloneNode(!0);d.querySelectorAll('[class*="animate"]').forEach(c=>{c.classList.remove(...Array.from(c.classList).filter(e=>e.startsWith("animate")))});d.style.width=`${a}px`;d.style.height=`${b}px`;return d})}
+function Ha(a){return u(function*(){var b={width:window.innerWidth||document.documentElement.clientWidth||document.body.offsetWidth,height:window.innerHeight||document.documentElement.clientHeight||document.body.offsetHeight,scrollTop:window.scrollY||document.documentElement.scrollTop||document.body.scrollTop||0,scrollLeft:window.scrollX||document.documentElement.scrollLeft||document.body.scrollLeft||0},d=document.body;if(W()){let c=yield Ga();d=c;document.body.appendChild(c)}b=yield Z(d,b);W()&&
+document.body.removeChild(d);window.parent.postMessage({type:"SEND_SCREENSHOT",image:b,topOffset:0},a.origin)})}function Ia(a){return u(function*(){var b={type:"SEND_SCREENSHOT_FOR_DATA_VISUALIZATION",image:yield Z(document.body),topOffset:0};window.parent.postMessage(b,a.origin)})}window.addEventListener("message",a=>u(function*(){if(Fa.some(d=>a.origin.includes(d))){var b=a.data;b&&(b.type==="MAKE_SCREENSHOT"&&(yield Ha(a)),b.type==="MAKE_SCREENSHOT_FOR_DATA_VISUALIZATION"&&(yield Ia(a)))}}));
+})();</script><script data-bard-client-injected="true">(function() {
+  // Ensure this script is executed only once
+  if (window.firebaseAuthBridgeScriptLoaded) {
+    return;
+  }
+  window.firebaseAuthBridgeScriptLoaded = true;
+
+  let nextTokenPromiseId = 0;
+
+  // Stores { resolve, reject } for ongoing token requests
+  const pendingTokenPromises = {};
+
+  // Listen for messages from the Host Application
+  window.addEventListener('message', function(event) {
+
+    const messageData = event.data;
+
+  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
+      const { success, token, error, promiseId } = messageData ?? {};
+      if (pendingTokenPromises[promiseId]) {
+        if (success) {
+          pendingTokenPromises[promiseId].resolve(token);
+        } else {
+          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
+        }
+        delete pendingTokenPromises[promiseId];
+      }
+    }
+  });
+
+  // Expose a function for the Generated App to request a new Firebase token
+  window.requestNewFirebaseToken = function() {
+    const currentPromiseId = nextTokenPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingTokenPromises[currentPromiseId] = { resolve, reject };
+    });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'REQUEST_NEW_FIREBASE_TOKEN',
+        promiseId: currentPromiseId
+      }, '*');
+    } else {
+      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
+      delete pendingTokenPromises[currentPromiseId];
+    }
+    return promise;
+  };
+})();</script><script data-bard-client-injected="true">
+let realOriginalGetUserMedia = null;
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+}
+
+(function() {
+  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
+    try {
+      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
+        get: function() {
+          return undefined; // Or throw an error
+        },
+        configurable: false
+      });
+    } catch (error) {
+      console.error("Error defining prototype getter:", error);
+    }
+  }
+})();
+
+(function() {
+  const pendingMediaResolvers = {};
+  let nextMediaPromiseId = 0;
+
+  function requestMediaPermissions(constraints) {
+    const mediaPromiseId = nextMediaPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingMediaResolvers[mediaPromiseId] = (granted) => {
+        delete pendingMediaResolvers[mediaPromiseId];
+        resolve(granted);
+      };
+    });
+
+    window.parent.postMessage({
+      type: 'requestMediaPermission',
+      constraints: constraints,
+      promiseId: mediaPromiseId,
+    }, '*');
+
+    return promise;
+  }
+
+  let originalGetUserMedia = realOriginalGetUserMedia;
+
+  function interceptGetUserMedia() {
+    if (navigator.mediaDevices) {
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+        value: function(constraints) {
+          return requestMediaPermissions(constraints).then((granted) => {
+            if (granted) {
+              if (originalGetUserMedia) {
+                return originalGetUserMedia(constraints);
+              } else {
+                throw new Error("Original getUserMedia not available.");
+              }
+            } else {
+              throw new DOMException('Permission denied', 'NotAllowedError');
+            }
+          });
+        },
+        writable: false,
+        configurable: false
+      });
+    }
+  }
+
+  interceptGetUserMedia();
+
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'childList' && mutation.addedNodes) {
+        mutation.addedNodes.forEach(node => {
+          if (node === navigator.mediaDevices) {
+            interceptGetUserMedia();
+          }
+        });
+      }
+    }
+  });
+
+  function interceptSpeechRecognition() {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      return;
+    }
+
+    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const SpeechRecognitionWrapper = function(...args) {
+      const recognizer = new OriginalSpeechRecognition(...args);
+      const originalStart = recognizer.start.bind(recognizer);
+
+      recognizer.start = function() {
+        requestMediaPermissions({ audio: true }).then(granted => {
+          if (granted) {
+            originalStart();
+          } else {
+            const errorEvent = new SpeechRecognitionErrorEvent('error');
+            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
+            recognizer.dispatchEvent(errorEvent);
+          }
+        });
+      };
+
+      return recognizer;
+    };
+
+    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
+    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
+
+    if (window.SpeechRecognition) {
+      window.SpeechRecognition = SpeechRecognitionWrapper;
+    }
+    if (window.webkitSpeechRecognition) {
+      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
+    }
+  }
+
+  interceptSpeechRecognition();
+
+  window.addEventListener('message', function(event) {
+    if (event.data) {
+      if (event.data.type === 'resolveMediaPermission') {
+        const { promiseId, granted } = event.data;
+        if (pendingMediaResolvers[promiseId]) {
+          pendingMediaResolvers[promiseId](granted);
+        }
+      }
+    }
+  });
+
+})();</script><script ws-interception-config="{&quot;parentOrigin&quot;:&quot;https://gemini.google.com&quot;,&quot;proxiedDomains&quot;:[]}" data-bard-client-injected="true">(function(){'use strict';var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,d,e){if(b==Array.prototype||b==Object.prototype)return b;b[d]=e.value;return b};function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var d=0;d<b.length;++d){var e=b[d];if(e&&e.Math==Math)return e}throw Error("Cannot find global object");}var w=v(this);
+function y(b,d){if(d)a:{var e=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var k=b[h];if(!(k in e))break a;e=e[k]}b=b[b.length-1];h=e[b];d=d(h);d!=h&&d!=null&&u(e,b,{configurable:!0,writable:!0,value:d})}}function z(b){function d(h){return b.next(h)}function e(h){return b.throw(h)}return new Promise(function(h,k){function m(n){n.done?h(n.value):Promise.resolve(n.value).then(d,e).then(m,k)}m(b.next())})}y("globalThis",function(b){return b||w});/*
+
+ Copyright The Closure Library Authors.
+ SPDX-License-Identifier: Apache-2.0
+*/
+function A(b,d){function e(){}e.prototype=d.prototype;b.j=d.prototype;b.prototype=new e;b.prototype.constructor=b;b.h=function(h,k,m){for(var n=Array(arguments.length-2),p=2;p<arguments.length;p++)n[p-2]=arguments[p];return d.prototype[k].apply(h,n)}};function B(b,d,e="*"){function h(a){if(typeof a==="string")return F.encode(a).buffer;if(a instanceof ArrayBuffer)return a.slice(0);if(ArrayBuffer.isView(a))return a.buffer.slice(a.byteOffset,a.byteOffset+a.byteLength);throw Error("Invalid data type");}function k(a){a=h(a);var f={type:"send",data:new Uint8Array(a)},g;(g=r)==null||g.postMessage(f,[a])}function m(){if(!r)throw Error("Data port not captured yet.");r.onmessage=a=>{if(a.data.type==="message"){a=new MessageEvent("message",{data:G.decode(a.data.data)});
+let f;(f=c.onmessage)==null||f.call(c,a);c.dispatchEvent(a)}}}function n(){if(!t)throw Error("Control port not captured yet.");t.onmessage=a=>{switch(a.data.type){case "open":l=1;var f=new Event("open"),g;(g=c.onopen)==null||g.call(c,f);c.dispatchEvent(f);q.forEach(H=>{k(H)});q=[];break;case "close":g=a.data;l=3;g=new CloseEvent("close",{code:g.code,reason:g.reason,wasClean:g.wasClean});(f=c.onclose)==null||f.call(c,g);c.dispatchEvent(g);break;case "error":l=3;f=new Event("error");let x;(x=c.onerror)==
+null||x.call(c,f);c.dispatchEvent(f)}}}function p(a){return z(function*(){var f=new MessageChannel;t=f.port1;var g=new MessageChannel;r=g.port1;n();m();window.parent.postMessage({type:"websocket_open",portOrdering:["control","data"],url:b,protocols:a||[],connectionId:I},e,[f.port2,g.port2])}())}var c=Reflect.construct(EventTarget,[],new.target);c.CONNECTING=0;c.OPEN=1;c.CLOSING=2;c.CLOSED=3;c.url=b;c.binaryType="arraybuffer";c.protocol="";c.i="";var l=0,t=null,r=null,q=[],F=new TextEncoder,G=new TextDecoder;
+c.onopen=null;c.onmessage=null;c.onclose=null;c.onerror=null;Object.defineProperty(c,"readyState",{get:()=>l,enumerable:!0,configurable:!0});Object.defineProperty(c,"bufferedAmount",{get:()=>{var a=0;q.forEach(f=>{a+=typeof f==="string"?f.length:f.byteLength});return a},enumerable:!0,configurable:!0});var I=function(){var a;return((a=globalThis.crypto)==null?0:a.randomUUID)?globalThis.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,f=>{var g=Math.random()*16|0;return(f===
+"x"?g:g&3|8).toString(16)})}();c.send=a=>{if(l===1)a instanceof Blob?a.arrayBuffer().then(f=>{k(f)}):k(a);else if(l===0)if(typeof a==="string")q.push(a);else if(a instanceof ArrayBuffer||ArrayBuffer.isView(a))q.push(h(a));else throw Error("Sending Blob is not supported before the connection is open.");else console.debug("WebSocket send called in CLOSING or CLOSED state; ignored.")};c.close=(a=1E3,f="")=>{if(l!==2&&l!==3){l=2;a={type:"close",code:a,reason:f,wasClean:a===1E3};var g;(g=t)==null||g.postMessage(a)}};
+Promise.resolve().then(()=>p(d));return c}A(B,EventTarget);var C=document.currentScript,D=C==null?void 0:C.getAttribute("ws-interception-config");if(!D)throw Error("WebSocket Interceptor: Missing ws-interception-config attribute in the script tag.");var E=JSON.parse(D);if(!E.parentOrigin||typeof E.parentOrigin!=="string")throw Error("WebSocket Interceptor: Invalid parentOrigin in ws-interception-config");
+(function(b){var d=Object.getOwnPropertyDescriptor(window,"WebSocket");if(!d||d.writable||d.configurable)d=Object.assign(function(e,h){try{let k=(new URL(e)).hostname;if(b.proxiedDomains.some(m=>k===m||k.endsWith(`.${m}`)))return new B(e,h,b.parentOrigin)}catch(k){throw window.parent.postMessage({type:"websocket_blocked",url:e,reason:"blocked_invalid_url"},b.parentOrigin),new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");}window.parent.postMessage({type:"websocket_blocked",
+url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");},{CONNECTING:0,OPEN:1,CLOSING:2,CLOSED:3}),Object.defineProperty(window,"WebSocket",{value:d,writable:!1,configurable:!1})})({proxiedDomains:E.proxiedDomains||[],parentOrigin:E.parentOrigin});}).call(this);
+</script><script data-bard-client-injected="true">((function(modelInformation) {
+  const originalFetch = window.fetch;
+  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
+  let googleLlmBaseApiUrls = [
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageTransformModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
+  ];
+  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+    );
+  });
+  modelInformation.deprecatedImageModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predict',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predictLongRunning',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+  modelInformation.deprecatedGenerateImageModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+  modelInformation.deprecatedImageTransformModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+
+  const pendingFetchResolvers = {};
+  let nextPromiseId = 0;
+
+  function handleStringInput(input, optionsArgument) {
+    const actualUrl = input;
+    const fetchCallArgs = [actualUrl, optionsArgument];
+    const effectiveOptions = optionsArgument || {};
+    const bodyForApiKeyCheck = effectiveOptions.body;
+    const bodyForPostMessage = effectiveOptions.body;
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  function handleRequestInput(input, optionsArgument) {
+    const actualUrl = input.url;
+    const fetchCallArgs = [input, optionsArgument];
+    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (optionsArgument) {
+      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
+      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
+      if ('body' in optionsArgument) {
+        bodyForApiKeyCheck = optionsArgument.body;
+        bodyForPostMessage = optionsArgument.body;
+      } else {
+        bodyForApiKeyCheck = undefined;
+        bodyForPostMessage = input.body;
+      }
+    } else {
+      bodyForApiKeyCheck = undefined;
+      bodyForPostMessage = input.body;
+    }
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  window.fetch = function(input, optionsArgument) {
+    let actualUrl;
+    let fetchCallArgs;
+    let effectiveOptions = {};
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (typeof input === 'string') {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
+    } else if (input instanceof Request) {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
+    } else {
+      return originalFetch.apply(window, [input, optionsArgument]);
+    }
+
+    effectiveOptions.method = effectiveOptions.method || 'GET';
+    if (!effectiveOptions.headers) {
+      effectiveOptions.headers = new Headers();
+    }
+
+
+    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
+      let apiKeyIsNull = true;
+
+      const regex = new RegExp("models/([^:]+)");
+      const modelNameMatch = actualUrl.match(regex);
+      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
+
+
+      try {
+        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
+        const apiKeyParam = urlObject.searchParams.get('key');
+        if (apiKeyParam) {
+          apiKeyIsNull = false;
+        }
+      } catch (e) {
+        // Continue checks even if URL parsing fails
+      }
+
+      if (apiKeyIsNull && effectiveOptions.headers) {
+        const h = new Headers(effectiveOptions.headers);
+        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
+        if (apiKeyHeaderValue) {
+          apiKeyIsNull = false;
+          return originalFetch.apply(window, fetchCallArgs);
+        }
+      }
+
+      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
+        try {
+          const bodyData = JSON.parse(bodyForApiKeyCheck);
+          if (bodyData && bodyData.apiKey) {
+            apiKeyIsNull = false;
+            return originalFetch.apply(window, fetchCallArgs);
+          }
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      if(apiKeyIsNull) {
+        const promiseId = nextPromiseId++;
+        const promise = new Promise((resolve) => {
+          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
+            delete pendingFetchResolvers[promiseId];
+            resolve(resolvedResponse);
+          };
+        });
+
+        let serializedBodyForPostMessage;
+        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
+            serializedBodyForPostMessage = bodyForPostMessage;
+        } else if (bodyForPostMessage instanceof ReadableStream) {
+            serializedBodyForPostMessage = null;
+        } else {
+            try {
+                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
+            } catch (e) {
+                serializedBodyForPostMessage = null;
+            }
+        }
+
+        const messageOptions = {
+            method: effectiveOptions.method,
+            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
+            body: serializedBodyForPostMessage
+        };
+
+        window.parent.postMessage({
+          type: 'requestFetch',
+          url: actualUrl,
+          modelName: modelName,
+          options: messageOptions,
+          promiseId: promiseId,
+        }, '*');
+
+        return promise;
+      }
+      return originalFetch.apply(window, fetchCallArgs);
+    }
+    return originalFetch.apply(window, fetchCallArgs);
+  };
+
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'resolveFetch') {
+      const { promiseId, response } = event.data;
+      if (pendingFetchResolvers[promiseId]) {
+        try {
+          const reconstructedResponse = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: new Headers(response.headers),
+          });
+          pendingFetchResolvers[promiseId](reconstructedResponse);
+        } catch (error) {
+          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
+        }
+      }
+    }
+  });
+
+}))({"textModelName":"gemini-3-flash-preview","imageModelName":"imagen-4.0-generate-001","imageEditModelName":"gemini-3.1-flash-image","imageTransformModelName":"gemini-3-pro-image","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash","gemini-2.5-flash-preview-04-17","gemini-2.5-flash-preview-05-20","gemini-2.5-flash-preview-09-2025"],"deprecatedImageModelNames":["imagen-3.0-generate-001","imagen-3.0-generate-002"],"deprecatedGenerateImageModelNames":["gemini-2.5-flash-image-preview","gemini-2.5-flash-image","gemini-3.1-flash-image-preview"],"deprecatedImageTransformModelNames":["gemini-3-pro-image-preview-11-2025"]})</script><script data-bard-client-injected="true">(function() {
+  function normalizeSlug(str) {
+    try {
+      return str
+        .trim()
+        .toLowerCase()
+        .replace(/[^p{L}p{N}s_-]/gu, '')
+        .replace(/s+/g, '-');
+    } catch (e) {
+      return str
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9s_-]/g, '')
+        .replace(/s+/g, '-');
+    }
+  }
+
+  function findTargetElement(hash) {
+    if (!hash || hash === '#') {
+      return null;
+    }
+    const rawId = hash.startsWith('#') ? hash.slice(1) : hash;
+    let decodedId = rawId;
+    try {
+      decodedId = decodeURIComponent(rawId);
+    } catch (e) {
+      // Ignore URI malformed errors.
+    }
+
+    // 1. Direct ID match (raw and decoded).
+    let target = document.getElementById(rawId) || document.getElementById(decodedId);
+    if (target) {
+      return target;
+    }
+
+    // 2. Name attribute match (<a name="...">).
+    try {
+      if (typeof CSS !== 'undefined' && CSS.escape) {
+        target =
+          document.querySelector('[name="' + CSS.escape(rawId) + '"]') ||
+          document.querySelector('[name="' + CSS.escape(decodedId) + '"]');
+      } else {
+        const namedElements = document.getElementsByName(rawId);
+        if (namedElements && namedElements.length > 0) {
+          return namedElements[0];
+        }
+      }
+    } catch (e) {
+      // Ignore querySelector syntax errors.
+    }
+    if (target) {
+      return target;
+    }
+
+    // 3. Match heading text by slug (for Markdown TOCs where headings lack explicit IDs).
+    const targetSlug = normalizeSlug(decodedId);
+    if (targetSlug) {
+      for (const heading of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
+        if (normalizeSlug(heading.textContent || '') === targetSlug) {
+          return heading;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  document.addEventListener('click', function(event) {
+    const target = event.target;
+    const anchor = target && typeof target.closest === 'function' ? target.closest('a') : null;
+    if (!anchor) {
+      return;
+    }
+
+    const href = anchor.getAttribute('href');
+    if (
+      !href ||
+      href.trim().toLowerCase().startsWith('javascript:') ||
+      anchor.hasAttribute('download')
+    ) {
+      return;
+    }
+
+    // Check if the link is an in-page hash / anchor link.
+    if (href.startsWith('#')) {
+      event.preventDefault();
+      const targetElement = findTargetElement(href);
+      if (targetElement) {
+        targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+      return;
+    }
+
+    // Check if the URL has the same origin/pathname but with a hash.
+    try {
+      const url = new URL(anchor.href, window.location.href);
+      if (
+        url.hash &&
+        url.origin === window.location.origin &&
+        url.pathname === window.location.pathname
+      ) {
+        event.preventDefault();
+        const targetElement = findTargetElement(url.hash);
+        if (targetElement) {
+          targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+        return;
+      }
+    } catch (e) {
+      // Fall through if URL parsing fails.
+    }
+
+    // For all external or full navigation links, prevent iframe-level navigation
+    // (which breaks in AGSA WebView or sandboxed iframes) and ensure they open
+    // safely in a new tab/window.
+    if (anchor.target !== '_blank') {
+      event.preventDefault();
+      window.open(anchor.href, '_blank', 'noopener,noreferrer');
+    }
+  }, {capture: true});
+})();</script><script data-bard-client-injected="true">(function(){'use strict';function a(){window.parent.postMessage({type:"interaction"},"*")}window.addEventListener("click",a,{capture:!0,passive:!0});window.addEventListener("touchstart",a,{capture:!0,passive:!0});window.addEventListener("keydown",a,{capture:!0,passive:!0});}).call(this);
+</script><script data-bard-client-injected="true">(function() {
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+
+    /**
+   * Normalizes an error event or a promise rejection reason into a structured error object.
+   * @param {*} errorEventOrReason The error object or reason.
+   * @return {object} Structured error data { message, name, stack }.
+   */
+  function getErrorObject(errorEventOrReason) {
+    if (errorEventOrReason instanceof Error) {
+      return {
+        message: errorEventOrReason.message,
+        name: errorEventOrReason.name,
+        stack: errorEventOrReason.stack,
+      };
+    }
+    // Fallback for non-Error objects.
+    try {
+      return {
+        message: JSON.stringify(errorEventOrReason),
+        name: 'UnknownErrorType',
+        stack: null,
+      };
+    } catch (e) {
+      return {
+        message: String(errorEventOrReason),
+        name: 'UnknownErrorTypeNonStringifiable',
+        stack: null,
+      };
+    }
+  }
+
+  /**
+   * Converts an array of arguments (from log/error) into a single string.
+   * Handles Error objects specially to include their message and stack.
+   * @param {Array<*>} args - Arguments passed to console methods.
+   * @return {string} A string representation of the arguments.
+   */
+  function stringifyArgs(args) {
+    return args
+      .map((arg) => {
+        if (arg instanceof Error) {
+          const {message, stack} = arg;
+          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
+        }
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg);
+          } catch (error) {
+            return '[Circular Object]';
+          }
+        } else {
+          return String(arg);
+        }
+      })
+      .join(' ');
+  }
+
+  console.log = function(...args) {
+    const logString = stringifyArgs(args);
+    window.parent.postMessage({ type: 'log', message: logString }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+
+  console.error = function(...args) {
+    let errorData;
+    if (args.length > 0 && args[0] instanceof Error) {
+      const err = args[0];
+      // If the first arg is an Error, capture its details.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        ...getErrorObject(err),
+        rawArgsString: stringifyArgs(args.slice(1)),
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      // If not an Error object, treat all args as a general error message.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        message: stringifyArgs(args),
+        name: 'ConsoleLoggedError',
+        stack: null,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    window.parent.postMessage(errorData, '*');
+    originalConsoleError.apply(console, args);
+  };
+
+  // Listen for global unhandled synchronous errors.
+  window.addEventListener('error', function(event) {
+    const errorDetails = event.error ? getErrorObject(event.error) : {
+      message: event.message,
+      name: 'GlobalError',
+      stack: null,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    };
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'global',
+      ...errorDetails,
+      message: errorDetails.message || event.message,
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+  // Listen for unhandled promise rejections (asynchronous errors).
+  window.addEventListener('unhandledrejection', function(event) {
+    const errorDetails = getErrorObject(event.reason);
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'unhandledrejection',
+      ...errorDetails,
+      message: errorDetails.message || 'Unhandled Promise Rejection',
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Aurora Cell">
+  <title>Aurora Cell - OCR &amp; Struk Thermal 58mm</title>
+  <style>
+    /* =====================================================================
+       1. DESIGN TOKENS & RESET (100% INTERNAL CSS - ZERO EXTERNAL BLOCKING)
+       ===================================================================== */
+    :root {
+      --bg-page: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-subtle: #f8fafc;
+      --bg-muted: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+      --border-light: #e2e8f0;
+
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-soft: #eef2ff;
+      --primary-border: #c7d2fe;
+
+      --ewallet: #0284c7;
+      --ewallet-hover: #0369a1;
+      --ewallet-soft: #e0f2fe;
+
+      --emerald: #059669;
+      --emerald-hover: #047857;
+      --emerald-soft: #ecfdf5;
+
+      --amber: #f59e0b;
+      --amber-hover: #d97706;
+
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+
+      --slate-dark: #0f172a;
+      --slate-dark-hover: #1e293b;
+
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-mono: "Courier New", Courier, "Lucida Console", Monaco, monospace;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+      --shadow-md: 0 8px 22px -4px rgba(15, 23, 42, 0.14);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100%;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button, input {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(0.985);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =====================================================================
+       2. HEADER, TOMBOL UNDUH APLIKASI & NAVIGASI 3 TAB UTAMA
+       ===================================================================== */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: linear-gradient(135deg, #090d16 0%, #1e1b4b 55%, #0f172a 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(9, 13, 22, 0.24);
+    }
+
+    .header-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 12px 14px 0 14px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: rgba(99, 102, 241, 0.26);
+      border: 1px solid rgba(165, 180, 252, 0.38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c7d2fe;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-download-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 36px;
+      padding: 6px 11px;
+      border-radius: 10px;
+      background: #10b981;
+      color: #052e16;
+      font-size: 0.74rem;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+      white-space: nowrap;
+    }
+
+    .btn-download-header:hover {
+      background: #34d399;
+    }
+
+    .mode-pill-header {
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #e0e7ff;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 430px) {
+      .mode-pill-header {
+        display: none;
+      }
+    }
+
+    /* 3 Tab Navigasi */
+    .tab-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 8px 6px;
+      border-radius: 12px 12px 0 0;
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-align: center;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-page);
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    /* =====================================================================
+       3. CONTAINER UTAMA & KOMPONEN CARD
+       ===================================================================== */
+    .main-container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 14px 14px 40px 14px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .badge-info {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      white-space: nowrap;
+    }
+
+    .helper-text {
+      font-size: 0.79rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    /* =====================================================================
+       4. ZONA OCR & TOMBOL AKSI FORM
+       ===================================================================== */
+    .ocr-box {
+      border: 2px dashed var(--primary-border);
+      background: #f8faff;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .ocr-preview-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .ocr-thumb {
+      max-height: 170px;
+      max-width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      display: block;
+    }
+
+    .btn-remove-img {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--slate-dark);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-remove-img:hover {
+      background: var(--danger);
+    }
+
+    .ocr-loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .status-banner {
+      text-align: left;
+      font-size: 0.78rem;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .status-banner.success {
+      background: var(--emerald-soft);
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .status-banner.error {
+      background: var(--danger-soft);
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .status-banner.info {
+      background: var(--primary-soft);
+      color: #3730a3;
+      border: 1px solid var(--primary-border);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 440px) {
+      .grid-2-responsive {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.84rem;
+      font-weight: 700;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-ewallet {
+      background: var(--ewallet);
+      color: #ffffff;
+    }
+    .btn-ewallet:hover { background: var(--ewallet-hover); }
+
+    .btn-dark {
+      background: var(--slate-dark);
+      color: #ffffff;
+    }
+    .btn-dark:hover { background: var(--slate-dark-hover); }
+
+    .btn-emerald {
+      background: var(--emerald);
+      color: #ffffff;
+    }
+    .btn-emerald:hover { background: var(--emerald-hover); }
+
+    .btn-amber {
+      background: var(--amber);
+      color: #0f172a;
+      font-weight: 800;
+    }
+    .btn-amber:hover { background: var(--amber-hover); }
+
+    .btn-outline {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    .btn-outline:hover { background: var(--bg-muted); }
+
+    .btn-mini {
+      min-height: 32px;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    /* =====================================================================
+       5. SEGMENTED TOGGLE & FORM INPUTS
+       ===================================================================== */
+    .segmented-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 4px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 14px;
+    }
+
+    .seg-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      transition: all 0.15s ease;
+    }
+
+    .seg-btn.active-bank {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .seg-btn.active-ewallet {
+      background: var(--ewallet);
+      color: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+    }
+
+    .link-action {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--primary);
+      padding: 2px 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .form-input:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+    }
+
+    .form-input.mono {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+
+    .form-input.bold-lg {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .form-input.text-right {
+      text-align: right;
+    }
+
+    .input-with-btn {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-with-btn .form-input {
+      flex: 1;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chip-btn {
+      min-height: 32px;
+      padding: 5px 11px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-page);
+      border: 1px solid var(--border-light);
+      color: var(--text-primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .chip-btn:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary-border);
+      color: var(--primary);
+    }
+
+    /* Toggle Mode Admin Otomatis vs Manual */
+    .admin-mode-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.69rem;
+      font-weight: 800;
+    }
+
+    .admin-mode-pill.auto {
+      background: var(--emerald-soft);
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .admin-mode-pill.manual {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    /* Ringkasan Nominal, Admin & Total */
+    .total-summary-box {
+      background: var(--slate-dark);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
+      margin-bottom: 12px;
+    }
+
+    .summary-breakdown {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+
+    .summary-divider {
+      border-top: 1px dashed rgba(148, 163, 184, 0.35);
+      margin: 8px 0;
+    }
+
+    .summary-total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .total-summary-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #e2e8f0;
+    }
+
+    .total-summary-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #34d399;
+      white-space: nowrap;
+    }
+
+    /* =====================================================================
+       6. PRATINJAU KERTAS STRUK THERMAL 58MM (32 KARAKTER PRESISI)
+       ===================================================================== */
+    .receipt-stage {
+      background: #e2e8f0;
+      border-radius: var(--radius-lg);
+      padding: 20px 10px;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      margin-bottom: 14px;
+    }
+
+    .thermal-paper {
+      position: relative;
+      width: 296px;
+      background: #ffffff;
+      color: #090d16;
+      padding: 20px 12px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.38;
+      box-shadow: var(--shadow-md);
+      user-select: all;
+    }
+
+    /* Efek gerigi atas & bawah kertas thermal murni CSS */
+    .thermal-paper::before,
+    .thermal-paper::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background-size: 16px 8px;
+      background-repeat: repeat-x;
+    }
+
+    .thermal-paper::before {
+      top: -8px;
+      background-image:
+        linear-gradient(135deg, transparent 50%, #ffffff 50%),
+        linear-gradient(225deg, transparent 50%, #ffffff 50%);
+    }
+
+    .thermal-paper::after {
+      bottom: -8px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #ffffff 50%),
+        linear-gradient(315deg, transparent 50%, #ffffff 50%);
+    }
+
+    .rcp-store-name {
+      text-align: center;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .rcp-store-address {
+      text-align: center;
+      font-size: 10.5px;
+      color: #334155;
+      margin-top: 3px;
+      margin-bottom: 8px;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .rcp-line {
+      white-space: pre;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .rcp-center {
+      text-align: center;
+    }
+
+    .rcp-bold {
+      font-weight: 700;
+    }
+
+    .rcp-footer {
+      text-align: center;
+      font-size: 10.5px;
+      color: #334155;
+      margin-top: 6px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .action-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-divider-label {
+      font-size: 0.71rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-top: 4px;
+      margin-bottom: -2px;
+    }
+
+    /* =====================================================================
+       7. TAB 3: PENGATURAN, API KEY, UNDUH APK & PANDUAN ANDROID
+       ===================================================================== */
+    .install-hero-card {
+      background: linear-gradient(135deg, #ecfdf5 0%, #eef2ff 100%);
+      border: 1px solid #a7f3d0;
+    }
+
+    .guide-list {
+      padding-left: 18px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .guide-list li {
+      margin-bottom: 6px;
+    }
+
+    .code-inline {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      background: rgba(15, 23, 42, 0.08);
+      padding: 2px 6px;
+      border-radius: 5px;
+      color: var(--text-primary);
+    }
+
+    .tier-item {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .tier-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .tier-badge {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .btn-delete-tier {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    .btn-delete-tier:hover {
+      background: #fee2e2;
+    }
+
+    .tier-sub-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .above-max-box {
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-top: 6px;
+      margin-bottom: 14px;
+    }
+
+    /* =====================================================================
+       8. TOAST NOTIFICATION (NON-BLOCKING MESSAGE BOX)
+       ===================================================================== */
+    .toast-box {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      max-width: 92vw;
+      width: max-content;
+      padding: 11px 16px;
+      border-radius: 12px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    .toast-box.error {
+      background: #b91c1c;
+    }
+
+    .toast-box.success {
+      background: #047857;
+    }
+
+    /* =====================================================================
+       9. ATURAN CETAK KHUSUS KERTAS THERMAL 58MM (@media print)
+       ===================================================================== */
+    @media print {
+      @page {
+        size: 58mm auto;
+        margin: 0mm;
+      }
+
+      html, body {
+        width: 58mm !important;
+        min-height: auto !important;
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .no-print,
+      .app-header,
+      #panel-tab-1,
+      #panel-tab-3,
+      #tab2-card-header,
+      .action-stack,
+      #ble-help-banner,
+      .toast-box {
+        display: none !important;
+      }
+
+      .main-container {
+        max-width: 58mm !important;
+        width: 58mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      #panel-tab-2 {
+        display: block !important;
+      }
+
+      #tab2-main-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+      }
+
+      .receipt-stage {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+        overflow: visible !important;
+      }
+
+      .thermal-paper {
+        width: 58mm !important;
+        max-width: 58mm !important;
+        padding: 2mm 1mm 4mm 1mm !important;
+        box-shadow: none !important;
+        font-size: 9.5pt !important;
+        line-height: 1.32 !important;
+        color: #000000 !important;
+      }
+
+      .thermal-paper::before,
+      .thermal-paper::after {
+        display: none !important;
+      }
+
+      .rcp-store-address,
+      .rcp-footer {
+        color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+<body data-exported-settings="{&quot;apiKey&quot;:&quot;&quot;,&quot;storeName&quot;:&quot;AURORA CELL&quot;,&quot;storeAddress&quot;:&quot;Kota Semarang, Jawa Tengah&quot;,&quot;footerLine1&quot;:&quot;Terima kasih telah bertransaksi&quot;,&quot;footerLine2&quot;:&quot;Simpan struk sebagai bukti sah&quot;,&quot;tiers&quot;:[{&quot;max&quot;:100000,&quot;fee&quot;:3000},{&quot;max&quot;:500000,&quot;fee&quot;:5000},{&quot;max&quot;:1000000,&quot;fee&quot;:6000},{&quot;max&quot;:2500000,&quot;fee&quot;:10000}],&quot;aboveMaxFee&quot;:15000}">
+
+  <!-- =================================================================== -->
+  <!-- HEADER, TOMBOL UNDUH APLIKASI & NAVIGASI 3 TAB UTAMA                -->
+  <!-- =================================================================== -->
+  <header class="app-header no-print">
+    <div class="header-inner">
+      <div class="brand-row">
+        <div class="brand-left">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path>
+              <path d="M8 7h8"></path>
+              <path d="M8 11h8"></path>
+              <path d="M8 15h5"></path>
+            </svg>
+          </div>
+          <div style="min-width: 0;">
+            <div id="header-store-name" class="brand-title">AURORA CELL</div>
+            <div class="brand-subtitle">OCR &amp; Struk Thermal 58mm</div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <span id="header-mode-pill" class="mode-pill-header">Transfer Bank</span>
+          <button type="button" id="btn-download-header" class="btn-download-header" title="Unduh file aplikasi HTML untuk diinstal di HP Android">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Unduh Aplikasi (.html)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 Tab Utama -->
+      <nav class="tab-bar" role="tablist" aria-label="Navigasi Utama">
+        <button type="button" id="nav-tab-1" class="tab-btn active" role="tab" aria-selected="true" data-tab="1">
+          <span>1. Input &amp; OCR</span>
+        </button>
+        <button type="button" id="nav-tab-2" class="tab-btn" role="tab" aria-selected="false" data-tab="2">
+          <span>2. Pratinjau &amp; Cetak</span>
+        </button>
+        <button type="button" id="nav-tab-3" class="tab-btn" role="tab" aria-selected="false" data-tab="3">
+          <span>3. Pengaturan</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =================================================================== -->
+  <!-- KONTEN UTAMA                                                        -->
+  <!-- =================================================================== -->
+  <main class="main-container">
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: INPUT & SCAN OCR                                           -->
+    <!-- ================================================================= -->
+    <section id="panel-tab-1" role="tabpanel">
+
+      <!-- Card Scan OCR -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-badge">1</span>
+            <h2 class="card-title">Scan OCR Bukti Transaksi</h2>
+          </div>
+          <span class="badge-info">Gemini Vision AI</span>
+        </div>
+
+        <p class="helper-text">
+          Pilih screenshot bukti transfer M-Banking (BCA, BRI, Mandiri, BNI, SeaBank) atau E-Wallet (DANA, OVO, GoPay, ShopeePay) untuk mengisi rincian struk secara otomatis.
+        </p>
+
+        <input type="file" id="file-gallery" accept="image/*" class="hidden">
+        <input type="file" id="file-camera" accept="image/*" capture="environment" class="hidden">
+
+        <div class="ocr-box">
+          <!-- Thumbnail Gambar Terunggah -->
+          <div id="ocr-preview-wrap" class="ocr-preview-wrap hidden">
+            <img id="ocr-thumb" class="ocr-thumb" alt="Pratinjau Bukti Transfer">
+            <button type="button" id="btn-clear-img" class="btn-remove-img" title="Hapus Foto" aria-label="Hapus Foto">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                <path d="M18 6 6 18M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Status Loading OCR -->
+          <div id="ocr-loading" class="ocr-loading hidden">
+            <span class="spinner" aria-hidden="true"></span>
+            <span>Memindai bukti transaksi...</span>
+          </div>
+
+          <!-- Banner Hasil / Error OCR -->
+          <div id="ocr-status-banner" class="status-banner hidden"></div>
+
+          <!-- 2 Tombol Besar Galeri & Kamera -->
+          <div class="grid-2">
+            <button type="button" id="btn-pick-gallery" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+              <span>Pilih dari Galeri</span>
+            </button>
+
+            <button type="button" id="btn-pick-camera" class="btn btn-dark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <span>Ambil Foto Kamera</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Form Detail Transaksi -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-badge">2</span>
+            <h2 class="card-title">Detail Transaksi Struk</h2>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" id="btn-fill-sample" class="btn btn-outline btn-mini">Contoh</button>
+            <button type="button" id="btn-reset-form" class="btn btn-outline btn-mini">Reset</button>
+          </div>
+        </div>
+
+        <!-- Pemilih Mode Transaksi (Transfer Bank vs E-Wallet) -->
+        <div class="form-group">
+          <span class="form-label" style="margin-bottom: 6px;">Mode Layanan</span>
+          <div class="segmented-wrap">
+            <button type="button" id="seg-bank" class="seg-btn active-bank">
+              <span>Transfer Bank</span>
+            </button>
+            <button type="button" id="seg-ewallet" class="seg-btn">
+              <span>E-Wallet</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tanggal & Waktu -->
+        <div class="grid-2 grid-2-responsive">
+          <div class="form-group">
+            <div class="label-row">
+              <label for="inp-tanggal" class="form-label">Tanggal</label>
+              <button type="button" id="btn-now-datetime" class="link-action">Waktu Sekarang</button>
+            </div>
+            <input type="text" id="inp-tanggal" class="form-input" placeholder="12 Nov 2026">
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="inp-waktu" class="form-label">Waktu</label>
+            </div>
+            <input type="text" id="inp-waktu" class="form-input" placeholder="15:17:50 WIB">
+          </div>
+        </div>
+
+        <!-- No. Referensi -->
+        <div class="form-group">
+          <div class="label-row">
+            <label for="inp-referensi" class="form-label">No. Referensi</label>
+          </div>
+          <input type="text" id="inp-referensi" class="form-input mono" placeholder="9527120261112151750379TRF1737080495">
+        </div>
+
+        <!-- Bank Tujuan / E-Wallet (Dinamis) -->
+        <div class="form-group">
+          <div class="label-row">
+            <label id="lbl-tujuan" for="inp-tujuan" class="form-label">Bank Tujuan</label>
+          </div>
+          <input type="text" id="inp-tujuan" class="form-input" style="text-transform: uppercase;" placeholder="BCA">
+          <div id="chips-tujuan" class="chip-row"></div>
+        </div>
+
+        <!-- Rekening / Nomor & Penerima -->
+        <div class="grid-2 grid-2-responsive">
+          <div class="form-group">
+            <div class="label-row">
+              <label id="lbl-nomor" for="inp-nomor" class="form-label">Rekening</label>
+            </div>
+            <input type="text" id="inp-nomor" class="form-input" placeholder="758-096-8702">
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="inp-penerima" class="form-label">Nama Penerima</label>
+            </div>
+            <input type="text" id="inp-penerima" class="form-input" style="text-transform: uppercase;" placeholder="SINERGI KOMUNIKASI SEJAH">
+          </div>
+        </div>
+
+        <!-- Nominal & Biaya Admin -->
+        <div class="grid-2 grid-2-responsive">
+          <div class="form-group">
+            <div class="label-row">
+              <label for="inp-nominal" class="form-label">Nominal Transfer (Rp)</label>
+            </div>
+            <input type="text" inputmode="numeric" id="inp-nominal" class="form-input bold-lg" placeholder="999.236">
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="inp-admin" class="form-label">Biaya Admin (Rp)</label>
+              <button type="button" id="btn-toggle-admin-mode" class="admin-mode-pill auto" title="Klik untuk ganti Otomatis / Manual">Otomatis</button>
+            </div>
+            <input type="text" inputmode="numeric" id="inp-admin" class="form-input bold-lg" placeholder="6.000">
+          </div>
+        </div>
+
+        <!-- Chip Cepat Biaya Admin -->
+        <div class="form-group" style="margin-bottom: 4px;">
+          <span class="form-label" style="font-size: 0.68rem;">Pilih Cepat Biaya Admin (Manual):</span>
+          <div id="chips-admin" class="chip-row">
+            <button type="button" class="chip-btn" data-admin="0">Rp 0</button>
+            <button type="button" class="chip-btn" data-admin="3000">Rp 3.000</button>
+            <button type="button" class="chip-btn" data-admin="5000">Rp 5.000</button>
+            <button type="button" class="chip-btn" data-admin="6000">Rp 6.000</button>
+            <button type="button" class="chip-btn" data-admin="10000">Rp 10.000</button>
+          </div>
+        </div>
+
+        <!-- Kotak Ringkasan Nominal, Admin & TOTAL BAYAR Real-Time -->
+        <div class="total-summary-box">
+          <div class="summary-breakdown">
+            <span>Nominal Transfer</span>
+            <span id="summary-nominal-val">Rp 999.236</span>
+          </div>
+          <div class="summary-breakdown">
+            <span>Biaya Admin</span>
+            <span id="summary-admin-val">Rp 6.000</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-total-row">
+            <div class="total-summary-label">TOTAL BAYAR</div>
+            <div id="summary-total-bayar" class="total-summary-value">Rp 1.005.236</div>
+          </div>
+        </div>
+
+        <button type="button" id="btn-goto-preview" class="btn btn-primary btn-full">
+          <span>Lihat Pratinjau &amp; Cetak Struk</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: PRATINJAU & 6 METODE CETAK FISIK + BAGIKAN                 -->
+    <!-- ================================================================= -->
+    <section id="panel-tab-2" class="hidden" role="tabpanel">
+      <div id="tab2-main-card" class="card">
+        <div id="tab2-card-header" class="card-header">
+          <div class="card-title-group">
+            <span class="step-badge">3</span>
+            <h2 class="card-title">Pratinjau Kertas Thermal 58mm</h2>
+          </div>
+          <span class="badge-info">32 Karakter</span>
+        </div>
+
+        <!-- Area Kertas Struk Thermal 58mm (Juga menjadi target @media print) -->
+        <div class="receipt-stage">
+          <div id="printable-receipt-area" class="thermal-paper" aria-label="Pratinjau Struk Thermal 58mm">
+            <div id="rcp-store-name" class="rcp-store-name">AURORA CELL</div>
+            <div id="rcp-store-address" class="rcp-store-address">Kota Semarang, Jawa Tengah</div>
+            <div class="rcp-line rcp-center">================================</div>
+            <div id="rcp-datetime" class="rcp-line">Tanggal              12 Nov 2026
+Waktu               15:17:50 WIB</div>
+            <div class="rcp-line rcp-center">--------------------------------</div>
+            <div class="rcp-line rcp-center">         No. Referensi          </div>
+            <div id="rcp-referensi" class="rcp-line rcp-center">       952712026111215175       
+       0379TRF1737080495        </div>
+            <div class="rcp-line rcp-center">--------------------------------</div>
+            <div class="rcp-line rcp-center rcp-bold">         DATA PENERIMA          </div>
+            <div id="rcp-penerima-block" class="rcp-line">Bank Tujuan                  BCA
+Rekening            758-096-8702
+Penerima      SINERGI KOMUNIKASI
+                           SEJAH</div>
+            <div class="rcp-line rcp-center">--------------------------------</div>
+            <div id="rcp-nominal-block" class="rcp-line">Nominal               Rp 999.236
+Admin                   Rp 6.000</div>
+            <div class="rcp-line rcp-center">================================</div>
+            <div id="rcp-total-line" class="rcp-line rcp-bold">TOTAL               Rp 1.005.236</div>
+            <div class="rcp-line rcp-center">================================</div>
+            <div id="rcp-footer" class="rcp-footer"></div>
+          </div>
+        </div>
+
+        <!-- Banner Bantuan jika Sandbox Pratinjau Memblokir Cetak Langsung -->
+        <div id="ble-help-banner" class="status-banner info hidden">
+          <strong>Info Cetak Fisik:</strong> Browser di dalam jendela pratinjau membatasi akses langsung ke Bluetooth/RawBT. Tekan tombol <strong>"Unduh Aplikasi (.html)"</strong> di bagian atas atau tab Pengaturan, lalu buka file tersebut lewat <strong>Google Chrome Android</strong> agar cetak ke printer thermal 58mm berjalan penuh.
+        </div>
+
+        <!-- 6 Tombol Aksi Cetak Fisik & Bagikan Struk Digital -->
+        <div class="action-stack">
+          <div class="section-divider-label">Cetak Fisik ke Printer Thermal 58mm</div>
+
+          <!-- Tombol 1: Cetak Bluetooth 58mm (ESC/POS) -->
+          <button type="button" id="btn-print-ble" class="btn btn-dark btn-full">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"></polyline>
+            </svg>
+            <span id="lbl-btn-ble">Cetak Bluetooth 58mm (ESC/POS)</span>
+          </button>
+
+          <!-- Tombol 2 & 3: RawBT & Print Service Sistem -->
+          <div class="grid-2 grid-2-responsive">
+            <button type="button" id="btn-print-rawbt" class="btn btn-primary">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Cetak via RawBT (Android)</span>
+            </button>
+
+            <button type="button" id="btn-print-system" class="btn btn-ewallet">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              <span>Cetak Sistem / Print Service (58mm)</span>
+            </button>
+          </div>
+
+          <div class="section-divider-label" style="margin-top: 6px;">Salin &amp; Bagikan Struk Digital</div>
+
+          <!-- Tombol 4: Salin Teks Struk 58mm -->
+          <button type="button" id="btn-copy-text" class="btn btn-outline btn-full">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Salin Teks Struk 58mm</span>
+          </button>
+
+          <!-- Tombol 5 & 6: Simpan/Bagikan PNG & Kirim WhatsApp -->
+          <div class="grid-2 grid-2-responsive">
+            <button type="button" id="btn-export-png" class="btn btn-amber">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Simpan / Bagikan Gambar PNG</span>
+            </button>
+
+            <button type="button" id="btn-share-wa" class="btn btn-emerald">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span>Kirim Struk Digital WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: PENGATURAN, UNDUH APLIKASI, API KEY & PANDUAN ANDROID      -->
+    <!-- ================================================================= -->
+    <section id="panel-tab-3" class="hidden" role="tabpanel">
+
+      <!-- Card Unduh Aplikasi & Panduan Instal di HP Android -->
+      <div class="card install-hero-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-badge" style="background: #059669;">APK</span>
+            <h2 class="card-title">Instal di HP Android (Cetak Fisik)</h2>
+          </div>
+        </div>
+
+        <p class="helper-text" style="color: #1e293b;">
+          Agar tombol <strong>Cetak via RawBT</strong>, <strong>Cetak Sistem (58mm)</strong>, dan <strong>Bluetooth ESC/POS</strong> berjalan penuh tanpa diblokir jendela pratinjau, unduh aplikasi ini ke HP Android Anda:
+        </p>
+
+        <button type="button" id="btn-download-settings" class="btn btn-emerald btn-full" style="margin-bottom: 12px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Unduh Aplikasi (.html)</span>
+        </button>
+
+        <ol class="guide-list">
+          <li><strong>Buka di Chrome Android:</strong> Buka aplikasi <em>File Saya / Download</em>, ketuk <span class="code-inline">Aurora-Cell-Struk-58mm.html</span> dan pilih buka dengan <strong>Google Chrome</strong>.</li>
+          <li><strong>Pasang ke Layar Utama:</strong> Di Chrome, ketuk menu titik tiga (⋮) di pojok kanan atas → pilih <strong>Tambahkan ke layar utama</strong> agar muncul ikon seperti aplikasi biasa.</li>
+          <li><strong>Cetak ke Printer Thermal 58mm:</strong> Pasangkan printer thermal Bluetooth di pengaturan HP, pasang aplikasi <strong>RawBT</strong> (dari Play Store), lalu gunakan tombol <strong>Cetak via RawBT (Android)</strong> atau <strong>Cetak Sistem (58mm)</strong>.</li>
+          <li><strong>Opsional Web Bluetooth Langsung:</strong> Web Bluetooth memerlukan koneksi <span class="code-inline">localhost</span> atau <span class="code-inline">https</span>. Jika ingin mencetak langsung tanpa RawBT, jalankan di Termux: <span class="code-inline">cd ~/storage/downloads &amp;&amp; python -m http.server 8080</span> lalu buka <span class="code-inline">http://localhost:8080/Aurora-Cell-Struk-58mm.html</span>.</li>
+        </ol>
+      </div>
+
+      <!-- Card Gemini API Key untuk Mode Instal Mandiri di HP -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-badge">AI</span>
+            <h2 class="card-title">Gemini API Key (Mode Instal di HP)</h2>
+          </div>
+          <span class="badge-info">Opsional</span>
+        </div>
+
+        <p class="helper-text">
+          Saat file <span class="code-inline">Aurora-Cell-Struk-58mm.html</span> dijalankan mandiri di HP Android, masukkan Gemini API Key gratis Anda (dari Google AI Studio) agar fitur Scan OCR foto tetap aktif. Kosongkan jika dijalankan di dalam pratinjau ini.
+        </p>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="set-api-key" class="form-label" style="margin-bottom: 5px;">Gemini API Key (Untuk Mode Instal di HP)</label>
+          <div class="input-with-btn">
+            <input type="password" id="set-api-key" class="form-input mono" placeholder="AIzaSy..." autocomplete="off">
+            <button type="button" id="btn-toggle-apikey" class="btn btn-outline btn-mini" style="min-height: 44px; padding: 0 12px;">
+              Lihat
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Identitas Toko & Footer -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-badge">A</span>
+            <h2 class="card-title">Identitas Toko &amp; Footer Struk</h2>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="set-store-name" class="form-label" style="margin-bottom: 5px;">Nama Toko (Tebal, Besar, Rata Tengah)</label>
+          <input type="text" id="set-store-name" class="form-input" style="text-transform: uppercase; font-weight: 800;" placeholder="AURORA CELL">
+        </div>
+
+        <div class="form-group">
+          <label for="set-store-address" class="form-label" style="margin-bottom: 5px;">Alamat Toko (Kecil, Rata Tengah)</label>
+          <input type="text" id="set-store-address" class="form-input" placeholder="Kota Semarang, Jawa Tengah">
+        </div>
+
+        <div class="form-group">
+          <label for="set-footer-1" class="form-label" style="margin-bottom: 5px;">Footer Baris 1 (Rata Tengah, Kecil)</label>
+          <input type="text" id="set-footer-1" class="form-input" placeholder="Terima kasih telah bertransaksi">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="set-footer-2" class="form-label" style="margin-bottom: 5px;">Footer Baris 2 (Rata Tengah, Kecil)</label>
+          <input type="text" id="set-footer-2" class="form-input" placeholder="Simpan struk sebagai bukti sah">
+        </div>
+      </div>
+
+      <!-- Aturan Admin Otomatis Berdasarkan Nominal (Tanpa Batas) -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-badge">B</span>
+            <h2 class="card-title">Aturan Admin Otomatis</h2>
+          </div>
+          <button type="button" id="btn-add-tier" class="btn btn-primary btn-mini">
+            + Tambah Aturan
+          </button>
+        </div>
+
+        <p class="helper-text">
+          Tambahkan aturan tingkatan nominal sebanyak yang diperlukan. Saat disimpan, seluruh aturan otomatis diurutkan dari nominal terkecil ke terbesar.
+        </p>
+
+        <!-- Daftar Aturan Dinamis -->
+        <div id="tier-list-container"></div>
+
+        <!-- Tarif di Atas Batas Tertinggi -->
+        <div class="above-max-box">
+          <label for="set-above-max" class="form-label" style="margin-bottom: 6px; color: var(--primary);">
+            Tarif di Atas Batas Tertinggi (Rp)
+          </label>
+          <input type="text" inputmode="numeric" id="set-above-max" class="form-input bold-lg text-right" placeholder="15.000">
+        </div>
+
+        <button type="button" id="btn-save-settings" class="btn btn-emerald btn-full">
+          <span>Simpan Semua Pengaturan</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notifikasi -->
+  <div id="toast-box" class="toast-box hidden no-print" role="status" aria-live="polite"></div>
+
+  <!-- =================================================================== -->
+  <!-- JAVASCRIPT VANILLA MURNI (100% MANDIRI, BEBAS ERROR)                -->
+  <!-- =================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ===================================================================
+         1. KONSTANTA & STATE APLIKASI
+         =================================================================== */
+      const LINE_WIDTH = 32;
+      const SETTINGS_KEY = 'aurora_cell_settings_v4';
+      const DRAFT_KEY = 'aurora_cell_draft_v4';
+
+      const BANK_LIST = ['BCA', 'BRI', 'Mandiri', 'BNI', 'SeaBank', 'BSI'];
+      const EWALLET_LIST = ['DANA', 'OVO', 'GoPay', 'ShopeePay', 'LinkAja'];
+      const EWALLET_KEYWORDS = ['DANA', 'OVO', 'GOPAY', 'GO-PAY', 'SHOPEEPAY', 'SHOPEE', 'LINKAJA', 'LINK AJA', 'ISAKU', 'SAKUKU'];
+
+      const DEFAULT_SETTINGS = {
+        apiKey: '',
+        storeName: 'AURORA CELL',
+        storeAddress: 'Kota Semarang, Jawa Tengah',
+        footerLine1: 'Terima kasih telah bertransaksi',
+        footerLine2: 'Simpan struk sebagai bukti sah',
+        tiers: [
+          { max: 100000, fee: 3000 },
+          { max: 500000, fee: 5000 },
+          { max: 1000000, fee: 6000 },
+          { max: 2500000, fee: 10000 }
+        ],
+        aboveMaxFee: 15000
+      };
+
+      const state = {
+        activeTab: '1',
+        txMode: 'bank', // 'bank' atau 'ewallet'
+        adminAutoMode: true,
+        settings: null,
+        bleDevice: null,
+        bleCharacteristic: null,
+        toastTimer: null
+      };
+
+      /* ===================================================================
+         2. HELPER ANGKA, FORMAT RIBUAN & TEKS STRUK 32 KARAKTER
+         =================================================================== */
+      function parseCleanNumber(val) {
+        if (typeof val === 'number' && Number.isFinite(val)) {
+          return Math.max(0, Math.round(val));
+        }
+        const digits = String(val || '').replace(/\D/g, '');
+        if (!digits) return 0;
+        const parsed = parseInt(digits, 10);
+        return Number.isFinite(parsed) ? parsed : 0;
+      }
+
+      function formatThousands(num) {
+        const clean = parseCleanNumber(num);
+        return clean.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      }
+
+      function formatRupiah(num) {
+        return 'Rp ' + formatThousands(num);
+      }
+
+      function sanitizeSingleLine(str) {
+        return String(str || '').replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim();
+      }
+
+      function centerPad(text, width) {
+        const w = width || LINE_WIDTH;
+        const clean = sanitizeSingleLine(text);
+        if (clean.length >= w) {
+          return clean.slice(0, w);
+        }
+        const totalSpaces = w - clean.length;
+        const leftSpaces = Math.floor(totalSpaces / 2);
+        const rightSpaces = totalSpaces - leftSpaces;
+        return ' '.repeat(leftSpaces) + clean + ' '.repeat(rightSpaces);
+      }
+
+      function wrapCenterLines(text, width) {
+        const w = width || LINE_WIDTH;
+        const clean = sanitizeSingleLine(text);
+        if (!clean) return [' '.repeat(w)];
+        if (clean.length <= w) return [centerPad(clean, w)];
+
+        const words = clean.split(' ');
+        const lines = [];
+        let current = '';
+
+        for (let i = 0; i < words.length; i++) {
+          let word = words[i];
+          while (word.length > w) {
+            if (current) {
+              lines.push(centerPad(current, w));
+              current = '';
+            }
+            lines.push(centerPad(word.slice(0, w), w));
+            word = word.slice(w);
+          }
+
+          if (!current) {
+            current = word;
+          } else if (current.length + 1 + word.length <= w) {
+            current += ' ' + word;
+          } else {
+            lines.push(centerPad(current, w));
+            current = word;
+          }
+        }
+
+        if (current) {
+          lines.push(centerPad(current, w));
+        }
+        return lines;
+      }
+
+      function formatReferenceLines(refText) {
+        const clean = sanitizeSingleLine(refText) || '-';
+        if (clean.length <= LINE_WIDTH) {
+          return [centerPad(clean, LINE_WIDTH)];
+        }
+        if (!clean.includes(' ') && clean.length <= LINE_WIDTH * 2 - 2) {
+          const mid = Math.ceil(clean.length / 2);
+          return [
+            centerPad(clean.slice(0, mid), LINE_WIDTH),
+            centerPad(clean.slice(mid), LINE_WIDTH)
+          ];
+        }
+        const chunks = [];
+        for (let i = 0; i < clean.length; i += LINE_WIDTH) {
+          chunks.push(centerPad(clean.slice(i, i + LINE_WIDTH), LINE_WIDTH));
+        }
+        return chunks;
+      }
+
+      // Format rata kiri (label) dan rata kanan (nilai) TANPA tanda titik dua ':'
+      function formatLeftRightLines(label, value) {
+        const left = sanitizeSingleLine(label);
+        const right = sanitizeSingleLine(value) || '-';
+
+        if (left.length + 1 + right.length <= LINE_WIDTH) {
+          const spaces = LINE_WIDTH - left.length - right.length;
+          return [left + ' '.repeat(spaces) + right];
+        }
+
+        const firstLineMax = Math.max(8, LINE_WIDTH - left.length - 1);
+        const nextLineMax = LINE_WIDTH - 2;
+        const words = right.split(' ');
+        const lines = [];
+        let current = '';
+        let isFirst = true;
+
+        for (let i = 0; i < words.length; i++) {
+          let word = words[i];
+          const limit = isFirst ? firstLineMax : nextLineMax;
+
+          while (word.length > limit) {
+            if (current) {
+              if (isFirst) {
+                lines.push(left + ' '.repeat(LINE_WIDTH - left.length - current.length) + current);
+                isFirst = false;
+              } else {
+                lines.push(' '.repeat(LINE_WIDTH - current.length) + current);
+              }
+              current = '';
+            }
+            const curLimit = isFirst ? firstLineMax : nextLineMax;
+            const part = word.slice(0, curLimit);
+            if (isFirst) {
+              lines.push(left + ' '.repeat(LINE_WIDTH - left.length - part.length) + part);
+              isFirst = false;
+            } else {
+              lines.push(' '.repeat(LINE_WIDTH - part.length) + part);
+            }
+            word = word.slice(curLimit);
+          }
+
+          const activeLimit = isFirst ? firstLineMax : nextLineMax;
+          if (!current) {
+            current = word;
+          } else if (current.length + 1 + word.length <= activeLimit) {
+            current += ' ' + word;
+          } else {
+            if (isFirst) {
+              lines.push(left + ' '.repeat(LINE_WIDTH - left.length - current.length) + current);
+              isFirst = false;
+            } else {
+              lines.push(' '.repeat(LINE_WIDTH - current.length) + current);
+            }
+            current = word;
+          }
+        }
+
+        if (current) {
+          if (isFirst) {
+            lines.push(left + ' '.repeat(LINE_WIDTH - left.length - current.length) + current);
+          } else {
+            lines.push(' '.repeat(LINE_WIDTH - current.length) + current);
+          }
+        }
+
+        return lines;
+      }
+
+      function showToast(message, type) {
+        const box = document.getElementById('toast-box');
+        if (!box) return;
+        box.textContent = message;
+        box.className = 'toast-box no-print' + (type ? ' ' + type : '');
+        if (state.toastTimer) {
+          clearTimeout(state.toastTimer);
+        }
+        state.toastTimer = setTimeout(function () {
+          box.classList.add('hidden');
+        }, 3200);
+      }
+
+      /* ===================================================================
+         3. MANAJEMEN PENGATURAN, API KEY & ATURAN ADMIN OTOMATIS
+         =================================================================== */
+      function normalizeSettingsObject(rawObj) {
+        const src = rawObj || {};
+        const validTiers = Array.isArray(src.tiers) && src.tiers.length > 0
+          ? src.tiers.map(function (t) {
+              return { max: parseCleanNumber(t.max), fee: parseCleanNumber(t.fee) };
+            }).filter(function (t) { return t.max > 0; })
+          : DEFAULT_SETTINGS.tiers.map(function (t) { return { max: t.max, fee: t.fee }; });
+
+        validTiers.sort(function (a, b) { return a.max - b.max; });
+
+        return {
+          apiKey: String(src.apiKey || '').trim(),
+          storeName: sanitizeSingleLine(src.storeName) || DEFAULT_SETTINGS.storeName,
+          storeAddress: sanitizeSingleLine(src.storeAddress) || DEFAULT_SETTINGS.storeAddress,
+          footerLine1: sanitizeSingleLine(src.footerLine1) || DEFAULT_SETTINGS.footerLine1,
+          footerLine2: sanitizeSingleLine(src.footerLine2) || DEFAULT_SETTINGS.footerLine2,
+          tiers: validTiers,
+          aboveMaxFee: src.aboveMaxFee !== undefined ? parseCleanNumber(src.aboveMaxFee) : DEFAULT_SETTINGS.aboveMaxFee
+        };
+      }
+
+      function loadSettings() {
+        try {
+          const raw = localStorage.getItem(SETTINGS_KEY);
+          if (raw) {
+            return normalizeSettingsObject(JSON.parse(raw));
+          }
+        } catch (e) {
+          // Abaikan error storage
+        }
+
+        // Cek apakah file HTML ini diunduh dengan pengaturan tertanam
+        try {
+          const embedded = document.body.getAttribute('data-exported-settings');
+          if (embedded) {
+            const parsedEmbedded = normalizeSettingsObject(JSON.parse(embedded));
+            persistSettings(parsedEmbedded);
+            return parsedEmbedded;
+          }
+        } catch (e) {
+          // Abaikan error parsing atribut
+        }
+
+        return normalizeSettingsObject(DEFAULT_SETTINGS);
+      }
+
+      function persistSettings(newSettings) {
+        state.settings = newSettings;
+        try {
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings));
+        } catch (e) {
+          // Abaikan jika browser memblokir storage pada file:// tertentu
+        }
+      }
+
+      function calculateAutoAdminFee(nominal) {
+        const cleanNominal = parseCleanNumber(nominal);
+        const tiers = state.settings.tiers || [];
+        if (cleanNominal <= 0) {
+          return tiers.length > 0 ? tiers[0].fee : 0;
+        }
+        for (let i = 0; i < tiers.length; i++) {
+          if (cleanNominal <= tiers[i].max) {
+            return tiers[i].fee;
+          }
+        }
+        return state.settings.aboveMaxFee;
+      }
+
+      function renderTierSettingsUI() {
+        const container = document.getElementById('tier-list-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        state.settings.tiers.forEach(function (tier, idx) {
+          container.appendChild(buildTierRowNode(idx, tier.max, tier.fee));
+        });
+      }
+
+      function buildTierRowNode(index, maxVal, feeVal) {
+        const row = document.createElement('div');
+        row.className = 'tier-item';
+
+        const top = document.createElement('div');
+        top.className = 'tier-item-top';
+
+        const badge = document.createElement('span');
+        badge.className = 'tier-badge';
+        badge.textContent = 'Aturan #' + (index + 1);
+
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'btn-delete-tier';
+        delBtn.textContent = 'Hapus';
+        delBtn.addEventListener('click', function () {
+          const allRows = document.querySelectorAll('#tier-list-container .tier-item');
+          if (allRows.length <= 1) {
+            showToast('Minimal harus ada 1 aturan nominal.', 'error');
+            return;
+          }
+          row.remove();
+          renumberTierBadges();
+        });
+
+        top.appendChild(badge);
+        top.appendChild(delBtn);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid-2';
+
+        const colMax = document.createElement('div');
+        const lblMax = document.createElement('label');
+        lblMax.className = 'tier-sub-label';
+        lblMax.textContent = 'Maksimal Nominal (Rp)';
+        const inpMax = document.createElement('input');
+        inpMax.type = 'text';
+        inpMax.inputMode = 'numeric';
+        inpMax.className = 'form-input text-right';
+        inpMax.dataset.role = 'tier-max';
+        inpMax.placeholder = '500.000';
+        inpMax.value = maxVal > 0 ? formatThousands(maxVal) : '';
+        inpMax.addEventListener('input', function () {
+          const clean = parseCleanNumber(inpMax.value);
+          inpMax.value = inpMax.value.trim() === '' ? '' : formatThousands(clean);
+        });
+        colMax.appendChild(lblMax);
+        colMax.appendChild(inpMax);
+
+        const colFee = document.createElement('div');
+        const lblFee = document.createElement('label');
+        lblFee.className = 'tier-sub-label';
+        lblFee.textContent = 'Biaya Admin (Rp)';
+        const inpFee = document.createElement('input');
+        inpFee.type = 'text';
+        inpFee.inputMode = 'numeric';
+        inpFee.className = 'form-input text-right';
+        inpFee.dataset.role = 'tier-fee';
+        inpFee.placeholder = '5.000';
+        inpFee.value = feeVal !== '' && feeVal !== null && feeVal !== undefined ? formatThousands(feeVal) : '';
+        inpFee.addEventListener('input', function () {
+          const clean = parseCleanNumber(inpFee.value);
+          inpFee.value = inpFee.value.trim() === '' ? '' : formatThousands(clean);
+        });
+        colFee.appendChild(lblFee);
+        colFee.appendChild(inpFee);
+
+        grid.appendChild(colMax);
+        grid.appendChild(colFee);
+
+        row.appendChild(top);
+        row.appendChild(grid);
+        return row;
+      }
+
+      function renumberTierBadges() {
+        const badges = document.querySelectorAll('#tier-list-container .tier-badge');
+        badges.forEach(function (el, idx) {
+          el.textContent = 'Aturan #' + (idx + 1);
+        });
+      }
+
+      function populateSettingsForm() {
+        document.getElementById('set-api-key').value = state.settings.apiKey || '';
+        document.getElementById('set-store-name').value = state.settings.storeName;
+        document.getElementById('set-store-address').value = state.settings.storeAddress;
+        document.getElementById('set-footer-1').value = state.settings.footerLine1;
+        document.getElementById('set-footer-2').value = state.settings.footerLine2;
+        document.getElementById('set-above-max').value = formatThousands(state.settings.aboveMaxFee);
+        renderTierSettingsUI();
+      }
+
+      function handleAddTierRow() {
+        const container = document.getElementById('tier-list-container');
+        const rows = container.querySelectorAll('.tier-item');
+        let nextMax = 500000;
+        let nextFee = 5000;
+
+        if (rows.length > 0) {
+          const lastRow = rows[rows.length - 1];
+          const lastMax = parseCleanNumber(lastRow.querySelector('[data-role="tier-max"]').value);
+          const lastFee = parseCleanNumber(lastRow.querySelector('[data-role="tier-fee"]').value);
+          nextMax = lastMax > 0 ? lastMax + 1000000 : 1000000;
+          nextFee = lastFee > 0 ? lastFee + 3000 : 6000;
+        }
+
+        const newNode = buildTierRowNode(rows.length, nextMax, nextFee);
+        container.appendChild(newNode);
+        const inputEl = newNode.querySelector('[data-role="tier-max"]');
+        if (inputEl) inputEl.focus();
+      }
+
+      function handleSaveSettings() {
+        const rows = document.querySelectorAll('#tier-list-container .tier-item');
+        const collectedTiers = [];
+
+        rows.forEach(function (row) {
+          const maxVal = parseCleanNumber(row.querySelector('[data-role="tier-max"]').value);
+          const feeVal = parseCleanNumber(row.querySelector('[data-role="tier-fee"]').value);
+          if (maxVal > 0) {
+            collectedTiers.push({ max: maxVal, fee: feeVal });
+          }
+        });
+
+        if (collectedTiers.length === 0) {
+          showToast('Isi minimal 1 aturan maksimal nominal yang valid.', 'error');
+          return;
+        }
+
+        collectedTiers.sort(function (a, b) { return a.max - b.max; });
+
+        const updated = {
+          apiKey: String(document.getElementById('set-api-key').value || '').trim(),
+          storeName: (sanitizeSingleLine(document.getElementById('set-store-name').value) || DEFAULT_SETTINGS.storeName).toUpperCase(),
+          storeAddress: sanitizeSingleLine(document.getElementById('set-store-address').value) || DEFAULT_SETTINGS.storeAddress,
+          footerLine1: sanitizeSingleLine(document.getElementById('set-footer-1').value) || DEFAULT_SETTINGS.footerLine1,
+          footerLine2: sanitizeSingleLine(document.getElementById('set-footer-2').value) || DEFAULT_SETTINGS.footerLine2,
+          tiers: collectedTiers,
+          aboveMaxFee: parseCleanNumber(document.getElementById('set-above-max').value)
+        };
+
+        persistSettings(updated);
+        populateSettingsForm();
+
+        if (state.adminAutoMode) {
+          const currentNominal = parseCleanNumber(document.getElementById('inp-nominal').value);
+          document.getElementById('inp-admin').value = formatThousands(calculateAutoAdminFee(currentNominal));
+        }
+
+        refreshReceiptAndSummary();
+        showToast('Pengaturan disimpan (' + updated.tiers.length + ' aturan admin aktif)', 'success');
+      }
+
+      /* ===================================================================
+         4. FITUR UNDUH APLIKASI MANDIRI (.HTML) UNTUK HP ANDROID
+         =================================================================== */
+      function handleDownloadStandaloneApp() {
+        try {
+          // Pastikan pengaturan terbaru di form juga tersimpan sebelum mengunduh
+          const currentApiKey = String(document.getElementById('set-api-key').value || state.settings.apiKey || '').trim();
+          const currentStoreName = (sanitizeSingleLine(document.getElementById('set-store-name').value) || state.settings.storeName).toUpperCase();
+          const currentStoreAddress = sanitizeSingleLine(document.getElementById('set-store-address').value) || state.settings.storeAddress;
+          const currentFooter1 = sanitizeSingleLine(document.getElementById('set-footer-1').value) || state.settings.footerLine1;
+          const currentFooter2 = sanitizeSingleLine(document.getElementById('set-footer-2').value) || state.settings.footerLine2;
+
+          const exportSettings = {
+            apiKey: currentApiKey,
+            storeName: currentStoreName,
+            storeAddress: currentStoreAddress,
+            footerLine1: currentFooter1,
+            footerLine2: currentFooter2,
+            tiers: state.settings.tiers,
+            aboveMaxFee: state.settings.aboveMaxFee
+          };
+
+          // Kloning dokumen saat ini agar bersih dan siap dibuka di Chrome Android
+          const docClone = document.documentElement.cloneNode(true);
+          const bodyClone = docClone.querySelector('body');
+          if (bodyClone) {
+            bodyClone.setAttribute('data-exported-settings', JSON.stringify(exportSettings));
+          }
+
+          // Bersihkan elemen dinamis yang akan dirender ulang oleh DOMContentLoaded
+          const clearIds = ['tier-list-container', 'chips-tujuan', 'rcp-footer'];
+          clearIds.forEach(function (id) {
+            const el = docClone.querySelector('#' + id);
+            if (el) el.innerHTML = '';
+          });
+
+          const hideIds = ['toast-box', 'ocr-loading', 'ocr-preview-wrap', 'ocr-status-banner', 'ble-help-banner'];
+          hideIds.forEach(function (id) {
+            const el = docClone.querySelector('#' + id);
+            if (el) el.classList.add('hidden');
+          });
+
+          const fullHtml = '<!DOCTYPE html>\n' + docClone.outerHTML;
+          const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'Aurora-Cell-Struk-58mm.html';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          setTimeout(function () {
+            URL.revokeObjectURL(url);
+          }, 2000);
+
+          showToast('File Aurora-Cell-Struk-58mm.html diunduh! Buka lewat Chrome Android.', 'success');
+        } catch (err) {
+          showToast('Gagal mengunduh file aplikasi HTML.', 'error');
+        }
+      }
+
+      /* ===================================================================
+         5. NAVIGASI TAB & MODE TRANSAKSI (BANK VS E-WALLET)
+         =================================================================== */
+      function switchTab(tabNumber) {
+        state.activeTab = String(tabNumber);
+        ['1', '2', '3'].forEach(function (num) {
+          const btn = document.getElementById('nav-tab-' + num);
+          const panel = document.getElementById('panel-tab-' + num);
+          const isActive = num === state.activeTab;
+          if (btn) {
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          }
+          if (panel) {
+            panel.classList.toggle('hidden', !isActive);
+          }
+        });
+
+        if (state.activeTab === '2') {
+          refreshReceiptAndSummary();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function getModeMetadata(mode) {
+        if (mode === 'ewallet') {
+          return {
+            badgeText: 'E-Wallet',
+            tujuanLabel: 'E-Wallet',
+            nomorLabel: 'Nomor',
+            tujuanPlaceholder: 'DANA',
+            nomorPlaceholder: '081234567890',
+            chips: EWALLET_LIST
+          };
+        }
+        return {
+          badgeText: 'Transfer Bank',
+          tujuanLabel: 'Bank Tujuan',
+          nomorLabel: 'Rekening',
+          tujuanPlaceholder: 'BCA',
+          nomorPlaceholder: '758-096-8702',
+          chips: BANK_LIST
+        };
+      }
+
+      function setTransactionMode(mode, notify) {
+        state.txMode = mode === 'ewallet' ? 'ewallet' : 'bank';
+        const meta = getModeMetadata(state.txMode);
+
+        const segBank = document.getElementById('seg-bank');
+        const segEwallet = document.getElementById('seg-ewallet');
+        segBank.className = 'seg-btn' + (state.txMode === 'bank' ? ' active-bank' : '');
+        segEwallet.className = 'seg-btn' + (state.txMode === 'ewallet' ? ' active-ewallet' : '');
+
+        document.getElementById('header-mode-pill').textContent = meta.badgeText;
+        document.getElementById('lbl-tujuan').textContent = meta.tujuanLabel;
+        document.getElementById('inp-tujuan').placeholder = meta.tujuanPlaceholder;
+        document.getElementById('lbl-nomor').textContent = meta.nomorLabel;
+        document.getElementById('inp-nomor').placeholder = meta.nomorPlaceholder;
+
+        const chipContainer = document.getElementById('chips-tujuan');
+        chipContainer.innerHTML = '';
+        meta.chips.forEach(function (item) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'chip-btn';
+          btn.textContent = item;
+          btn.addEventListener('click', function () {
+            document.getElementById('inp-tujuan').value = item.toUpperCase();
+            refreshReceiptAndSummary();
+          });
+          chipContainer.appendChild(btn);
+        });
+
+        refreshReceiptAndSummary();
+
+        if (notify) {
+          showToast(
+            state.txMode === 'ewallet'
+              ? 'Mode E-Wallet: Label menjadi E-Wallet & Nomor'
+              : 'Mode Transfer Bank: Label menjadi Bank Tujuan & Rekening'
+          );
+        }
+      }
+
+      function setAdminAutoMode(isAuto) {
+        state.adminAutoMode = Boolean(isAuto);
+        const pill = document.getElementById('btn-toggle-admin-mode');
+        if (state.adminAutoMode) {
+          pill.textContent = 'Otomatis';
+          pill.className = 'admin-mode-pill auto';
+          const nom = parseCleanNumber(document.getElementById('inp-nominal').value);
+          document.getElementById('inp-admin').value = formatThousands(calculateAutoAdminFee(nom));
+        } else {
+          pill.textContent = 'Manual';
+          pill.className = 'admin-mode-pill manual';
+        }
+        refreshReceiptAndSummary();
+      }
+
+      function fillCurrentDateTime() {
+        const now = new Date();
+        const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const tgl = String(now.getDate()).padStart(2, '0') + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
+        const wkt = String(now.getHours()).padStart(2, '0') + ':' +
+                    String(now.getMinutes()).padStart(2, '0') + ':' +
+                    String(now.getSeconds()).padStart(2, '0') + ' WIB';
+        document.getElementById('inp-tanggal').value = tgl;
+        document.getElementById('inp-waktu').value = wkt;
+        refreshReceiptAndSummary();
+      }
+
+      function fillSampleTransaction() {
+        setTransactionMode('bank', false);
+        document.getElementById('inp-tanggal').value = '12 Nov 2026';
+        document.getElementById('inp-waktu').value = '15:17:50 WIB';
+        document.getElementById('inp-referensi').value = '9527120261112151750379TRF1737080495';
+        document.getElementById('inp-tujuan').value = 'BCA';
+        document.getElementById('inp-nomor').value = '758-096-8702';
+        document.getElementById('inp-penerima').value = 'SINERGI KOMUNIKASI SEJAH';
+        document.getElementById('inp-nominal').value = '999.236';
+        setAdminAutoMode(true);
+        refreshReceiptAndSummary();
+        showToast('Data contoh BCA berhasil diisi');
+      }
+
+      function resetTransactionForm() {
+        fillCurrentDateTime();
+        document.getElementById('inp-referensi').value = '';
+        document.getElementById('inp-tujuan').value = '';
+        document.getElementById('inp-nomor').value = '';
+        document.getElementById('inp-penerima').value = '';
+        document.getElementById('inp-nominal').value = '';
+        setAdminAutoMode(true);
+        clearOcrPreview();
+        refreshReceiptAndSummary();
+        showToast('Formulir dikosongkan');
+      }
+
+      /* ===================================================================
+         6. PENYUSUNAN DATA TRANSAKSI & RENDER STRUK 58MM (32 KARAKTER)
+         =================================================================== */
+      function getTransactionData() {
+        const tanggal = sanitizeSingleLine(document.getElementById('inp-tanggal').value) || '-';
+        const waktu = sanitizeSingleLine(document.getElementById('inp-waktu').value) || '-';
+        const referensi = sanitizeSingleLine(document.getElementById('inp-referensi').value) || '-';
+        const tujuan = (sanitizeSingleLine(document.getElementById('inp-tujuan').value) || '-').toUpperCase();
+        const nomor = sanitizeSingleLine(document.getElementById('inp-nomor').value) || '-';
+        const penerima = (sanitizeSingleLine(document.getElementById('inp-penerima').value) || '-').toUpperCase();
+        const nominal = parseCleanNumber(document.getElementById('inp-nominal').value);
+        const admin = parseCleanNumber(document.getElementById('inp-admin').value);
+        const total = nominal + admin;
+
+        return {
+          mode: state.txMode,
+          tanggal: tanggal,
+          waktu: waktu,
+          referensi: referensi,
+          tujuan: tujuan,
+          nomor: nomor,
+          penerima: penerima,
+          nominal: nominal,
+          admin: admin,
+          total: total
+        };
+      }
+
+      function buildThermal32String() {
+        const tx = getTransactionData();
+        const meta = getModeMetadata(tx.mode);
+        const lines = [];
+
+        wrapCenterLines(state.settings.storeName.toUpperCase(), LINE_WIDTH).forEach(function (l) { lines.push(l); });
+        wrapCenterLines(state.settings.storeAddress, LINE_WIDTH).forEach(function (l) { lines.push(l); });
+        lines.push('================================');
+        formatLeftRightLines('Tanggal', tx.tanggal).forEach(function (l) { lines.push(l); });
+        formatLeftRightLines('Waktu', tx.waktu).forEach(function (l) { lines.push(l); });
+        lines.push('--------------------------------');
+        lines.push(centerPad('No. Referensi', LINE_WIDTH));
+        formatReferenceLines(tx.referensi).forEach(function (l) { lines.push(l); });
+        lines.push('--------------------------------');
+        lines.push(centerPad('DATA PENERIMA', LINE_WIDTH));
+        formatLeftRightLines(meta.tujuanLabel, tx.tujuan).forEach(function (l) { lines.push(l); });
+        formatLeftRightLines(meta.nomorLabel, tx.nomor).forEach(function (l) { lines.push(l); });
+        formatLeftRightLines('Penerima', tx.penerima).forEach(function (l) { lines.push(l); });
+        lines.push('--------------------------------');
+        formatLeftRightLines('Nominal', formatRupiah(tx.nominal)).forEach(function (l) { lines.push(l); });
+        formatLeftRightLines('Admin', formatRupiah(tx.admin)).forEach(function (l) { lines.push(l); });
+        lines.push('================================');
+        formatLeftRightLines('TOTAL', formatRupiah(tx.total)).forEach(function (l) { lines.push(l); });
+        lines.push('================================');
+        wrapCenterLines(state.settings.footerLine1, LINE_WIDTH).forEach(function (l) { lines.push(l); });
+        if (state.settings.footerLine2) {
+          wrapCenterLines(state.settings.footerLine2, LINE_WIDTH).forEach(function (l) { lines.push(l); });
+        }
+
+        return lines.join('\n');
+      }
+
+      function refreshReceiptAndSummary() {
+        const tx = getTransactionData();
+        const meta = getModeMetadata(tx.mode);
+        const nomStr = formatRupiah(tx.nominal);
+        const admStr = formatRupiah(tx.admin);
+        const totalStr = formatRupiah(tx.total);
+
+        document.getElementById('header-store-name').textContent = state.settings.storeName.toUpperCase();
+        document.getElementById('summary-nominal-val').textContent = nomStr;
+        document.getElementById('summary-admin-val').textContent = admStr;
+        document.getElementById('summary-total-bayar').textContent = totalStr;
+
+        document.getElementById('rcp-store-name').textContent = state.settings.storeName.toUpperCase();
+        document.getElementById('rcp-store-address').textContent = state.settings.storeAddress;
+
+        document.getElementById('rcp-datetime').textContent =
+          formatLeftRightLines('Tanggal', tx.tanggal)
+            .concat(formatLeftRightLines('Waktu', tx.waktu))
+            .join('\n');
+
+        document.getElementById('rcp-referensi').textContent =
+          formatReferenceLines(tx.referensi).join('\n');
+
+        document.getElementById('rcp-penerima-block').textContent =
+          formatLeftRightLines(meta.tujuanLabel, tx.tujuan)
+            .concat(formatLeftRightLines(meta.nomorLabel, tx.nomor))
+            .concat(formatLeftRightLines('Penerima', tx.penerima))
+            .join('\n');
+
+        document.getElementById('rcp-nominal-block').textContent =
+          formatLeftRightLines('Nominal', nomStr)
+            .concat(formatLeftRightLines('Admin', admStr))
+            .join('\n');
+
+        document.getElementById('rcp-total-line').textContent =
+          formatLeftRightLines('TOTAL', totalStr).join('\n');
+
+        const footerEl = document.getElementById('rcp-footer');
+        footerEl.innerHTML = '';
+        [state.settings.footerLine1, state.settings.footerLine2].forEach(function (line) {
+          if (line) {
+            const div = document.createElement('div');
+            div.textContent = line;
+            footerEl.appendChild(div);
+          }
+        });
+
+        try {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify({
+            mode: tx.mode,
+            adminAutoMode: state.adminAutoMode,
+            tanggal: tx.tanggal,
+            waktu: tx.waktu,
+            referensi: tx.referensi,
+            tujuan: tx.tujuan,
+            nomor: tx.nomor,
+            penerima: tx.penerima,
+            nominal: tx.nominal,
+            admin: tx.admin
+          }));
+        } catch (e) {
+          // Abaikan jika storage penuh
+        }
+      }
+
+      /* ===================================================================
+         7. SCAN OCR GEMINI VISION API (KOMPRESI CANVAS + TIMEOUT 25 DETIK)
+         =================================================================== */
+      function clearOcrPreview() {
+        document.getElementById('file-gallery').value = '';
+        document.getElementById('file-camera').value = '';
+        document.getElementById('ocr-thumb').removeAttribute('src');
+        document.getElementById('ocr-preview-wrap').classList.add('hidden');
+        document.getElementById('ocr-status-banner').classList.add('hidden');
+      }
+
+      function showOcrBanner(type, text) {
+        const banner = document.getElementById('ocr-status-banner');
+        banner.className = 'status-banner ' + type;
+        banner.textContent = text;
+      }
+
+      function compressImageToJpeg(file, maxWidth) {
+        const limit = maxWidth || 1024;
+        return new Promise(function (resolve, reject) {
+          const reader = new FileReader();
+          reader.onerror = function () {
+            reject(new Error('Gagal membaca berkas gambar.'));
+          };
+          reader.onload = function (ev) {
+            const img = new Image();
+            img.onerror = function () {
+              reject(new Error('Format gambar tidak didukung.'));
+            };
+            img.onload = function () {
+              let w = img.width;
+              let h = img.height;
+              if (w > limit) {
+                h = Math.round((h * limit) / w);
+                w = limit;
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, w, h);
+
+              const jpegUrl = canvas.toDataURL('image/jpeg', 0.82);
+              const base64Data = jpegUrl.split(',')[1];
+              resolve({ previewUrl: jpegUrl, base64Data: base64Data });
+            };
+            img.src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function runGeminiVisionOCR(base64Image) {
+        // Gunakan API Key buatan pengguna jika diisi di Pengaturan, jika kosong gunakan "" runtime
+        const apiKey = (state.settings && state.settings.apiKey) ? state.settings.apiKey.trim() : '';
+        const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=' + encodeURIComponent(apiKey);
+
+        const promptText =
+          'Ekstrak data struk bukti transfer bank atau top up e-wallet Indonesia dari gambar ini menjadi JSON.\n' +
+          'Aturan pengisian:\n' +
+          '1. tipe: isi "ewallet" jika tujuan adalah DANA, OVO, GoPay, ShopeePay, LinkAja, atau dompet digital lainnya. Selain itu isi "bank".\n' +
+          '2. tanggal: format ringkas seperti "12 Nov 2026".\n' +
+          '3. waktu: format jam lengkap seperti "15:17:50 WIB" (tambahkan WIB bila belum ada zona waktu).\n' +
+          '4. referensi: nomor referensi / ID transaksi / RRN lengkap tanpa spasi baris.\n' +
+          '5. tujuan: nama bank tujuan (misal "BCA", "BRI", "Mandiri", "BNI", "SeaBank", "BSI") atau e-wallet ("DANA", "OVO", "GoPay", "ShopeePay", "LinkAja").\n' +
+          '6. nomor: nomor rekening tujuan atau nomor HP tujuan.\n' +
+          '7. penerima: nama lengkap penerima (gabungkan bila terpotong 2 baris).\n' +
+          '8. nominal: angka integer bersih nominal utama TANPA angka sen (.00) dan tanpa pemisah ribuan (contoh "IDR 999,236.00" -> 999236).';
+
+        const payload = {
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: promptText },
+                {
+                  inlineData: {
+                    mimeType: 'image/jpeg',
+                    data: base64Image
+                  }
+                }
+              ]
+            }
+          ],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: 'OBJECT',
+              properties: {
+                tipe: { type: 'STRING', enum: ['bank', 'ewallet'] },
+                tanggal: { type: 'STRING' },
+                waktu: { type: 'STRING' },
+                referensi: { type: 'STRING' },
+                tujuan: { type: 'STRING' },
+                nomor: { type: 'STRING' },
+                penerima: { type: 'STRING' },
+                nominal: { type: 'INTEGER' }
+              },
+              required: ['tipe', 'tanggal', 'waktu', 'referensi', 'tujuan', 'nomor', 'penerima', 'nominal'],
+              propertyOrdering: ['tipe', 'tanggal', 'waktu', 'referensi', 'tujuan', 'nomor', 'penerima', 'nominal']
+            }
+          }
+        };
+
+        const retryDelays = [1000, 2000];
+        let lastError = null;
+
+        for (let attempt = 0; attempt <= retryDelays.length; attempt++) {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(function () {
+            controller.abort();
+          }, 25000);
+
+          try {
+            const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+              if ((response.status === 429 || response.status >= 500) && attempt < retryDelays.length) {
+                await new Promise(function (r) { setTimeout(r, retryDelays[attempt]); });
+                continue;
+              }
+              if (response.status === 400 || response.status === 403) {
+                throw new Error('API Key belum diisi atau tidak valid. Jika dijalankan mandiri di HP, masukkan Gemini API Key di tab 3. Pengaturan.');
+              }
+              throw new Error('Layanan AI merespons kode ' + response.status + '.');
+            }
+
+            const result = await response.json();
+            const jsonText = result && result.candidates && result.candidates[0] &&
+                             result.candidates[0].content && result.candidates[0].content.parts &&
+                             result.candidates[0].content.parts[0] && result.candidates[0].content.parts[0].text;
+
+            if (!jsonText) {
+              throw new Error('Hasil OCR kosong. Pastikan foto bukti transfer terlihat jelas.');
+            }
+
+            return JSON.parse(jsonText);
+          } catch (err) {
+            clearTimeout(timeoutId);
+            if (err && err.name === 'AbortError') {
+              lastError = new Error('Waktu pemindaian habis (25 detik). Periksa koneksi internet Anda lalu coba lagi.');
+              break;
+            }
+            lastError = err;
+            if (attempt < retryDelays.length) {
+              await new Promise(function (r) { setTimeout(r, retryDelays[attempt]); });
+            }
+          }
+        }
+
+        throw lastError || new Error('Gagal memproses gambar.');
+      }
+
+      async function handleImageSelected(event) {
+        const file = event.target && event.target.files && event.target.files[0];
+        if (!file) return;
+
+        const loadingEl = document.getElementById('ocr-loading');
+        const previewWrap = document.getElementById('ocr-preview-wrap');
+        const thumbEl = document.getElementById('ocr-thumb');
+
+        document.getElementById('ocr-status-banner').classList.add('hidden');
+        loadingEl.classList.remove('hidden');
+
+        try {
+          const compressed = await compressImageToJpeg(file, 1024);
+          thumbEl.src = compressed.previewUrl;
+          previewWrap.classList.remove('hidden');
+
+          const data = await runGeminiVisionOCR(compressed.base64Data);
+
+          const tujuanUpper = sanitizeSingleLine(data.tujuan).toUpperCase();
+          const detectedEwallet =
+            data.tipe === 'ewallet' ||
+            EWALLET_KEYWORDS.some(function (kw) { return tujuanUpper.indexOf(kw) !== -1; });
+
+          setTransactionMode(detectedEwallet ? 'ewallet' : 'bank', false);
+
+          if (data.tanggal) document.getElementById('inp-tanggal').value = sanitizeSingleLine(data.tanggal);
+          if (data.waktu) document.getElementById('inp-waktu').value = sanitizeSingleLine(data.waktu);
+          if (data.referensi) document.getElementById('inp-referensi').value = String(data.referensi).replace(/\s+/g, '');
+          if (tujuanUpper) document.getElementById('inp-tujuan').value = tujuanUpper;
+          if (data.nomor) document.getElementById('inp-nomor').value = sanitizeSingleLine(data.nomor);
+          if (data.penerima) document.getElementById('inp-penerima').value = sanitizeSingleLine(data.penerima).toUpperCase();
+
+          const nomClean = parseCleanNumber(data.nominal);
+          document.getElementById('inp-nominal').value = nomClean > 0 ? formatThousands(nomClean) : '';
+
+          if (state.adminAutoMode) {
+            document.getElementById('inp-admin').value = formatThousands(calculateAutoAdminFee(nomClean));
+          }
+
+          refreshReceiptAndSummary();
+          showOcrBanner('success', 'Scan OCR berhasil! Data transaksi (' + (tujuanUpper || '-') + ') telah diisikan otomatis.');
+          showToast('Bukti transaksi berhasil dipindai!', 'success');
+        } catch (err) {
+          showOcrBanner('error', (err && err.message ? err.message : 'Gagal memindai bukti transaksi.') + ' Anda tetap bisa mengisi data secara manual.');
+          showToast('Pemindaian OCR gagal', 'error');
+        } finally {
+          loadingEl.classList.add('hidden');
+        }
+      }
+
+      /* ===================================================================
+         8. 3 METODE CETAK FISIK (BLUETOOTH ESC/POS, RAWBT, PRINT SERVICE)
+            + SALIN TEKS, PNG CANVAS & WHATSAPP
+         =================================================================== */
+      function buildEscPosPayload() {
+        const tx = getTransactionData();
+        const meta = getModeMetadata(tx.mode);
+        const encoder = new TextEncoder();
+        const chunks = [];
+
+        function pushBytes() {
+          chunks.push(new Uint8Array(Array.prototype.slice.call(arguments)));
+        }
+
+        function pushLine(text) {
+          chunks.push(encoder.encode(text + '\n'));
+        }
+
+        // Reset printer (ESC @)
+        pushBytes(0x1B, 0x40);
+
+        // NAMA TOKO: Rata tengah, Tebal, Ukuran Besar (Double Height & Double Width)
+        pushBytes(0x1B, 0x61, 0x01);
+        pushBytes(0x1B, 0x45, 0x01);
+        pushBytes(0x1D, 0x21, 0x11);
+        pushLine(state.settings.storeName.toUpperCase());
+
+        // Reset ukuran normal & matikan bold untuk alamat
+        pushBytes(0x1D, 0x21, 0x00);
+        pushBytes(0x1B, 0x45, 0x00);
+        pushLine(state.settings.storeAddress);
+
+        // Kembali rata kiri (baris presisi 32 karakter)
+        pushBytes(0x1B, 0x61, 0x00);
+        pushLine('================================');
+        formatLeftRightLines('Tanggal', tx.tanggal).forEach(pushLine);
+        formatLeftRightLines('Waktu', tx.waktu).forEach(pushLine);
+        pushLine('--------------------------------');
+
+        pushLine(centerPad('No. Referensi', LINE_WIDTH));
+        formatReferenceLines(tx.referensi).forEach(pushLine);
+        pushLine('--------------------------------');
+
+        // DATA PENERIMA (Tebal, rata tengah)
+        pushBytes(0x1B, 0x45, 0x01);
+        pushLine(centerPad('DATA PENERIMA', LINE_WIDTH));
+        pushBytes(0x1B, 0x45, 0x00);
+
+        formatLeftRightLines(meta.tujuanLabel, tx.tujuan).forEach(pushLine);
+        formatLeftRightLines(meta.nomorLabel, tx.nomor).forEach(pushLine);
+        formatLeftRightLines('Penerima', tx.penerima).forEach(pushLine);
+        pushLine('--------------------------------');
+
+        formatLeftRightLines('Nominal', formatRupiah(tx.nominal)).forEach(pushLine);
+        formatLeftRightLines('Admin', formatRupiah(tx.admin)).forEach(pushLine);
+        pushLine('================================');
+
+        // TOTAL (Tebal)
+        pushBytes(0x1B, 0x45, 0x01);
+        formatLeftRightLines('TOTAL', formatRupiah(tx.total)).forEach(pushLine);
+        pushBytes(0x1B, 0x45, 0x00);
+        pushLine('================================');
+
+        // Footer (rata tengah)
+        wrapCenterLines(state.settings.footerLine1, LINE_WIDTH).forEach(pushLine);
+        if (state.settings.footerLine2) {
+          wrapCenterLines(state.settings.footerLine2, LINE_WIDTH).forEach(pushLine);
+        }
+
+        // Paper feed 3 baris (ESC d 3)
+        pushBytes(0x1B, 0x64, 0x03);
+
+        const totalBytes = chunks.reduce(function (acc, c) { return acc + c.length; }, 0);
+        const result = new Uint8Array(totalBytes);
+        let offset = 0;
+        chunks.forEach(function (c) {
+          result.set(c, offset);
+          offset += c.length;
+        });
+        return result;
+      }
+
+      // Tombol 1: Cetak Bluetooth 58mm (ESC/POS)
+      async function handlePrintBluetooth() {
+        const helpBanner = document.getElementById('ble-help-banner');
+
+        if (!navigator.bluetooth) {
+          helpBanner.classList.remove('hidden');
+          showToast('Web Bluetooth tidak tersedia di mode ini. Gunakan RawBT atau Cetak Sistem.', 'error');
+          return;
+        }
+
+        const btnLabel = document.getElementById('lbl-btn-ble');
+        try {
+          if (!state.bleDevice || !state.bleDevice.gatt.connected || !state.bleCharacteristic) {
+            btnLabel.textContent = 'Mencari Printer Bluetooth...';
+            state.bleDevice = await navigator.bluetooth.requestDevice({
+              acceptAllDevices: true,
+              optionalServices: [
+                '000018f0-0000-1000-8000-00805f9b34fb',
+                'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
+                '49535343-fe7d-4ae5-8fa9-9fafd205e455',
+                '0000ff00-0000-1000-8000-00805f9b34fb'
+              ]
+            });
+
+            const server = await state.bleDevice.gatt.connect();
+            const services = await server.getPrimaryServices();
+            let writeChar = null;
+
+            for (let i = 0; i < services.length; i++) {
+              const chars = await services[i].getCharacteristics();
+              for (let j = 0; j < chars.length; j++) {
+                if (chars[j].properties.write || chars[j].properties.writeWithoutResponse) {
+                  writeChar = chars[j];
+                  break;
+                }
+              }
+              if (writeChar) break;
+            }
+
+            if (!writeChar) {
+              throw new Error('Karakteristik cetak printer tidak ditemukan.');
+            }
+            state.bleCharacteristic = writeChar;
+          }
+
+          btnLabel.textContent = 'Mengirim ESC/POS ke Printer...';
+          const bytes = buildEscPosPayload();
+          const chunkSize = 100;
+
+          for (let pos = 0; pos < bytes.length; pos += chunkSize) {
+            const slice = bytes.slice(pos, pos + chunkSize);
+            if (state.bleCharacteristic.properties.writeWithoutResponse) {
+              await state.bleCharacteristic.writeValueWithoutResponse(slice);
+            } else {
+              await state.bleCharacteristic.writeValue(slice);
+            }
+          }
+
+          helpBanner.classList.add('hidden');
+          showToast('Struk berhasil dicetak via Bluetooth!', 'success');
+        } catch (err) {
+          if (err && err.name === 'NotFoundError') {
+            showToast('Pemilihan printer dibatalkan.');
+          } else if (err && (err.name === 'SecurityError' || String(err.message).toLowerCase().indexOf('disallowed') !== -1 || String(err.message).toLowerCase().indexOf('permission') !== -1)) {
+            helpBanner.classList.remove('hidden');
+            showToast('Akses Bluetooth diblokir pratinjau. Unduh file .html lalu buka lewat Chrome Android.', 'error');
+          } else {
+            state.bleCharacteristic = null;
+            helpBanner.classList.remove('hidden');
+            showToast((err && err.message) || 'Gagal terhubung ke printer Bluetooth.', 'error');
+          }
+        } finally {
+          btnLabel.textContent = 'Cetak Bluetooth 58mm (ESC/POS)';
+        }
+      }
+
+      // Tombol 2: Cetak via RawBT (Android) dengan payload ESC/POS 58mm asli
+      function handlePrintRawBT() {
+        try {
+          const escposBytes = buildEscPosPayload();
+          let binary = '';
+          for (let i = 0; i < escposBytes.length; i++) {
+            binary += String.fromCharCode(escposBytes[i]);
+          }
+          const b64 = btoa(binary);
+          window.location.href = 'rawbt:base64,' + b64;
+          showToast('Mengirim perintah cetak 58mm ke RawBT...', 'success');
+        } catch (e) {
+          document.getElementById('ble-help-banner').classList.remove('hidden');
+          showToast('Gagal membuka RawBT. Unduh file .html lalu buka di Chrome Android.', 'error');
+        }
+      }
+
+      // Tombol 3: Cetak Sistem / Print Service (58mm)
+      function handlePrintSystem() {
+        refreshReceiptAndSummary();
+        try {
+          window.print();
+        } catch (e) {
+          showToast('Dialog cetak sistem tidak tersedia di jendela pratinjau ini.', 'error');
+        }
+      }
+
+      function copyToClipboardSafe(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+
+        let ok = false;
+        try {
+          ok = document.execCommand('copy');
+        } catch (e) {
+          ok = false;
+        }
+        document.body.removeChild(ta);
+
+        if (!ok && navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(function () {});
+          ok = true;
+        }
+        return ok;
+      }
+
+      // Tombol 4: Salin Teks Struk 58mm
+      function handleCopyReceiptText() {
+        const text = buildThermal32String();
+        if (copyToClipboardSafe(text)) {
+          showToast('Teks struk 58mm (32 karakter) berhasil disalin!', 'success');
+        } else {
+          showToast('Gagal menyalin teks struk.', 'error');
+        }
+      }
+
+      // Tombol 5: Simpan / Bagikan Gambar PNG via HTML5 Canvas 2D
+      function renderReceiptCanvasBlob() {
+        const tx = getTransactionData();
+        const meta = getModeMetadata(tx.mode);
+
+        const storeLines = wrapCenterLines(state.settings.storeName.toUpperCase(), 24);
+        const addrLines = wrapCenterLines(state.settings.storeAddress, 36);
+        const dtLines = formatLeftRightLines('Tanggal', tx.tanggal).concat(formatLeftRightLines('Waktu', tx.waktu));
+        const refLines = formatReferenceLines(tx.referensi);
+        const penerimaLines = formatLeftRightLines(meta.tujuanLabel, tx.tujuan)
+          .concat(formatLeftRightLines(meta.nomorLabel, tx.nomor))
+          .concat(formatLeftRightLines('Penerima', tx.penerima));
+        const nomLines = formatLeftRightLines('Nominal', formatRupiah(tx.nominal))
+          .concat(formatLeftRightLines('Admin', formatRupiah(tx.admin)));
+        const totLines = formatLeftRightLines('TOTAL', formatRupiah(tx.total));
+        const footerLines = wrapCenterLines(state.settings.footerLine1, 36)
+          .concat(state.settings.footerLine2 ? wrapCenterLines(state.settings.footerLine2, 36) : []);
+
+        const scale = 3;
+        const width = 360;
+        const titleH = 26;
+        const smallH = 16;
+        const bodyH = 20;
+
+        const bodyLineCount =
+          1 + dtLines.length +
+          1 + 1 + refLines.length +
+          1 + 1 + penerimaLines.length +
+          1 + nomLines.length +
+          1 + totLines.length + 1;
+
+        const height =
+          44 +
+          storeLines.length * titleH +
+          addrLines.length * smallH +
+          16 +
+          bodyLineCount * bodyH +
+          14 +
+          footerLines.length * smallH +
+          44;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+
+        const ctx = canvas.getContext('2d');
+        ctx.scale(scale, scale);
+
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fillRect(0, 0, width, height);
+
+        const topY = 12;
+        const botY = height - 12;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, topY, width, botY - topY);
+
+        const toothW = 12;
+        const toothH = 6;
+        for (let x = 0; x < width; x += toothW) {
+          ctx.beginPath();
+          ctx.moveTo(x, topY);
+          ctx.lineTo(x + toothW / 2, topY - toothH);
+          ctx.lineTo(x + toothW, topY);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(x, botY);
+          ctx.lineTo(x + toothW / 2, botY + toothH);
+          ctx.lineTo(x + toothW, botY);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        let y = 40;
+        const centerX = width / 2;
+
+        ctx.fillStyle = '#090d16';
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 20px "Courier New", Courier, monospace';
+        storeLines.forEach(function (l) {
+          ctx.fillText(l.trim(), centerX, y);
+          y += titleH;
+        });
+
+        ctx.fillStyle = '#334155';
+        ctx.font = '12.5px "Courier New", Courier, monospace';
+        addrLines.forEach(function (l) {
+          ctx.fillText(l.trim(), centerX, y);
+          y += smallH;
+        });
+
+        y += 12;
+        ctx.fillStyle = '#090d16';
+
+        function drawRow(text, isBold) {
+          ctx.font = (isBold ? 'bold ' : '') + '15px "Courier New", Courier, monospace';
+          ctx.fillText(text, centerX, y);
+          y += bodyH;
+        }
+
+        drawRow('================================', false);
+        dtLines.forEach(function (l) { drawRow(l, false); });
+        drawRow('--------------------------------', false);
+        drawRow(centerPad('No. Referensi', LINE_WIDTH), false);
+        refLines.forEach(function (l) { drawRow(l, false); });
+        drawRow('--------------------------------', false);
+        drawRow(centerPad('DATA PENERIMA', LINE_WIDTH), true);
+        penerimaLines.forEach(function (l) { drawRow(l, false); });
+        drawRow('--------------------------------', false);
+        nomLines.forEach(function (l) { drawRow(l, false); });
+        drawRow('================================', false);
+        totLines.forEach(function (l) { drawRow(l, true); });
+        drawRow('================================', false);
+
+        y += 6;
+        ctx.fillStyle = '#334155';
+        ctx.font = '12.5px "Courier New", Courier, monospace';
+        footerLines.forEach(function (l) {
+          ctx.fillText(l.trim(), centerX, y);
+          y += smallH;
+        });
+
+        return new Promise(function (resolve) {
+          canvas.toBlob(function (blob) {
+            resolve(blob);
+          }, 'image/png', 1.0);
+        });
+      }
+
+      async function handleExportPNG() {
+        try {
+          const blob = await renderReceiptCanvasBlob();
+          if (!blob) throw new Error('Gagal membuat gambar PNG.');
+
+          const fileName = 'struk-' + state.settings.storeName.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now() + '.png';
+          const file = new File([blob], fileName, { type: 'image/png' });
+
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Struk ' + state.settings.storeName,
+              text: 'Bukti Transaksi - ' + state.settings.storeName
+            });
+            showToast('Gambar struk PNG siap dibagikan!', 'success');
+            return;
+          }
+
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+          showToast('Gambar struk PNG berhasil diunduh!', 'success');
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+          showToast('Gagal menyimpan atau membagikan gambar PNG.', 'error');
+        }
+      }
+
+      // Tombol 6: Kirim Struk Digital WhatsApp
+      function handleShareWhatsApp() {
+        const tx = getTransactionData();
+        const meta = getModeMetadata(tx.mode);
+
+        const dtCode = formatLeftRightLines('Tanggal', tx.tanggal)
+          .concat(formatLeftRightLines('Waktu', tx.waktu))
+          .map(function (l) { return '```' + l + '```'; });
+
+        const penerimaCode = formatLeftRightLines(meta.tujuanLabel, tx.tujuan)
+          .concat(formatLeftRightLines(meta.nomorLabel, tx.nomor))
+          .concat(formatLeftRightLines('Penerima', tx.penerima))
+          .map(function (l) { return '```' + l + '```'; });
+
+        const nomCode = formatLeftRightLines('Nominal', formatRupiah(tx.nominal))
+          .concat(formatLeftRightLines('Admin', formatRupiah(tx.admin)))
+          .map(function (l) { return '```' + l + '```'; });
+
+        const totCode = formatLeftRightLines('TOTAL', formatRupiah(tx.total))
+          .map(function (l) { return '*```' + l + '```*'; });
+
+        const waLines = [
+          '*' + state.settings.storeName.toUpperCase() + '*',
+          '_' + state.settings.storeAddress + '_',
+          '================================'
+        ]
+          .concat(dtCode)
+          .concat([
+            '--------------------------------',
+            'No. Referensi',
+            '`' + tx.referensi + '`',
+            '--------------------------------',
+            '*DATA PENERIMA*'
+          ])
+          .concat(penerimaCode)
+          .concat(['--------------------------------'])
+          .concat(nomCode)
+          .concat(['================================'])
+          .concat(totCode)
+          .concat([
+            '================================',
+            '_' + state.settings.footerLine1 + '_'
+          ]);
+
+        if (state.settings.footerLine2) {
+          waLines.push('_' + state.settings.footerLine2 + '_');
+        }
+
+        const message = waLines.join('\n');
+        const waUrl = 'https://wa.me/?text=' + encodeURIComponent(message);
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+      }
+
+      /* ===================================================================
+         9. INISIALISASI DOMContentLoaded (SEMUA EVENT LISTENER TERPASANG AMAN)
+         =================================================================== */
+      document.addEventListener('DOMContentLoaded', function () {
+        state.settings = loadSettings();
+        populateSettingsForm();
+
+        // Tombol Unduh Aplikasi (.html) di Header & Tab Pengaturan
+        document.getElementById('btn-download-header').addEventListener('click', handleDownloadStandaloneApp);
+        document.getElementById('btn-download-settings').addEventListener('click', handleDownloadStandaloneApp);
+
+        // Toggle Lihat/Sembunyikan Gemini API Key
+        const inpApiKey = document.getElementById('set-api-key');
+        const btnToggleApiKey = document.getElementById('btn-toggle-apikey');
+        btnToggleApiKey.addEventListener('click', function () {
+          const isHidden = inpApiKey.type === 'password';
+          inpApiKey.type = isHidden ? 'text' : 'password';
+          btnToggleApiKey.textContent = isHidden ? 'Sembunyi' : 'Lihat';
+        });
+
+        // Navigasi 3 Tab
+        ['1', '2', '3'].forEach(function (num) {
+          const tabBtn = document.getElementById('nav-tab-' + num);
+          if (tabBtn) {
+            tabBtn.addEventListener('click', function () {
+              switchTab(num);
+            });
+          }
+        });
+
+        // Tombol Scan OCR (Galeri, Kamera, Hapus Preview)
+        document.getElementById('btn-pick-gallery').addEventListener('click', function () {
+          document.getElementById('file-gallery').click();
+        });
+        document.getElementById('btn-pick-camera').addEventListener('click', function () {
+          document.getElementById('file-camera').click();
+        });
+        document.getElementById('file-gallery').addEventListener('change', handleImageSelected);
+        document.getElementById('file-camera').addEventListener('change', handleImageSelected);
+        document.getElementById('btn-clear-img').addEventListener('click', clearOcrPreview);
+
+        // Tombol Contoh, Reset & Segmented Mode
+        document.getElementById('btn-fill-sample').addEventListener('click', fillSampleTransaction);
+        document.getElementById('btn-reset-form').addEventListener('click', resetTransactionForm);
+        document.getElementById('seg-bank').addEventListener('click', function () {
+          setTransactionMode('bank', true);
+        });
+        document.getElementById('seg-ewallet').addEventListener('click', function () {
+          setTransactionMode('ewallet', true);
+        });
+        document.getElementById('btn-now-datetime').addEventListener('click', fillCurrentDateTime);
+
+        // Input Teks Umum -> Update Pratinjau Real-Time
+        ['inp-tanggal', 'inp-waktu', 'inp-referensi', 'inp-tujuan', 'inp-nomor', 'inp-penerima'].forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('input', refreshReceiptAndSummary);
+          }
+        });
+
+        // Input Nominal -> Format Ribuan & Hitung Admin Otomatis jika aktif
+        const inpNominal = document.getElementById('inp-nominal');
+        inpNominal.addEventListener('input', function () {
+          const clean = parseCleanNumber(inpNominal.value);
+          inpNominal.value = inpNominal.value.trim() === '' ? '' : formatThousands(clean);
+          if (state.adminAutoMode) {
+            document.getElementById('inp-admin').value = formatThousands(calculateAutoAdminFee(clean));
+          }
+          refreshReceiptAndSummary();
+        });
+
+        // Input Admin Manual -> Format Ribuan & Alihkan ke Mode Manual
+        const inpAdmin = document.getElementById('inp-admin');
+        inpAdmin.addEventListener('input', function () {
+          const clean = parseCleanNumber(inpAdmin.value);
+          inpAdmin.value = inpAdmin.value.trim() === '' ? '' : formatThousands(clean);
+          if (state.adminAutoMode) {
+            state.adminAutoMode = false;
+            const pill = document.getElementById('btn-toggle-admin-mode');
+            pill.textContent = 'Manual';
+            pill.className = 'admin-mode-pill manual';
+          }
+          refreshReceiptAndSummary();
+        });
+
+        // Tombol Toggle Mode Admin (Otomatis <-> Manual)
+        document.getElementById('btn-toggle-admin-mode').addEventListener('click', function () {
+          setAdminAutoMode(!state.adminAutoMode);
+          showToast(
+            state.adminAutoMode
+              ? 'Biaya admin dihitung otomatis sesuai aturan nominal'
+              : 'Biaya admin dalam mode input manual'
+          );
+        });
+
+        // Chip Cepat Biaya Admin
+        document.querySelectorAll('#chips-admin .chip-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const fee = parseCleanNumber(btn.dataset.admin);
+            state.adminAutoMode = false;
+            const pill = document.getElementById('btn-toggle-admin-mode');
+            pill.textContent = 'Manual';
+            pill.className = 'admin-mode-pill manual';
+            inpAdmin.value = formatThousands(fee);
+            refreshReceiptAndSummary();
+          });
+        });
+
+        // Tombol Pindah ke Tab 2
+        document.getElementById('btn-goto-preview').addEventListener('click', function () {
+          switchTab('2');
+        });
+
+        // 6 Tombol Cetak Fisik & Bagikan di Tab 2
+        document.getElementById('btn-print-ble').addEventListener('click', handlePrintBluetooth);
+        document.getElementById('btn-print-rawbt').addEventListener('click', handlePrintRawBT);
+        document.getElementById('btn-print-system').addEventListener('click', handlePrintSystem);
+        document.getElementById('btn-copy-text').addEventListener('click', handleCopyReceiptText);
+        document.getElementById('btn-export-png').addEventListener('click', handleExportPNG);
+        document.getElementById('btn-share-wa').addEventListener('click', handleShareWhatsApp);
+
+        // Event Pengaturan di Tab 3
+        const inpAboveMax = document.getElementById('set-above-max');
+        inpAboveMax.addEventListener('input', function () {
+          const clean = parseCleanNumber(inpAboveMax.value);
+          inpAboveMax.value = inpAboveMax.value.trim() === '' ? '' : formatThousands(clean);
+        });
+        document.getElementById('btn-add-tier').addEventListener('click', handleAddTierRow);
+        document.getElementById('btn-save-settings').addEventListener('click', handleSaveSettings);
+
+        // Muat Draft Terakhir atau Data Contoh Awal
+        let restored = false;
+        try {
+          const rawDraft = localStorage.getItem(DRAFT_KEY);
+          if (rawDraft) {
+            const d = JSON.parse(rawDraft);
+            if (d && (d.nominal > 0 || (d.penerima && d.penerima !== '-'))) {
+              setTransactionMode(d.mode || 'bank', false);
+              document.getElementById('inp-tanggal').value = d.tanggal !== '-' ? d.tanggal : '';
+              document.getElementById('inp-waktu').value = d.waktu !== '-' ? d.waktu : '';
+              document.getElementById('inp-referensi').value = d.referensi !== '-' ? d.referensi : '';
+              document.getElementById('inp-tujuan').value = d.tujuan !== '-' ? d.tujuan : '';
+              document.getElementById('inp-nomor').value = d.nomor !== '-' ? d.nomor : '';
+              document.getElementById('inp-penerima').value = d.penerima !== '-' ? d.penerima : '';
+              inpNominal.value = d.nominal > 0 ? formatThousands(d.nominal) : '';
+              inpAdmin.value = formatThousands(d.admin);
+              setAdminAutoMode(d.adminAutoMode !== undefined ? Boolean(d.adminAutoMode) : true);
+              restored = true;
+            }
+          }
+        } catch (e) {
+          // Gunakan default jika draft rusak
+        }
+
+        if (!restored) {
+          setTransactionMode('bank', false);
+          document.getElementById('inp-tanggal').value = '12 Nov 2026';
+          document.getElementById('inp-waktu').value = '15:17:50 WIB';
+          document.getElementById('inp-referensi').value = '9527120261112151750379TRF1737080495';
+          document.getElementById('inp-tujuan').value = 'BCA';
+          document.getElementById('inp-nomor').value = '758-096-8702';
+          document.getElementById('inp-penerima').value = 'SINERGI KOMUNIKASI SEJAH';
+          inpNominal.value = '999.236';
+          setAdminAutoMode(true);
+        }
+
+        refreshReceiptAndSummary();
+      });
+    })();
+  </script>
+
+</body></html>

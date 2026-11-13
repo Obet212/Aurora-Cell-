@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Aurora Cell</string>
+    <string name="app_subtitle">OCR &amp; Struk Thermal 58mm</string>
+    <string name="tab_input_ocr">Input &amp; OCR</string>
+    <string name="tab_preview_print">Pratinjau &amp; Cetak</string>
+    <string name="tab_settings">Pengaturan</string>
+    <string name="scan_ocr_title">Scan OCR Bukti Transaksi</string>
+    <string name="scan_ocr_desc">Pilih screenshot bukti transfer M-Banking (BCA, BRI, Mandiri, BNI, SeaBank) atau E-Wallet (DANA, OVO, GoPay, ShopeePay) untuk mengisi rincian struk otomatis.</string>
+    <string name="pick_gallery">Pilih dari Galeri</string>
+    <string name="take_camera">Ambil Foto Kamera</string>
+    <string name="detail_tx_title">Detail Transaksi Struk</string>
+    <string name="preview_58mm_title">Pratinjau Kertas Thermal 58mm</string>
+    <string name="print_bluetooth">Cetak Bluetooth 58mm (ESC/POS)</string>
+    <string name="print_rawbt">Cetak via RawBT (Android)</string>
+    <string name="print_system">Cetak Sistem / Print Service (58mm)</string>
+    <string name="copy_receipt_text">Salin Teks Struk 58mm</string>
+    <string name="share_png_receipt">Simpan / Bagikan Gambar PNG</string>
+    <string name="share_whatsapp">Kirim Struk Digital WhatsApp</string>
+</resources>
