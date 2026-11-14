@@ -301,12 +301,38 @@ fun InputOcrScreen(
                             )
                         }
                         is OcrUiState.Error -> {
-                            StatusBanner(
-                                text = ocr.message,
-                                containerColor = DangerSoft,
-                                borderColor = Color(0xFFFECACA),
-                                textColor = Color(0xFF991B1B)
-                            )
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                StatusBanner(
+                                    text = ocr.message,
+                                    containerColor = DangerSoft,
+                                    borderColor = Color(0xFFFECACA),
+                                    textColor = Color(0xFF991B1B)
+                                )
+                                if (isGemini && state.selectedImageUri != null) {
+                                    OutlinedButton(
+                                        onClick = { onSelectScanEngine(ScanEngine.OFFLINE_MLKIT) },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .heightIn(min = 44.dp)
+                                            .testTag("fallback_offline_ocr_button"),
+                                        shape = RoundedCornerShape(10.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.DocumentScanner,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(16.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text(
+                                            text = "Coba Scan dengan OCR Offline",
+                                            style = MaterialTheme.typography.labelLarge
+                                        )
+                                    }
+                                }
+                            }
                         }
                         else -> Unit
                     }

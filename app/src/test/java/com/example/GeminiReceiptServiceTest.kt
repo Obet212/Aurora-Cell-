@@ -1,8 +1,15 @@
 package com.example
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.example.data.GeminiReceiptService
+import com.example.firebase.configureAppCheck
 import com.example.model.ServiceMode
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ai.ai
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,6 +19,17 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class GeminiReceiptServiceTest {
+
+    @Test
+    fun `initializes default FirebaseApp and Firebase AI model from google-services resources`() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        configureAppCheck(context, null)
+
+        val apps = FirebaseApp.getApps(context)
+        assertTrue("Expected FirebaseApp to be initialized", apps.isNotEmpty())
+        assertEquals("aurora-cell", FirebaseApp.getInstance().options.projectId)
+        assertNotNull(Firebase.ai.generativeModel("gemini-3.8-flash"))
+    }
 
     @Test
     fun `parses structured Gemini JSON for SeaBank cross-bank transfer`() {

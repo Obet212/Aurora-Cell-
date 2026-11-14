@@ -19,9 +19,17 @@ private const val RECAPTCHA_SITE_KEY_RES = "recaptcha_site_key"
 
 @SuppressLint("ApplySharedPref", "DiscouragedApi")
 fun configureAppCheck(context: Context, intent: Intent?) {
+    val appContext = context.applicationContext ?: context
     try {
-        if (FirebaseApp.getApps(context).isEmpty()) {
-            FirebaseApp.initializeApp(context)
+        if (FirebaseApp.getApps(appContext).isEmpty()) {
+            val initialized = FirebaseApp.initializeApp(appContext)
+            if (initialized == null || FirebaseApp.getApps(appContext).isEmpty()) {
+                Log.e(
+                    TAG,
+                    "FirebaseApp.initializeApp returned null. Verify google-services.json / google_app_id is bundled."
+                )
+                return
+            }
         }
 
         if (BuildConfig.DEBUG) {
@@ -29,7 +37,7 @@ fun configureAppCheck(context: Context, intent: Intent?) {
 
             if (!debugToken.isNullOrEmpty()) {
                 val persistenceKey = FirebaseApp.getInstance().persistenceKey
-                val prefs = context.getSharedPreferences(
+                val prefs = appContext.getSharedPreferences(
                     "$DEBUG_STORE_PREFIX$persistenceKey",
                     Context.MODE_PRIVATE
                 )
