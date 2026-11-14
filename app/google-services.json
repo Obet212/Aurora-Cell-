@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "120975596615",
+    "project_id": "aurora-cell",
+    "storage_bucket": "aurora-cell.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120975596615:android:8d75453ab942dc2733a562",
+        "android_client_info": {
+          "package_name": "com.aistudio.auroracell.kx7m2p"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJsp-OYWEe-bET4m3yJNJcyPJTCuIoPmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
