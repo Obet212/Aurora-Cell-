@@ -66,4 +66,29 @@ class GeminiReceiptServiceTest {
         assertEquals(50_000L, result.nominal)
         assertTrue(result.rawText.contains("E-Wallet: DANA"))
     }
+
+    @Test
+    fun `maps merchant to recipient when penerima is empty on QRIS or retail receipt`() {
+        val json = """
+            {
+              "mode": "EWALLET",
+              "tanggal": "13 Nov 2026",
+              "waktu": "19:10:00",
+              "referensi": "QRIS99887766",
+              "tujuan": "ShopeePay",
+              "nomor": "081234567890",
+              "penerima": "",
+              "merchant": "Toko Berkah Jaya",
+              "nominal": 75000
+            }
+        """.trimIndent()
+
+        val result = GeminiReceiptService.parseGeminiJsonResponse(json)
+
+        assertEquals(ServiceMode.EWALLET, result.tipe)
+        assertEquals("SHOPEEPAY", result.tujuan)
+        assertEquals("TOKO BERKAH JAYA", result.penerima)
+        assertEquals("QRIS99887766", result.referensi)
+        assertEquals(75_000L, result.nominal)
+    }
 }

@@ -53,16 +53,19 @@ class GeminiReceiptService(private val context: Context) {
                     description = "Nomor rekening bank tujuan atau nomor HP/akun e-wallet penerima (hanya angka tanpa spasi/tanda hubung, atau tanda * bila memang disensor di gambar). Abaikan rekening pengirim."
                 ),
                 "penerima" to Schema.string(
-                    description = "Nama lengkap penerima dalam huruf kapital. Abaikan nama pengirim."
+                    description = "Nama lengkap penerima transfer (huruf kapital). Abaikan nama pengirim."
+                ),
+                "merchant" to Schema.string(
+                    description = "Nama merchant/toko/penyedia layanan jika transaksi berupa pembayaran QRIS, belanja merchant, atau tagihan."
                 ),
                 "nominal" to Schema.integer(
-                    description = "Nominal transfer utama dalam Rupiah bulat (contoh: 50000 untuk Rp 50.000 atau 999236 untuk IDR 999,236.00). Abaikan desimal .00/.00 dan biaya admin."
+                    description = "Nominal transfer/pembayaran utama dalam Rupiah bulat (contoh: 50000 untuk Rp 50.000 atau 999236 untuk IDR 999,236.00). Abaikan desimal .00/,00 dan biaya admin."
                 ),
                 "ringkasanTeks" to Schema.string(
                     description = "Ringkasan poin transaksi yang terbaca dalam format baris 'Label: Nilai' agar pengguna mudah menyalin."
                 )
             ),
-            optionalProperties = listOf("ringkasanTeks")
+            optionalProperties = listOf("merchant", "ringkasanTeks")
         )
     }
 
@@ -82,10 +85,10 @@ class GeminiReceiptService(private val context: Context) {
             try {
                 bitmap = loadNormalizedBitmap(imageUri)
                 val promptText = buildString {
-                    appendLine("Baca gambar bukti transaksi M-Banking / E-Wallet Indonesia ini dengan sangat teliti.")
+                    appendLine("Baca gambar bukti transaksi M-Banking / E-Wallet / QRIS Indonesia ini dengan sangat teliti dan ekstrak ke JSON.")
                     appendLine("Aturan penting:")
                     appendLine("1. Jika bukti berasal dari SeaBank, perhatikan baris 'Ke': di sana tercantum nama penerima dan bank/e-wallet tujuan (bisa SeaBank atau bank lain seperti BCA/BRI/Mandiri/BNI atau e-wallet seperti DANA/OVO/GoPay/ShopeePay). Abaikan baris 'Dari' (pengirim).")
-                    appendLine("2. Jika bukti berasal dari BRI/Qita/myBCA/Livin/DANA/OVO/GoPay/ShopeePay, selalu bedakan pengirim vs penerima dan ambil DATA PENERIMA.")
+                    appendLine("2. Jika bukti berasal dari BRI/Qita/myBCA/Livin/DANA/OVO/GoPay/ShopeePay, selalu bedakan pengirim vs penerima dan ambil DATA PENERIMA (atau merchant untuk pembayaran QRIS/tagihan).")
                     appendLine("3. Abaikan jam baterai/sinyal serta ikon aplikasi pada status bar ponsel paling atas.")
                     appendLine("4. Untuk No. Referensi / No. Transaksi / ID Transaksi yang terpotong beberapa baris, gabungkan semua baris menjadi satu string utuh tanpa spasi.")
                     appendLine("5. Untuk Nominal, hilangkan angka sen desimal (.00 atau ,00) sebelum mengambil angka bulat Rupiah.")
@@ -233,10 +236,17 @@ class GeminiReceiptService(private val context: Context) {
                 pureDigits.ifBlank { rawNomor.replace(Regex("\\s+"), "") }
             }
 
-            val penerima = ReceiptFormatter.sanitizeSingleLine(json.optString("penerima", ""))
+            val merchant = ReceiptFormatter.sanitizeSingleLine(json.optString("merchant", ""))
                 .replace('•', '*')
                 .replace('·', '*')
                 .uppercase()
+
+            val rawPenerima = ReceiptFormatter.sanitizeSingleLine(json.optString("penerima", ""))
+                .replace('•', '*')
+                .replace('·', '*')
+                .uppercase()
+            val penerima = rawPenerima.ifBlank { merchant }
+            val resolvedTujuan = rawTujuan.ifBlank { merchant }
 
             val nominal = json.optLong("nominal", 0L).coerceAtLeast(0L)
 
@@ -248,7 +258,7 @@ class GeminiReceiptService(private val context: Context) {
                     tanggal.takeIf { it.isNotBlank() }?.let { "Tanggal: $it" },
                     waktu.takeIf { it.isNotBlank() }?.let { "Waktu: $it" },
                     referensi.takeIf { it.isNotBlank() }?.let { "No. Referensi: $it" },
-                    rawTujuan.takeIf { it.isNotBlank() }?.let {
+                    resolvedTujuan.takeIf { it.isNotBlank() }?.let {
                         val label = if (mode == ServiceMode.EWALLET) "E-Wallet" else "Bank Tujuan"
                         "$label: $it"
                     },
@@ -266,7 +276,7 @@ class GeminiReceiptService(private val context: Context) {
                 tanggal = tanggal,
                 waktu = waktu,
                 referensi = referensi,
-                tujuan = rawTujuan,
+                tujuan = resolvedTujuan,
                 nomor = nomor,
                 penerima = penerima,
                 nominal = nominal,
