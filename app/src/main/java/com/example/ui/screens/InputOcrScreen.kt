@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
@@ -71,6 +72,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.model.OcrUiState
+import com.example.model.ScanEngine
 import com.example.model.ServiceMode
 import com.example.ui.MainUiState
 import com.example.ui.components.AuroraSectionCard
@@ -95,6 +97,8 @@ import com.example.util.ReceiptFormatter
 @Composable
 fun InputOcrScreen(
     state: MainUiState,
+    onSelectScanEngine: (ScanEngine) -> Unit,
+    onRescanImage: () -> Unit,
     onPickGallery: () -> Unit,
     onTakeCamera: () -> Unit,
     onClearImage: () -> Unit,
@@ -125,16 +129,20 @@ fun InputOcrScreen(
             .padding(14.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Card 1: Scan OCR Bukti Transaksi
+        // Card 1: Scan OCR & AI Gemini Bukti Transaksi
         AuroraSectionCard {
+            val isGemini = state.scanEngine == ScanEngine.GEMINI_AI
             SectionHeaderRow(
                 badgeText = "1",
-                title = "Scan OCR Bukti Transaksi",
+                title = "Scan Bukti Transaksi",
                 trailing = {
                     Surface(
                         shape = RoundedCornerShape(999.dp),
-                        color = IndigoSoft,
-                        border = BorderStroke(1.dp, IndigoBorder)
+                        color = if (isGemini) EmeraldSoft else IndigoSoft,
+                        border = BorderStroke(
+                            1.dp,
+                            if (isGemini) Color(0xFFA7F3D0) else IndigoBorder
+                        )
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 9.dp, vertical = 4.dp),
@@ -142,15 +150,15 @@ fun InputOcrScreen(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.DocumentScanner,
+                                imageVector = if (isGemini) Icons.Filled.AutoAwesome else Icons.Filled.DocumentScanner,
                                 contentDescription = null,
-                                tint = IndigoPrimary,
+                                tint = if (isGemini) EmeraldAccent else IndigoPrimary,
                                 modifier = Modifier.size(13.dp)
                             )
                             Text(
-                                text = "OCR Offline",
+                                text = if (isGemini) "AI Gemini" else "OCR Offline",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = IndigoPrimary,
+                                color = if (isGemini) Color(0xFF065F46) else IndigoPrimary,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -161,10 +169,44 @@ fun InputOcrScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Bagikan (Share) bukti transfer langsung dari aplikasi M-Banking/E-Wallet, atau pilih dari Galeri/Kamera untuk scan OCR 100% offline.",
+                text = "Bagikan (Share) bukti transfer langsung dari M-Banking/E-Wallet, atau pilih Galeri/Kamera. Gunakan AI Gemini (tanpa API Key) atau OCR Offline.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Engine Selector: AI Gemini vs OCR Offline
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.background)
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                ModeSegmentButton(
+                    selected = isGemini,
+                    label = "AI Gemini",
+                    icon = Icons.Filled.AutoAwesome,
+                    activeColor = EmeraldAccent,
+                    onClick = { onSelectScanEngine(ScanEngine.GEMINI_AI) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("scan_engine_gemini_button")
+                )
+                ModeSegmentButton(
+                    selected = !isGemini,
+                    label = "OCR Offline",
+                    icon = Icons.Filled.DocumentScanner,
+                    activeColor = IndigoPrimary,
+                    onClick = { onSelectScanEngine(ScanEngine.OFFLINE_MLKIT) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("scan_engine_offline_button")
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -193,16 +235,42 @@ fun InputOcrScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     AnimatedVisibility(visible = state.selectedImageUri != null) {
-                        SelectedImagePreview(
-                            uri = state.selectedImageUri,
-                            onClear = onClearImage
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            SelectedImagePreview(
+                                uri = state.selectedImageUri,
+                                onClear = onClearImage
+                            )
+                            if (state.ocrState !is OcrUiState.Loading) {
+                                OutlinedButton(
+                                    onClick = onRescanImage,
+                                    modifier = Modifier
+                                        .heightIn(min = 38.dp)
+                                        .testTag("rescan_image_button"),
+                                    shape = RoundedCornerShape(10.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Refresh,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = if (isGemini) "Scan Ulang dengan AI Gemini" else "Scan Ulang dengan OCR Offline",
+                                        style = MaterialTheme.typography.labelMedium
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     AnimatedVisibility(visible = state.ocrState is OcrUiState.Loading) {
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = IndigoPrimary
+                            color = if (isGemini) EmeraldAccent else IndigoPrimary
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
@@ -215,7 +283,7 @@ fun InputOcrScreen(
                                     strokeWidth = 2.2.dp
                                 )
                                 Text(
-                                    text = "Memindai bukti transaksi...",
+                                    text = if (isGemini) "Membaca gambar dengan AI Gemini..." else "Memindai bukti transaksi offline...",
                                     style = MaterialTheme.typography.labelLarge,
                                     color = Color.White
                                 )

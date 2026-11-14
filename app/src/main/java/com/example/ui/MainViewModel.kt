@@ -4,12 +4,14 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.GeminiReceiptService
 import com.example.data.OcrUnrecognizedException
 import com.example.data.OfflineOcrService
 import com.example.data.SettingsRepository
 import com.example.model.AdminTier
 import com.example.model.BluetoothPrinterDevice
 import com.example.model.OcrUiState
+import com.example.model.ScanEngine
 import com.example.model.ServiceMode
 import com.example.model.StoreSettings
 import com.example.model.TransactionForm
@@ -44,13 +46,15 @@ data class MainUiState(
     val pairedPrinters: List<BluetoothPrinterDevice> = emptyList(),
     val showPrinterDialog: Boolean = false,
     val isPrintingBluetooth: Boolean = false,
-    val lastOcrRawText: String = ""
+    val lastOcrRawText: String = "",
+    val scanEngine: ScanEngine = ScanEngine.GEMINI_AI
 )
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = SettingsRepository(application.applicationContext)
     private val ocrService = OfflineOcrService(application.applicationContext)
+    private val geminiService = GeminiReceiptService(application.applicationContext)
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -222,8 +226,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun setScanEngine(engine: ScanEngine) {
+        val prev = _uiState.value.scanEngine
+        _uiState.update { it.copy(scanEngine = engine) }
+        val existingUri = _uiState.value.selectedImageUri
+        if (existingUri != null && prev != engine) {
+            processOcrImage(existingUri)
+        }
+    }
+
+    fun rescanCurrentImage() {
+        val existingUri = _uiState.value.selectedImageUri ?: return
+        processOcrImage(existingUri)
+    }
+
     fun processOcrImage(uri: Uri) {
         viewModelScope.launch {
+            val engine = _uiState.value.scanEngine
             _uiState.update {
                 it.copy(
                     selectedImageUri = uri,
@@ -231,7 +250,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     lastOcrRawText = ""
                 )
             }
-            val result = ocrService.scanReceiptImage(uri)
+            val result = when (engine) {
+                ScanEngine.GEMINI_AI -> geminiService.scanReceiptImage(uri)
+                ScanEngine.OFFLINE_MLKIT -> ocrService.scanReceiptImage(uri)
+            }
+            val engineLabel = if (engine == ScanEngine.GEMINI_AI) "AI Gemini" else "OCR Offline"
             result.onSuccess { parsed ->
                 val settings = _uiState.value.settings
                 updateTx { current ->
@@ -255,19 +278,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.update {
                     it.copy(
                         ocrState = OcrUiState.Success(
-                            "Scan OCR offline berhasil! Data transaksi (${parsed.tujuan.ifBlank { "-" }}) telah diisikan otomatis."
+                            "Scan $engineLabel berhasil! Data transaksi (${parsed.tujuan.ifBlank { "-" }}) telah diisikan otomatis."
                         ),
                         lastOcrRawText = parsed.rawText
                     )
                 }
-                emitMessage("Bukti transaksi berhasil dipindai!")
+                emitMessage("Bukti transaksi berhasil dipindai ($engineLabel)!")
             }.onFailure { err ->
                 val partialRaw = (err as? OcrUnrecognizedException)?.rawText.orEmpty()
                 _uiState.update {
                     it.copy(
                         ocrState = OcrUiState.Error(
                             (err.message ?: "Gagal memindai bukti transaksi.") +
-                                " Anda tetap dapat mengisi data secara manual."
+                                " Anda dapat beralih metode scan atau mengisi data secara manual."
                         ),
                         lastOcrRawText = partialRaw
                     )

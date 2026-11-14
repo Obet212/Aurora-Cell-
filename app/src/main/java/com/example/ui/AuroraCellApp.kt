@@ -250,6 +250,8 @@ fun AuroraCellApp(
                         AppTab.INPUT_OCR -> {
                             InputOcrScreen(
                                 state = state,
+                                onSelectScanEngine = viewModel::setScanEngine,
+                                onRescanImage = viewModel::rescanCurrentImage,
                                 onPickGallery = {
                                     galleryLauncher.launch(
                                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)

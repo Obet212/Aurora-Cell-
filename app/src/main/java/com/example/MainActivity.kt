@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.content.IntentCompat
+import com.example.firebase.configureAppCheck
 import com.example.ui.AuroraCellApp
 import com.example.ui.MainViewModel
 import com.example.ui.theme.AuroraCellTheme
@@ -18,6 +19,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Configure Firebase App Check before UI, ViewModels, or Firebase operations
+        configureAppCheck(this, intent)
+
         enableEdgeToEdge()
 
         if (savedInstanceState == null) {

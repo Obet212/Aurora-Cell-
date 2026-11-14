@@ -5,6 +5,11 @@ enum class ServiceMode {
     EWALLET
 }
 
+enum class ScanEngine {
+    GEMINI_AI,
+    OFFLINE_MLKIT
+}
+
 data class AdminTier(
     val id: Long = System.nanoTime(),
     val maxNominal: Long,

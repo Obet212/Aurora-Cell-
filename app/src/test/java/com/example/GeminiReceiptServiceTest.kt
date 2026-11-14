@@ -1,0 +1,69 @@
+package com.example
+
+import com.example.data.GeminiReceiptService
+import com.example.model.ServiceMode
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [36])
+class GeminiReceiptServiceTest {
+
+    @Test
+    fun `parses structured Gemini JSON for SeaBank cross-bank transfer`() {
+        val json = """
+            {
+              "mode": "BANK",
+              "tanggal": "14 September 2026",
+              "waktu": "14:51",
+              "referensi": "202609144350 8949687858639",
+              "tujuan": "bca",
+              "nomor": "758 - 096 - 8702",
+              "penerima": "Sinergi Komunikasi Sejah",
+              "nominal": 250000,
+              "ringkasanTeks": "Tujuan: BCA\nPenerima: SINERGI KOMUNIKASI SEJAH"
+            }
+        """.trimIndent()
+
+        val result = GeminiReceiptService.parseGeminiJsonResponse(json)
+
+        assertEquals(ServiceMode.BANK, result.tipe)
+        assertEquals("14 Sep 2026", result.tanggal)
+        assertEquals("14:51 WIB", result.waktu)
+        assertEquals("2026091443508949687858639", result.referensi)
+        assertEquals("BCA", result.tujuan)
+        assertEquals("7580968702", result.nomor)
+        assertEquals("SINERGI KOMUNIKASI SEJAH", result.penerima)
+        assertEquals(250_000L, result.nominal)
+        assertTrue(result.rawText.contains("SINERGI KOMUNIKASI SEJAH"))
+    }
+
+    @Test
+    fun `forces EWALLET mode when tujuan is an e-wallet keyword`() {
+        val json = """
+            {
+              "mode": "BANK",
+              "tanggal": "13 Nov 2026",
+              "waktu": "17:55 WIB",
+              "referensi": "2026111310121420010100166112312785466",
+              "tujuan": "DANA",
+              "nomor": "0855 5965 9554",
+              "penerima": "Cahyo A•i Nu••••o",
+              "nominal": 50000
+            }
+        """.trimIndent()
+
+        val result = GeminiReceiptService.parseGeminiJsonResponse(json)
+
+        assertEquals(ServiceMode.EWALLET, result.tipe)
+        assertEquals("DANA", result.tujuan)
+        assertEquals("085559659554", result.nomor)
+        assertEquals("CAHYO A*I NU****O", result.penerima)
+        assertEquals(50_000L, result.nominal)
+        assertTrue(result.rawText.contains("E-Wallet: DANA"))
+    }
+}
