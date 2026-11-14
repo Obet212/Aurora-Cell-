@@ -153,4 +153,105 @@ class ReceiptTextParserTest {
         assertEquals(50_000L, ReceiptTextParser.parseRupiahAmount("IDR 50,000.00"))
         assertEquals("085518001234", ReceiptTextParser.sanitizeDigitsOnlyAccount("O8SS lB00 1234"))
     }
+
+    @Test
+    fun `parses SeaBank to SeaBank screenshot ignoring status bar and sender block`() {
+        val boxes = listOf(
+            // Phone status bar noise (clock & allo bank icon should never override receipt data)
+            OcrLineBox("16.10", 70f, 18f, 155f, 45f),
+            OcrLineBox("allo bank", 175f, 18f, 220f, 45f),
+            OcrLineBox("Rincian Transaksi", 140f, 80f, 520f, 120f),
+            OcrLineBox("Rp", 320f, 200f, 380f, 235f),
+            OcrLineBox("50.000", 390f, 175f, 685f, 245f),
+            OcrLineBox("Dari", 80f, 330f, 145f, 365f),
+            OcrLineBox("Adhi Nugroho", 685f, 330f, 920f, 365f),
+            OcrLineBox("SeaBank: 901461173949", 560f, 380f, 920f, 415f),
+            OcrLineBox("Ke", 80f, 465f, 125f, 500f),
+            OcrLineBox("Yeti Heriawati >", 620f, 465f, 910f, 500f),
+            OcrLineBox("SeaBank: 901313096306", 560f, 515f, 920f, 550f),
+            OcrLineBox("Jumlah Transfer", 80f, 600f, 360f, 635f),
+            OcrLineBox("Rp 50.000", 720f, 600f, 920f, 635f),
+            OcrLineBox("No. Transaksi", 80f, 690f, 310f, 725f),
+            // 25-digit transaction ID wraps left of 0.45*W (~0.36*W)
+            OcrLineBox("20260914435089496878586", 360f, 690f, 865f, 725f),
+            OcrLineBox("39", 825f, 730f, 865f, 765f),
+            OcrLineBox("Waktu Transaksi", 80f, 810f, 360f, 845f),
+            OcrLineBox("14 Sep 2026, 14:51", 585f, 810f, 920f, 845f)
+        )
+
+        val result = ReceiptTextParser.parseCoordinateLayout(boxes, imageWidth = 1000f, imageHeight = 1400f)
+
+        assertEquals(ServiceMode.BANK, result.tipe)
+        assertEquals("SEABANK", result.tujuan)
+        assertEquals("14 Sep 2026", result.tanggal)
+        assertEquals("14:51 WIB", result.waktu)
+        assertEquals(50_000L, result.nominal)
+        assertEquals("901313096306", result.nomor)
+        assertEquals("YETI HERIAWATI", result.penerima)
+        assertEquals("2026091443508949687858639", result.referensi)
+    }
+
+    @Test
+    fun `parses SeaBank transfer to another bank extracting destination bank instead of SeaBank`() {
+        val boxes = listOf(
+            OcrLineBox("Rincian Transaksi", 140f, 80f, 520f, 120f),
+            OcrLineBox("Rp 250.000", 320f, 175f, 685f, 240f),
+            OcrLineBox("Dari", 80f, 330f, 145f, 365f),
+            OcrLineBox("Adhi Nugroho", 685f, 330f, 920f, 365f),
+            OcrLineBox("SeaBank: 901461173949", 560f, 380f, 920f, 415f),
+            OcrLineBox("Ke", 80f, 465f, 125f, 500f),
+            OcrLineBox("SINERGI KOMUNIKASI >", 520f, 465f, 910f, 500f),
+            OcrLineBox("BCA: 7580968702", 610f, 515f, 920f, 550f),
+            OcrLineBox("Jumlah Transfer", 80f, 600f, 360f, 635f),
+            OcrLineBox("Rp 250.000", 710f, 600f, 920f, 635f),
+            OcrLineBox("No. Transaksi", 80f, 690f, 310f, 725f),
+            OcrLineBox("20260914435089496878587", 360f, 690f, 865f, 725f),
+            OcrLineBox("11", 825f, 730f, 865f, 765f),
+            OcrLineBox("Waktu Transaksi", 80f, 810f, 360f, 845f),
+            OcrLineBox("14 Sep 2026, 15:02", 585f, 810f, 920f, 845f)
+        )
+
+        val result = ReceiptTextParser.parseCoordinateLayout(boxes, imageWidth = 1000f, imageHeight = 1400f)
+
+        assertEquals(ServiceMode.BANK, result.tipe)
+        assertEquals("BCA", result.tujuan)
+        assertEquals("7580968702", result.nomor)
+        assertEquals("SINERGI KOMUNIKASI", result.penerima)
+        assertEquals(250_000L, result.nominal)
+        assertEquals("14 Sep 2026", result.tanggal)
+        assertEquals("15:02 WIB", result.waktu)
+        assertEquals("2026091443508949687858711", result.referensi)
+    }
+
+    @Test
+    fun `parses SeaBank transfer to e-wallet switching mode to EWALLET`() {
+        val boxes = listOf(
+            OcrLineBox("Rincian Transaksi", 140f, 80f, 520f, 120f),
+            OcrLineBox("Rp 100.000", 320f, 175f, 685f, 240f),
+            OcrLineBox("Dari", 80f, 330f, 145f, 365f),
+            OcrLineBox("Adhi Nugroho", 685f, 330f, 920f, 365f),
+            OcrLineBox("SeaBank: 901461173949", 560f, 380f, 920f, 415f),
+            OcrLineBox("Ke", 80f, 465f, 125f, 500f),
+            OcrLineBox("CAHYO ADI >", 620f, 465f, 910f, 500f),
+            OcrLineBox("DANA:", 580f, 515f, 675f, 550f),
+            OcrLineBox("085559659554", 685f, 515f, 920f, 550f),
+            OcrLineBox("Jumlah Transfer", 80f, 600f, 360f, 635f),
+            OcrLineBox("Rp 100.000", 710f, 600f, 920f, 635f),
+            OcrLineBox("No. Transaksi", 80f, 690f, 310f, 725f),
+            OcrLineBox("2026091443508949687858900", 360f, 690f, 920f, 725f),
+            OcrLineBox("Waktu Transaksi", 80f, 810f, 360f, 845f),
+            OcrLineBox("14 Sep 2026, 15:10", 585f, 810f, 920f, 845f)
+        )
+
+        val result = ReceiptTextParser.parseCoordinateLayout(boxes, imageWidth = 1000f, imageHeight = 1400f)
+
+        assertEquals(ServiceMode.EWALLET, result.tipe)
+        assertEquals("DANA", result.tujuan)
+        assertEquals("085559659554", result.nomor)
+        assertEquals("CAHYO ADI", result.penerima)
+        assertEquals(100_000L, result.nominal)
+        assertEquals("14 Sep 2026", result.tanggal)
+        assertEquals("15:10 WIB", result.waktu)
+        assertEquals("2026091443508949687858900", result.referensi)
+    }
 }
