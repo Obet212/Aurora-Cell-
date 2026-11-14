@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.util.Log
+import com.example.firebase.diagnoseAppCheck
 import com.example.firebase.ensureFirebaseInitialized
 import com.example.model.OcrParsedResult
 import com.example.model.ServiceMode
@@ -145,15 +146,55 @@ class GeminiReceiptService(private val context: Context) {
                 throw e
             } catch (e: Exception) {
                 Log.e(TAG, "Gemini AI receipt scan failed", e)
-                Result.failure(
-                    IllegalStateException(
-                        e.localizedMessage ?: "Gagal memindai gambar dengan AI Gemini."
-                    )
-                )
+                val rawMessage = e.localizedMessage ?: "Gagal memindai gambar dengan AI Gemini."
+                val enrichedMessage = if (isAppCheckFailure(rawMessage)) {
+                    buildAppCheckDiagnosticMessage(rawMessage)
+                } else {
+                    rawMessage
+                }
+                Result.failure(IllegalStateException(enrichedMessage))
             } finally {
                 bitmap?.recycle()
             }
         }
+
+    private fun isAppCheckFailure(message: String): Boolean {
+        val lower = message.lowercase()
+        return lower.contains("app check") ||
+            lower.contains("token is invalid") ||
+            lower.contains("attestation") ||
+            lower.contains("403")
+    }
+
+    private suspend fun buildAppCheckDiagnosticMessage(originalError: String): String {
+        val diag = runCatching { diagnoseAppCheck(context) }.getOrNull() ?: return originalError
+        return buildString {
+            appendLine(originalError)
+            if (diag.isDebugBuild) {
+                append("Mode APK: DEBUG (DebugAppCheckProvider). ")
+                if (!diag.hasIntentDebugToken) {
+                    append("APK Debug yang dipasang langsung di HP tidak membawa Debug Token bawaan sehingga ditolak server App Check. ")
+                }
+                if (!diag.tokenError.isNullOrBlank()) {
+                    append("Penyebab: ${diag.tokenError}. ")
+                }
+                if (!diag.debugSecretUuid.isNullOrBlank()) {
+                    append("Debug Token HP ini (salin ke Firebase Console -> App Check -> Apps -> Manage debug tokens): ${diag.debugSecretUuid}")
+                } else {
+                    append("Gunakan APK Release atau daftarkan Debug Token di Firebase Console.")
+                }
+            } else {
+                append("Mode APK: RELEASE (RecaptchaAppCheckProvider). ")
+                if (diag.recaptchaSiteKey.isBlank()) {
+                    append("recaptcha_site_key tidak ditemukan di APK.")
+                } else if (!diag.tokenError.isNullOrBlank()) {
+                    append("Penyebab token gagal dibuat: ${diag.tokenError}")
+                } else {
+                    append("Token berhasil dibuat oleh reCAPTCHA, tetapi ditolak server project 'aurora-cell'. Pastikan reCAPTCHA Enterprise aktif dan terhubung di Firebase Console -> App Check -> Apps.")
+                }
+            }
+        }
+    }
 
     private fun loadNormalizedBitmap(uri: Uri): Bitmap {
         val raw = context.contentResolver.openInputStream(uri)?.use { stream ->

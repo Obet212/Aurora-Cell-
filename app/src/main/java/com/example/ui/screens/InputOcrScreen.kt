@@ -902,13 +902,15 @@ private fun StatusBanner(
         color = containerColor,
         border = BorderStroke(1.dp, borderColor)
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodySmall,
-            color = textColor,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(12.dp)
-        )
+        SelectionContainer {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodySmall,
+                color = textColor,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(12.dp)
+            )
+        }
     }
 }
 

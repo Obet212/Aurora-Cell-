@@ -1,10 +1,12 @@
 package com.example
 
 import android.content.Context
+import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import com.example.data.GeminiReceiptService
 import com.example.firebase.configureAppCheck
 import com.example.firebase.ensureFirebaseInitialized
+import com.example.firebase.readDebugAppCheckSecret
 import com.example.model.ServiceMode
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -25,13 +27,15 @@ class GeminiReceiptServiceTest {
     fun `initializes default FirebaseApp and Firebase AI model with fallback resources present`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         assertTrue(ensureFirebaseInitialized(context))
-        configureAppCheck(context, null)
+        val launchIntent = Intent().putExtra("FIREBASE_APPCHECK_DEBUG_TOKEN", "11111111-2222-3333-4444-555555555555")
+        configureAppCheck(context, launchIntent)
 
         val apps = FirebaseApp.getApps(context)
         assertTrue("Expected FirebaseApp to be initialized", apps.isNotEmpty())
         assertEquals("aurora-cell", FirebaseApp.getInstance().options.projectId)
         assertEquals("aurora-cell", context.getString(R.string.fallback_project_id))
         assertTrue(context.getString(R.string.fallback_google_app_id).isNotBlank())
+        assertEquals("11111111-2222-3333-4444-555555555555", readDebugAppCheckSecret(context))
         assertNotNull(Firebase.ai.generativeModel("gemini-3.8-flash"))
     }
 
