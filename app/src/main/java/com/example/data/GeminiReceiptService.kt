@@ -7,11 +7,11 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.util.Log
+import com.example.firebase.ensureFirebaseInitialized
 import com.example.model.OcrParsedResult
 import com.example.model.ServiceMode
 import com.example.util.ReceiptFormatter
 import com.google.firebase.Firebase
-import com.google.firebase.FirebaseApp
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.content
@@ -84,23 +84,12 @@ class GeminiReceiptService(private val context: Context) {
         withContext(Dispatchers.IO) {
             var bitmap: Bitmap? = null
             try {
-                val appContext = context.applicationContext ?: context
-                if (FirebaseApp.getApps(appContext).isEmpty()) {
-                    FirebaseApp.initializeApp(appContext)
-                }
-                if (FirebaseApp.getApps(appContext).isEmpty()) {
-                    val googleAppIdRes = appContext.resources.getIdentifier(
-                        "google_app_id",
-                        "string",
-                        appContext.packageName
+                if (!ensureFirebaseInitialized(context)) {
+                    return@withContext Result.failure(
+                        IllegalStateException(
+                            "Konfigurasi Firebase belum tersedia di APK ini. Gunakan OCR Offline sebagai alternatif."
+                        )
                     )
-                    val reason = if (googleAppIdRes == 0) {
-                        "Konfigurasi Firebase (google-services.json) belum terbawa ke dalam APK ini. Bangun ulang APK atau gunakan OCR Offline."
-                    } else {
-                        "FirebaseApp gagal diinisialisasi pada perangkat ini. Coba buka ulang aplikasi atau gunakan OCR Offline."
-                    }
-                    Log.e(TAG, "FirebaseApp not initialized (googleAppIdRes=$googleAppIdRes)")
-                    return@withContext Result.failure(IllegalStateException(reason))
                 }
 
                 bitmap = loadNormalizedBitmap(imageUri)

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="recaptcha_site_key" translatable="false">6Lf3LR8uAAAAAOQ9oBxhF5v0yEnO-3lYMHfF6eRF</string>
+    <string name="fallback_google_app_id" translatable="false">1:120975596615:android:8d75453ab942dc2733a562</string>
+    <string name="fallback_google_api_key" translatable="false">AIzaSyAJsp-OYWEe-bET4m3yJNJcyPJTCuIoPmA</string>
+    <string name="fallback_gcm_default_sender_id" translatable="false">120975596615</string>
+    <string name="fallback_google_storage_bucket" translatable="false">aurora-cell.firebasestorage.app</string>
+    <string name="fallback_project_id" translatable="false">aurora-cell</string>
 </resources>

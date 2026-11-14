@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.example.data.GeminiReceiptService
 import com.example.firebase.configureAppCheck
+import com.example.firebase.ensureFirebaseInitialized
 import com.example.model.ServiceMode
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -21,13 +22,16 @@ import org.robolectric.annotation.Config
 class GeminiReceiptServiceTest {
 
     @Test
-    fun `initializes default FirebaseApp and Firebase AI model from google-services resources`() {
+    fun `initializes default FirebaseApp and Firebase AI model with fallback resources present`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
+        assertTrue(ensureFirebaseInitialized(context))
         configureAppCheck(context, null)
 
         val apps = FirebaseApp.getApps(context)
         assertTrue("Expected FirebaseApp to be initialized", apps.isNotEmpty())
         assertEquals("aurora-cell", FirebaseApp.getInstance().options.projectId)
+        assertEquals("aurora-cell", context.getString(R.string.fallback_project_id))
+        assertTrue(context.getString(R.string.fallback_google_app_id).isNotBlank())
         assertNotNull(Firebase.ai.generativeModel("gemini-3.8-flash"))
     }
 
