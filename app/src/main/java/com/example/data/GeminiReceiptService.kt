@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.util.Log
+import com.example.firebase.AppCheckDiagnostic
 import com.example.firebase.diagnoseAppCheck
 import com.example.firebase.ensureFirebaseInitialized
 import com.example.model.OcrParsedResult
@@ -28,7 +29,7 @@ import kotlin.math.roundToInt
 
 private const val TAG = "GeminiReceiptService"
 private const val GEMINI_TIMEOUT_MS = 60_000L
-private const val MAX_INLINE_IMAGE_DIMENSION = 2048
+private const val MAX_INLINE_IMAGE_DIMENSION = 1600
 
 class GeminiReceiptService(private val context: Context) {
 
@@ -84,11 +85,24 @@ class GeminiReceiptService(private val context: Context) {
     suspend fun scanReceiptImage(imageUri: Uri): Result<OcrParsedResult> =
         withContext(Dispatchers.IO) {
             var bitmap: Bitmap? = null
+            var appCheckStatus: AppCheckDiagnostic? = null
             try {
                 if (!ensureFirebaseInitialized(context)) {
                     return@withContext Result.failure(
                         IllegalStateException(
                             "Konfigurasi Firebase belum tersedia di APK ini. Gunakan OCR Offline sebagai alternatif."
+                        )
+                    )
+                }
+
+                appCheckStatus = diagnoseAppCheck(context)
+                if (!appCheckStatus.tokenAcquired) {
+                    return@withContext Result.failure(
+                        IllegalStateException(
+                            formatAppCheckDiagnosticMessage(
+                                originalError = "Firebase App Check gagal memperoleh token.",
+                                diag = appCheckStatus
+                            )
                         )
                     )
                 }
@@ -139,8 +153,16 @@ class GeminiReceiptService(private val context: Context) {
                 Result.success(parsed)
             } catch (e: TimeoutCancellationException) {
                 Log.e(TAG, "Gemini AI scan timed out", e)
+                val modeLabel = if (appCheckStatus?.isDebugBuild == true) "DEBUG" else "RELEASE"
+                val appCheckNote = if (appCheckStatus?.tokenAcquired == true) {
+                    "App Check OK ($modeLabel)"
+                } else {
+                    "App Check belum terverifikasi ($modeLabel)"
+                }
                 Result.failure(
-                    IllegalStateException("Waktu pemindaian AI Gemini habis (60 detik). Periksa koneksi internet atau coba mode OCR Offline.")
+                    IllegalStateException(
+                        "Waktu pemindaian AI Gemini habis (60 detik) [$appCheckNote]. Periksa koneksi internet yang stabil, tekan Scan Ulang, atau gunakan mode OCR Offline."
+                    )
                 )
             } catch (e: CancellationException) {
                 throw e
@@ -148,7 +170,8 @@ class GeminiReceiptService(private val context: Context) {
                 Log.e(TAG, "Gemini AI receipt scan failed", e)
                 val rawMessage = e.localizedMessage ?: "Gagal memindai gambar dengan AI Gemini."
                 val enrichedMessage = if (isAppCheckFailure(rawMessage)) {
-                    buildAppCheckDiagnosticMessage(rawMessage)
+                    val diag = appCheckStatus ?: runCatching { diagnoseAppCheck(context) }.getOrNull()
+                    if (diag != null) formatAppCheckDiagnosticMessage(rawMessage, diag) else rawMessage
                 } else {
                     rawMessage
                 }
@@ -166,8 +189,10 @@ class GeminiReceiptService(private val context: Context) {
             lower.contains("403")
     }
 
-    private suspend fun buildAppCheckDiagnosticMessage(originalError: String): String {
-        val diag = runCatching { diagnoseAppCheck(context) }.getOrNull() ?: return originalError
+    private fun formatAppCheckDiagnosticMessage(
+        originalError: String,
+        diag: AppCheckDiagnostic
+    ): String {
         return buildString {
             appendLine(originalError)
             if (diag.isDebugBuild) {

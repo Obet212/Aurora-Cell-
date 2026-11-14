@@ -166,7 +166,11 @@ suspend fun diagnoseAppCheck(context: Context): AppCheckDiagnostic {
         )
     }
 
-    val tokenResult: Result<String>? = withTimeoutOrNull(8_000L) {
+    if (!appCheckProviderInstalled) {
+        configureAppCheck(appContext, null)
+    }
+
+    val tokenResult: Result<String>? = withTimeoutOrNull(15_000L) {
         suspendCancellableCoroutine { cont ->
             FirebaseAppCheck.getInstance()
                 .getAppCheckToken(false)
@@ -184,14 +188,24 @@ suspend fun diagnoseAppCheck(context: Context): AppCheckDiagnostic {
     }
 
     val debugSecret = readDebugAppCheckSecret(appContext)
+    val rawToken = tokenResult?.getOrNull()
+    val isDummyErrorToken = rawToken != null && rawToken.startsWith("eyJlcnJvciI6")
+
     val errorText = when {
-        tokenResult == null -> "Timeout (8 detik) saat mengambil token App Check."
+        tokenResult == null -> "Timeout (15 detik) saat mengambil token App Check dari perangkat."
         tokenResult.isFailure -> {
             val exc = tokenResult.exceptionOrNull()
             val detail = exc?.localizedMessage ?: exc?.javaClass?.simpleName ?: "Unknown App Check error"
             val causeMsg = exc?.cause?.localizedMessage?.takeIf { it.isNotBlank() && it != detail }
             if (causeMsg != null) "$detail ($causeMsg)" else detail
         }
+        isDummyErrorToken -> {
+            val decoded = runCatching {
+                String(android.util.Base64.decode(rawToken, android.util.Base64.DEFAULT))
+            }.getOrDefault(rawToken)
+            "App Check mengembalikan error token: $decoded"
+        }
+        rawToken.isNullOrBlank() -> "Token App Check kosong."
         else -> null
     }
 
@@ -200,7 +214,7 @@ suspend fun diagnoseAppCheck(context: Context): AppCheckDiagnostic {
         hasIntentDebugToken = lastIntentHadDebugToken,
         recaptchaSiteKey = siteKey,
         debugSecretUuid = debugSecret,
-        tokenAcquired = tokenResult?.isSuccess == true,
+        tokenAcquired = tokenResult?.isSuccess == true && !isDummyErrorToken && !rawToken.isNullOrBlank(),
         tokenError = errorText
     )
 }
